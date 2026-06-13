@@ -1,0 +1,89 @@
+style.css
+body {
+    background-color: #0B192C; /* Professional Navy Blue */
+    color: #F1F6F9; /* Clean White text for contrast */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Header & Typography styling */
+h1, h2, h3 {
+    color: #00ADB5; /* Sleek High-Tech Teal for headers */
+    text-align: center;
+}
+
+p {
+    max-width: 800px;
+    margin: 10px auto 25px auto;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Perfect-Fit Layout Container */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Beautiful & Responsive Data Table */
+table {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #153044; /* Slightly lighter navy for table depth */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+}
+
+th {
+    background-color: #00ADB5; /* Teal header for the table */
+    color: #0B192C; /* Navy text inside header for readability */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+/* Alternating Row Colors for Easy Reading */
+tr:nth-child(even) {
+    background-color: #1A3C54;
+}
+
+/* Subtle Hover Effect on Rows */
+tr:hover {
+    background-color: #224B69;
+    transition: background-color 0.3s ease;
+}
+
+td {
+    border-bottom: 1px solid #224B69;
+    font-size: 1rem;
+}
+
+/* Responsive view for smaller screens/phones */
+@media screen and (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    th {
+        text-align: center;
+    }
+    
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border-bottom: 1px solid #224B69;
+    }
+}
