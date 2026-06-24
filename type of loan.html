@@ -1,11 +1,14 @@
-<html lang="en">
-<head>
- <link rel="stylesheet" href="style.css">   
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
 <title>Liz KEMI Capital FIRM</title>
+  <!-- Hero Header Component -->
+    <header class="hero-header">
+        <img src="company.png" alt="Liz KEMI Capital FIRM Logo Banner" class="hero-main-img">
+        <h1>Liz KEMI Capital FIRM</h1>
+    </header>
 <style>.product-matrix{
-    l;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:20px;
     margin-top:25px;
@@ -49,13 +52,18 @@ body {
     overflow-x: hidden;
     line-height: 1.6;
 }
-
+body {
+    background: linear-gradient(135deg, #02020a, #0d0d2b, #050515);
+}
 /* --- Particle Background Layer --- */
 canvas#canvas {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+
+    z-index: -3;
     pointer-events: none;
 }
 
@@ -75,824 +83,737 @@ canvas#canvas {
 
 /* Container scales back beautifully when the massive assistant panel spreads open */
 body.ai-open .container {
-    transform: scale(0.96) translateX(-50px);
+transform: scale(0.96) translateX(-50px);
 }
+/* BACKGROUND LAYERS ORDER */
 
-/* --- Fixed Navigation & Dropdown Menu --- */
+/* 1. Deep gradient (body) */
+/* 2. Texture overlay (body::before) */
+/* 3. Particle canvas (#canvas) */
+/* 4. Content (.container, sections) */
+/* --- Fixed Navigation & Dropdown Menu --- /
 nav {
-    background-color: rgba(13, 13, 43, 0.95); /* Professional Navy Blue Overlay */
-    backdrop-filter: blur(10px);
-    padding: 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: width 0.4s ease;
+background-color: rgba(13, 13, 43, 0.95); / Professional Navy Blue Overlay */
+backdrop-filter: blur(10px);
+padding: 15px;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+z-index: 1000;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: width 0.4s ease;
 }
 
 .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: bold;
-    letter-spacing: 0.15em;
-    font-size: 1.1rem;
-    color: #ffffff;
-    text-decoration: none;
+display: flex;
+align-items: center;
+gap: 10px;
+font-weight: bold;
+letter-spacing: 0.15em;
+font-size: 1.1rem;
+color: #ffffff;
+text-decoration: none;
 }
 
 .nav-logo-img {
-    height: 1.1rem;
-    width: auto;
-    object-fit: contain;
+height: 1.1rem;
+width: auto;
+object-fit: contain;
 }
 
 .dropdown {
-    position: relative;
-    display: inline-block;
+position: relative;
+display: inline-block;
 }
 
 .dropbtn {
-    background-color: #00f2fe;
-    color: #050515;
-    padding: 12px 24px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+background-color: #00f2fe;
+color: #050515;
+padding: 12px 24px;
+font-size: 16px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+transition: background-color 0.3s ease;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #121236;
-    min-width: 240px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
-    z-index: 1;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-height: 80vh;
-    overflow-y: auto;
+display: none;
+position: absolute;
+right: 0;
+background-color: #121236;
+min-width: 240px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+z-index: 1;
+border-radius: 5px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+max-height: 80vh;
+overflow-y: auto;
 }
 
 .dropdown-content a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-size: 0.95rem;
+color: white;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+font-size: 0.95rem;
 }
 
 .dropdown-content a:hover {
-    background-color: #00d2ff;
-    color: #050515;
+background-color: #00d2ff;
+color: #050515;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+display: block;
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #00d2ff;
+background-color: #00d2ff;
 }
 
 /* --- Live Running Market Ticker Bar --- */
 .ticker-wrap {
-    position: fixed;
-    top: 73px;
-    left: 0;
-    width: 100%;
-    background: #02020a;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-    z-index: 999;
-    overflow: hidden;
-    padding: 6px 0;
-    transition: width 0.4s ease;
+position: fixed;
+top: 73px;
+left: 0;
+width: 100%;
+background: #02020a;
+border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+z-index: 999;
+overflow: hidden;
+padding: 6px 0;
+transition: width 0.4s ease;
 }
 
 .ticker {
-    display: flex;
-    white-space: nowrap;
-    animation: marquee 30s linear infinite;
-    gap: 60px;
+display: flex;
+white-space: nowrap;
+animation: marquee 30s linear infinite;
+gap: 60px;
 }
 
 .ticker-item {
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: bold;
-    letter-spacing: 0.05em;
+display: inline-block;
+font-size: 0.85rem;
+font-weight: bold;
+letter-spacing: 0.05em;
 }
 
 .ticker-green { color: #00ff88; }
 .ticker-blue { color: #00f2fe; }
 
 @keyframes marquee {
-    0% { transform: translate3d(100%, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
+0% { transform: translate3d(100%, 0, 0); }
+100% { transform: translate3d(-100%, 0, 0); }
 }
 
 /* --- Hero & Header Layout --- */
 .hero-header {
-    text-align: center;
-    padding: 210px 20px 60px 20px;
-    max-width: 700px;
-    margin: 0 auto;
+text-align: center;
+padding: 210px 20px 60px 20px;
+max-width: 700px;
+margin: 0 auto;
 }
 
 .hero-main-img {
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-    object-fit: contain;
-    margin-bottom: 25px;
+width: 100%;
+max-width: 450px;
+height: auto;
+object-fit: contain;
+margin-bottom: 25px;
 }
 
 .hero-header h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-    background: linear-gradient(45deg, #ffffff, #00f2fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.2;
+font-size: 3rem;
+margin-bottom: 20px;
+background: linear-gradient(45deg, #ffffff, #00f2fe);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+line-height: 1.2;
 }
 
 .hero-header p {
-    font-size: 1.2rem;
-    color: #dddddd;
+font-size: 1.2rem;
+color: #dddddd;
 }
 
 /* --- Layout Structures --- */
 section {
-    padding: 60px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    scroll-margin-top: 130px;
+padding: 60px 0;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+scroll-margin-top: 130px;
 }
 
 section h2 {
-    font-size: 2rem;
-    margin-bottom: 25px;
-    letter-spacing: 0.05em;
-    color: #00f2fe;
+font-size: 2rem;
+margin-bottom: 25px;
+letter-spacing: 0.05em;
+color: #00f2fe;
 }
 
 .content-block {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px);
-    padding: 35px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    margin-bottom: 20px;
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(5px);
+padding: 35px;
+border-radius: 12px;
+border: 1px solid rgba(255, 255, 255, 0.05);
+margin-bottom: 20px;
 }
 
 h3 {
-    margin-bottom: 15px;
-    color: #ffffff;
-    font-size: 1.4rem;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.2);
-    padding-bottom: 5px;
+margin-bottom: 15px;
+color: #ffffff;
+font-size: 1.4rem;
+border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+padding-bottom: 5px;
 }
 
 /* --- Form Fields & Interactive Layouts --- */
 .calc-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-top: 20px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 3rem;
+margin-top: 20px;
 }
 
 .calc-box select, .custom-select {
-    width: 100%;
-    background-color: #121236;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #ffffff;
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 6px;
-    outline: none;
-    margin-top: 10px;
+width: 100%;
+background-color: #121236;
+border: 1px solid rgba(255,255,255,0.2);
+color: #ffffff;
+padding: 12px;
+font-size: 1.1rem;
+border-radius: 6px;
+outline: none;
+margin-top: 10px;
 }
 
 .slider-group {
-    margin-bottom: 25px;
+margin-bottom: 25px;
 }
 
 .slider-group label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1rem;
-    color: #dddddd;
-    margin-bottom: 8px;
+display: flex;
+justify-content: space-between;
+font-size: 1rem;
+color: #dddddd;
+margin-bottom: 8px;
 }
 
 .slider-group label span {
-    color: #00f2fe;
-    font-weight: bold;
+color: #00f2fe;
+font-weight: bold;
 }
 
 .custom-slider {
-    width: 100%;
-    height: 6px;
-    background: #121236;
-    border-radius: 3px;
-    outline: none;
-    accent-color: #00f2fe;
+width: 100%;
+height: 6px;
+background: #121236;
+border-radius: 3px;
+outline: none;
+accent-color: #00f2fe;
 }
 
 .info-line {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.95rem;
-    color: #dddddd;
+display: flex;
+justify-content: space-between;
+padding: 10px 0;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+font-size: 0.95rem;
+color: #dddddd;
 }
 
 .info-line span:last-child {
-    font-weight: bold;
-    color: #ffffff;
+font-weight: bold;
+color: #ffffff;
 }
 
 .segmented-tabs {
-    display: flex;
-    background: #121236;
-    padding: 4px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 15px 0 25px 0;
+display: flex;
+background: #121236;
+padding: 4px;
+border-radius: 8px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+margin: 15px 0 25px 0;
 }
 
 .tab-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #aaaaaa;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+flex: 1;
+background: transparent;
+border: none;
+color: #aaaaaa;
+padding: 12px;
+font-size: 1rem;
+font-weight: bold;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease;
 }
 
 .tab-btn.active {
-    background: #00f2fe;
-    color: #050515;
+background: #00f2fe;
+color: #050515;
 }
 
 .action-btn {
-    background: transparent;
-    border: 1px solid #00f2fe;
-    color: #00f2fe;
-    padding: 10px 20px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: all 0.3s ease;
+background: transparent;
+border: 1px solid #00f2fe;
+color: #00f2fe;
+padding: 10px 20px;
+font-weight: bold;
+border-radius: 6px;
+cursor: pointer;
+margin-top: 15px;
+transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-    background: #00f2fe;
-    color: #050515;
+background: #00f2fe;
+color: #050515;
 }
 
 .form-group-inline {
-    margin: 25px 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+margin: 25px 0;
+display: flex;
+align-items: center;
+gap: 12px;
 }
 
 .form-group-inline input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #00f2fe;
-    cursor: pointer;
+width: 20px;
+height: 20px;
+accent-color: #00f2fe;
+cursor: pointer;
 }
 
 .form-group-inline label {
-    font-size: 1.1rem;
-    cursor: pointer;
+font-size: 1.1rem;
+cursor: pointer;
 }
 
 .custom-textarea, .custom-input {
-    width: 100%;
-    background-color: #121236;
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #ffffff;
-    padding: 15px;
-    font-size: 1rem;
-    border-radius: 6px;
-    outline: none;
-    margin-bottom: 15px;
+width: 100%;
+background-color: #121236;
+border: 1px solid rgba(255,255,255,0.2);
+color: #ffffff;
+padding: 15px;
+font-size: 1rem;
+border-radius: 6px;
+outline: none;
+margin-bottom: 15px;
 }
 
 .custom-textarea {
-    min-height: 120px;
-    resize: vertical;
+min-height: 120px;
+resize: vertical;
 }
 
 .display-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+display: flex;
+flex-direction: column;
+justify-content: center;
 }
 
 .metric {
-    margin-bottom: 1.5rem;
+margin-bottom: 1.5rem;
 }
 
 .val-highlight {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: #00f2fe;
+font-size: 2.2rem;
+font-weight: bold;
+color: #00f2fe;
 }
 
 /* --- Scrollable Contract Box --- */
 .contract-scroll {
-    background-color: #02020a;
-    border: 1px solid rgba(255,255,255,0.1);
-    height: 350px;
-    overflow-y: scroll;
-    padding: 25px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    color: #e0e0e0;
-    border-radius: 8px;
-    margin-top: 20px;
+background-color: #02020a;
+border: 1px solid rgba(255,255,255,0.1);
+height: 350px;
+overflow-y: scroll;
+padding: 25px;
+font-family: 'Courier New', Courier, monospace;
+font-size: 0.9rem;
+color: #e0e0e0;
+border-radius: 8px;
+margin-top: 20px;
 }
 
 .contract-scroll h4 {
-    margin: 20px 0 5px 0;
-    color: #00f2fe;
+margin: 20px 0 5px 0;
+color: #00f2fe;
 }
 
 /* --- Media Player Component Area --- */
 .video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-    background: #02020a;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 242, 254, 0.2);
-    margin: 20px 0;
+position: relative;
+padding-bottom: 56.25%;
+height: 0;
+overflow: hidden;
+max-width: 100%;
+background: #02020a;
+border-radius: 8px;
+border: 1px solid rgba(0, 242, 254, 0.2);
+margin: 20px 0;
 }
 
 .video-wrapper iframe, .video-wrapper video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border: none;
 }
 
 /* --- Interactive Performance Leaderboard --- */
 .performance-matrix {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
+width: 100%;
+border-collapse: collapse;
+margin-top: 15px;
 }
 
 .performance-matrix th, .performance-matrix td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+padding: 12px 15px;
+text-align: left;
+border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .performance-matrix th {
-    color: #00f2fe;
-    font-weight: bold;
-    font-size: 0.9rem;
-    text-transform: uppercase;
+color: #00f2fe;
+font-weight: bold;
+font-size: 0.9rem;
+text-transform: uppercase;
 }
 
 .performance-matrix tr:hover {
-    background: rgba(0, 242, 254, 0.03);
+background: rgba(0, 242, 254, 0.03);
 }
 
 /* --- Live Dynamic Pipeline Cards --- */
 .pipeline-card {
-    background: rgba(18, 18, 54, 0.6);
-    border: 1px solid rgba(0, 242, 254, 0.15);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+background: rgba(18, 18, 54, 0.6);
+border: 1px solid rgba(0, 242, 254, 0.15);
+border-radius: 8px;
+padding: 20px;
+margin-bottom: 25px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* --- HTML5 Visualization Canvas --- */
 .chart-container {
-    width: 100%;
-    background: #02020a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 15px;
+width: 100%;
+background: #02020a;
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 8px;
+padding: 15px;
+margin-top: 15px;
 }
 
 canvas.analytics-chart {
-    width: 100%;
-    height: 150px;
-    display: block;
+width: 100%;
+height: 150px;
+display: block;
 }
 
 /* --- Live System Activity Logs --- */
 .system-log-box {
-    background: #02020a;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 15px;
-    font-family: monospace;
-    font-size: 0.85rem;
-    color: #00ff88;
-    height: 120px;
-    overflow-y: auto;
-    margin-top: 15px;
+background: #02020a;
+border: 1px solid rgba(255, 255, 255, 0.05);
+border-radius: 6px;
+padding: 15px;
+font-family: monospace;
+font-size: 0.85rem;
+color: #00ff88;
+height: 120px;
+overflow-y: auto;
+margin-top: 15px;
 }
 
 @keyframes fadeEffect {
-    from { opacity: 0; }
-    to { opacity: 1; }
+from { opacity: 0; }
+to { opacity: 1; }
 }
 
 /* --- Security Badge Clusters --- */
 .trust-badges {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-top: 35px;
-    padding-top: 25px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    flex-wrap: wrap;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 30px;
+margin-top: 35px;
+padding-top: 25px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+flex-wrap: wrap;
 }
 
 .badge-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-    color: #aaaaaa;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 0.85rem;
+color: #aaaaaa;
+text-transform: uppercase;
+letter-spacing: 0.05em;
 }
 
 .badge-item svg {
-    width: 20px;
-    height: 20px;
-    fill: #00f2fe;
+width: 20px;
+height: 20px;
+fill: #00f2fe;
 }
 
 /* ==========================================================================
-   HIGH-POWERED UPGRADE: SIDE OPEN OVER-SPREADING AI PANEL ARCHITECTURE
-   ========================================================================== */
-   
+HIGH-POWERED UPGRADE: SIDE OPEN OVER-SPREADING AI PANEL ARCHITECTURE
+========================================================================== */
+
 /* Glowing Interaction Tab Panel Edge Trigger */
 #ai-sidebar-trigger {
-    position: fixed;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    background: linear-gradient(135deg, #00f2fe, #00d2ff);
-    color: #050515;
-    padding: 20px 10px;
-    font-weight: bold;
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    cursor: pointer;
-    border-radius: 8px 0 0 8px;
-    box-shadow: -4px 0 25px rgba(0, 242, 254, 0.4);
-    z-index: 10001;
-    transition: all 0.3s cubic-bezier(0.05, 0.74, 0.2, 0.99);
+position: fixed;
+top: 50%;
+right: 0;
+transform: translateY(-50%);
+background: linear-gradient(135deg, #00f2fe, #00d2ff);
+color: #050515;
+padding: 20px 10px;
+font-weight: bold;
+font-size: 0.85rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+writing-mode: vertical-rl;
+text-orientation: mixed;
+cursor: pointer;
+border-radius: 8px 0 0 8px;
+box-shadow: -4px 0 25px rgba(0, 242, 254, 0.4);
+z-index: 10001;
+transition: all 0.3s cubic-bezier(0.05, 0.74, 0.2, 0.99);
 }
 
 #ai-sidebar-trigger:hover {
-    padding-right: 15px;
-    box-shadow: -6px 0 30px rgba(0, 242, 254, 0.6);
+padding-right: 15px;
+box-shadow: -6px 0 30px rgba(0, 242, 254, 0.6);
 }
 
-/* Main Spreading Interaction Module */
+/* Main Spreading Interaction Module /
 #ai-widget {
-    position: fixed;
-    top: 0;
-    right: -55%; /* Hidden perfectly off-screen */
-    width: 45%;  /* Over-spread across a massive layout tier */
-    height: 100vh;
-    background: rgba(10, 10, 32, 0.96);
-    backdrop-filter: blur(30px);
-    border-left: 2px solid rgba(0, 242, 254, 0.3);
-    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    z-index: 10000;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    transition: right 0.4s cubic-bezier(0.05, 0.74, 0.2, 0.99);
+position: fixed;
+top: 0;
+right: -55%; / Hidden perfectly off-screen /
+width: 45%;  / Over-spread across a massive layout tier */
+height: 100vh;
+background: rgba(10, 10, 32, 0.96);
+backdrop-filter: blur(30px);
+border-left: 2px solid rgba(0, 242, 254, 0.3);
+box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
+display: flex;
+flex-direction: column;
+z-index: 10000;
+overflow: hidden;
+font-family: Arial, sans-serif;
+transition: right 0.4s cubic-bezier(0.05, 0.74, 0.2, 0.99);
 }
 
 /* Active Open Over-Spread Framework State Selector */
 #ai-widget.open {
-    right: 0;
+right: 0;
 }
 
 #ai-header {
-    background: linear-gradient(135deg, #0d0d2b, #121236);
-    padding: 25px;
-    font-weight: bold;
-    font-size: 1.3rem;
-    color: #00f2fe;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    letter-spacing: 0.05em;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+background: linear-gradient(135deg, #0d0d2b, #121236);
+padding: 25px;
+font-weight: bold;
+font-size: 1.3rem;
+color: #00f2fe;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+letter-spacing: 0.05em;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
 
 .ai-close-x {
-    background: transparent;
-    border: 1px solid rgba(0, 242, 254, 0.4);
-    color: #00f2fe;
-    font-size: 0.9rem;
-    padding: 6px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: normal;
-    transition: all 0.2s ease;
+background: transparent;
+border: 1px solid rgba(0, 242, 254, 0.4);
+color: #00f2fe;
+font-size: 0.9rem;
+padding: 6px 14px;
+border-radius: 4px;
+cursor: pointer;
+font-weight: normal;
+transition: all 0.2s ease;
 }
 
 .ai-close-x:hover {
-    background: #00f2fe;
-    color: #050515;
+background: #00f2fe;
+color: #050515;
 }
 
 #ai-chat {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+flex: 1;
+padding: 30px;
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+gap: 15px;
 }
 
 #ai-chat .user {
-    align-self: flex-end;
-    background: #00f2fe;
-    color: #050515;
-    padding: 14px 20px;
-    border-radius: 16px 16px 2px 16px;
-    font-size: 1rem;
-    max-width: 75%;
-    word-wrap: break-word;
-    font-weight: 500;
-    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+align-self: flex-end;
+background: #00f2fe;
+color: #050515;
+padding: 14px 20px;
+border-radius: 16px 16px 2px 16px;
+font-size: 1rem;
+max-width: 75%;
+word-wrap: break-word;
+font-weight: 500;
+box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
 }
 
 #ai-chat .bot {
-    align-self: flex-start;
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
-    padding: 14px 20px;
-    border-radius: 16px 16px 16px 2px;
-    font-size: 1rem;
-    max-width: 75%;
-    word-wrap: break-word;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    line-height: 1.5;
+align-self: flex-start;
+background: rgba(255, 255, 255, 0.06);
+color: #ffffff;
+padding: 14px 20px;
+border-radius: 16px 16px 16px 2px;
+font-size: 1rem;
+max-width: 75%;
+word-wrap: break-word;
+border: 1px solid rgba(255, 255, 255, 0.05);
+line-height: 1.5;
 }
 
 #ai-input-area {
-    display: flex;
-    padding: 20px 30px 30px 30px;
-    background: rgba(13, 13, 43, 0.9);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    gap: 12px;
+display: flex;
+padding: 20px 30px 30px 30px;
+background: rgba(13, 13, 43, 0.9);
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+gap: 12px;
 }
 
 #userInput {
-    flex: 1;
-    background: #050515;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    color: #ffffff;
-    border-radius: 8px;
-    outline: none;
-    font-size: 1rem;
+flex: 1;
+background: #050515;
+border: 1px solid rgba(255, 255, 255, 0.2);
+padding: 15px;
+color: #ffffff;
+border-radius: 8px;
+outline: none;
+font-size: 1rem;
 }
 
 #userInput:focus {
-    border-color: #00f2fe;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+border-color: #00f2fe;
+box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
 }
 
 #ai-input-area button {
-    background: #00f2fe;
-    color: #050515;
-    border: none;
-    padding: 0 25px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
+background: #00f2fe;
+color: #050515;
+border: none;
+padding: 0 25px;
+border-radius: 8px;
+font-weight: bold;
+font-size: 1rem;
+cursor: pointer;
+transition: background 0.2s ease;
 }
 
 #ai-input-area button:hover {
-    background: #00d2ff;
+background: #00d2ff;
 }
 
 footer {
-    text-align: center;
-    padding: 60px 20px;
-    color: #cccccc;
-    border-top: 1px solid rgba(255,255,255,0.05);
+text-align: center;
+padding: 60px 20px;
+color: #cccccc;
+border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
-    #ai-widget {
-        width: 65%;
-        right: -75%;
-    }
+#ai-widget {
+width: 65%;
+right: -75%;
+}
 }
 
 @media (max-width: 768px) {
-    .hero-header { padding-top: 180px; }
-    .hero-header h1 { font-size: 2.2rem; }
-    .hero-main-img { max-width: 85%; }
-    section h2 { font-size: 1.6rem; }
-    .content-block { padding: 20px; }
-    .calc-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    .trust-badges { gap: 15px; }
-    .ticker-wrap { top: 71px; }
-    
-    /* Full mobile layout spread over-expansion */
-    #ai-widget {
-        width: 100%;
-        right: -105%;
-    }
-    #ai-chat { padding: 15px; }
-    #ai-input-area { padding: 15px; }
+.hero-header { padding-top: 180px; }
+.hero-header h1 { font-size: 2.2rem; }
+.hero-main-img { max-width: 85%; }
+section h2 { font-size: 1.6rem; }
+.content-block { padding: 20px; }
+.calc-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+.trust-badges { gap: 15px; }
+.ticker-wrap { top: 71px; }
+
+/* Full mobile layout spread over-expansion */  
+#ai-widget {  
+    width: 100%;  
+    right: -105%;  
+}  
+#ai-chat { padding: 15px; }  
+#ai-input-area { padding: 15px; }
+
 }
 </style>
-   <head>
-    <tittle>Type of Loan</tittle>
-  </head>
-    <body>
-        <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>LizKemi Capital Loan Application</title>
 
-<style>
+   <head>  
+    <tittle>Type of Loan</tittle>  
+  </head>  
+    <body>  
+        <!DOCTYPE html>  
+<html>  
+<head>  
+<meta charset="UTF-8">  
+<title>LizKemi Capital Loan Application</title>  <style>  
 body {
-  font-family: Arial, sans-serif;
-  background:#eef2f7;
-  margin:0;
-  padding:0;
-}
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
 
-.container {
-  max-width:800px;
-  margin:40px auto;
-  background:#fff;
-  padding:30px;
-  border-radius:12px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.1);
-}
-
-h1 {
-  text-align:center;
-  color:#0f172a;
-}
-
-.section-title {
-  margin-top:25px;
-  padding:10px;
-  background:#1e3a8a;
-  color:#fff;
-  border-radius:6px;
-  font-size:14px;
-}
-
-label {
-  font-weight:bold;
-  font-size:13px;
-  color:#333;
-}
-
-input, select, textarea {
-  width:100%;
-  padding:10px;
-  margin-top:6px;
-  margin-bottom:15px;
-  border:1px solid #ccc;
-  border-radius:6px;
-}
-
-.row {
-  display:flex;
-  gap:15px;
-}
-
-.row > div {
-  flex:1;
-}
-
-button {
-  width:100%;
-  padding:14px;
-  background:#0f172a;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  font-size:16px;
-  cursor:pointer;
-}
-
-button:hover {
-  background:#1e3a8a;
-}
-
-.note {
-  font-size:12px;
-  background:#f8fafc;
-  padding:12px;
-  border-left:4px solid #1e3a8a;
-  margin-bottom:20px;
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>LizKemi Capital Ltd</h1>
-
-<p style="text-align:center;color:#555;">
-Complete Loan Application Form
-</p>
-
-<div class="note">
-By submitting this form, you confirm that all information provided is accurate.
-False information may lead to rejection of your application.
-</div>
-
-<form id="loanForm">
-
-<!-- PERSONAL DETAILS -->
-<div class="section-title">PERSONAL INFORMATION</div>
-
-<div class="row">
-<div>
-<label>First Name</label>
-<input type="text" id="first_name" required>
-</div>
-
-<div>
-<label>Last Name</label>
-<input type="text" id="last_name" required>
-</div>
-</div>
-
-<label>Date of Birth</label>
+    /* 🔥 Main Company Background */
+    background: radial-gradient(circle at top, #0b0b2a 0%, #050515 50%, #02020a 100%);
+    overflow-x: hidden;
+}  
+</style>  </head>  <body>  <div class="container">  <h1>LizKemi Capital Ltd</h1>  <p style="text-align:center;color:#555;">  
+Complete Loan Application Form  
+</p>  <div class="note">  
+By submitting this form, you confirm that all information provided is accurate.  
+False information may lead to rejection of your application.  
+</div>  <form id="loanForm">  <!-- PERSONAL DETAILS -->  <div class="section-title">PERSONAL INFORMATION</div>  <div class="row">  
+<div>  
+<label>First Name</label>  
+<input type="text" id="first_name" required>  
+</div>  <div>  
+<label>Last Name</label>  
+<input type="text" id="last_name" required>  
+</div>  
+</div>  <label>Date of Birth</label>
 <input type="date" id="dob">
 
-<label>Gender</label>
+<p><label>Gender</label>
 <select id="gender">
-<option>Male</option>
-<option>Female</option>
-</select>
 
-<label>Marital Status</label>
+<option>Male</option>  
+<option>Female</option>  
+</select></p> 
+<p> <label>Marital Status</label>
 <select id="marital_status">
-<option>Single</option>
-<option>Married</option>
-<option>Divorced</option>
-<option>Widowed</option>
-</select>
 
-<!-- CONTACT DETAILS -->
-<div class="section-title">CONTACT DETAILS</div>
-
-<label>Email Address</label>
+<option>Single</option>  
+<option>Married</option>  
+<option>Divorced</option>  
+<option>Widowed</option>  
+</select></p>
+  <!-- CONTACT DETAILS -->  <div class="section-title">CONTACT DETAILS</div>  <label>Email Address</label>
 <input type="email" id="email" required>
 
 <label>Phone Number</label>
@@ -901,85 +822,66 @@ False information may lead to rejection of your application.
 <label>Residential Address</label>
 <input type="text" id="address">
 
-<label>City / Town</label>
-<input type="text" id="city">
+<p><label>City / Town</label>
+<input type="text" id="city"></p>
 
-<!-- EMPLOYMENT -->
-<div class="section-title">EMPLOYMENT INFORMATION</div>
-
-<label>Employment Status</label>
+<!-- EMPLOYMENT -->  <div class="section-title">EMPLOYMENT INFORMATION</div>  <label>Employment Status</label>
 <select id="employment_status">
-<option>Employed</option>
-<option>Self-Employed</option>
-<option>Business Owner</option>
-<option>Unemployed</option>
-<option>Student</option>
-</select>
 
-<label>Employer / Business Name</label>
+<option>Employed</option>  
+<option>Self-Employed</option>  
+<option>Business Owner</option>  
+<option>Unemployed</option>  
+<option>Student</option>  
+</select>  <label>Employer / Business Name</label>
 <input type="text" id="employer">
 
-<label>Monthly Income</label>
+<p><label>Monthly Income</label></p>
 <input type="number" id="income">
 
-<!-- LOAN DETAILS -->
-<div class="section-title">LOAN INFORMATION</div>
-
-<label>Loan Type</label>
+<!-- LOAN DETAILS -->  <div class="section-title">LOAN INFORMATION</div>  <label>Loan Type</label>
 <select id="loan_type">
-<option>Personal Loan</option>
-<option>Business Loan</option>
-<option>Student Loan</option>
-<option>Equipment Financing</option>
-<option>Micro Loan</option>
-<option>Mortgage Loan</option>
-</select>
 
-<label>Loan Amount Requested</label>
+<option>Personal Loan</option>  
+<option>Business Loan</option>  
+<option>Student Loan</option>  
+<option>Equipment Financing</option>  
+<option>Micro Loan</option>  
+<option>Mortgage Loan</option>  
+</select>  <p><label>Loan Amount Requested</label></p>
 <input type="number" id="loan_amount">
 
-<label>Loan Duration (Months)</label>
+<p><label>Loan Duration (Months)</label></p>
 <input type="number" id="duration">
 
-<label>Purpose of Loan</label>
-<textarea id="purpose"></textarea>
+<p><label>Purpose of Loan</label></p>
 
-<!-- REFERENCES -->
-<div class="section-title">NEXT OF KIN / REFERENCE</div>
-
-<label>Full Name</label>
+<textarea id="purpose"></textarea>  <!-- REFERENCES -->  <div class="section-title">NEXT OF KIN / REFERENCE</div>  <label>Full Name</label>
 <input type="text" id="next_of_kin">
 
-<label>Phone Number</label>
+<p><label>Phone Number</label></p>
 <input type="tel" id="nok_phone">
 
-<label>Relationship</label>
+<p><label>Relationship</label></p>
 <input type="text" id="relationship">
 
-<!-- SUBMIT -->
-<button type="submit">Submit Application</button>
+<!-- SUBMIT --> <p><button type="submit">Submit Application</button></p>
 
-</form>
-
-</div>
-
-</body>
-</html>
-         <section id="loans">
-        <h2>1. Loan & Capital Services</h2>
-        <div class="content-block">
-            <h3>Institutional Lending Portfolio</h3>
-            <p style="margin-bottom: 20px;">
-                LizKemi Capital Ltd deploys a robust suite of diversified capital structures designed to support individual scaling and corporate liquidity execution worldwide.
-            </p>
-
-            <!-- Comprehensive Specialized Products Matrix Grid -->
-            <div class="product-matrix">
-                <!-- 1. Term Loan -->
-                <div class="product-card">
-                    <h4>✦ Term Loan</h4>
-                    <p>A classic lump-sum funding distribution accompanied by structured, predictable repayment intervals. Ideal for direct equipment acquisition or defined corporate expansion tracks.</p>
-                </div>
+</form>  </div>  </body>  
+</html>  
+         <section id="loans">  
+        <h2>1. Loan & Capital Services</h2>  
+        <div class="content-block">  
+            <h3>Institutional Lending Portfolio</h3>  
+            <p style="margin-bottom: 20px;">  
+                LizKemi Capital Ltd deploys a robust suite of diversified capital structures designed to support individual scaling and corporate liquidity execution worldwide.  
+            </p>  <!-- Comprehensive Specialized Products Matrix Grid -->  
+        <div class="product-matrix">  
+            <!-- 1. Term Loan -->  
+            <div class="product-card">  
+                <h4>✦ Term Loan</h4>  
+                <p>A classic lump-sum funding distribution accompanied by structured, predictable repayment intervals. Ideal for direct equipment acquisition or defined corporate expansion tracks.</p>  
+            </  </div>
                 <!-- 2. SBA Loan -->
                 <div class="product-card">
                     <h4>✦ SBA Loan</h4>
@@ -1004,7 +906,7 @@ False information may lead to rejection of your application.
                 <div class="product-card">
                     <h4>✦ Micro Loan</h4>
                     <p>Targeted, localized mini-capital injections structured specifically to accelerate startups, student entrepreneurial targets, and community storefront micro-ventures.</p>
-                </div>
+                 </div>
                 <!-- 7. Macra Frameworks -->
                 <div class="product-card">
                     <h4>✦ Macro Loan</h4>
@@ -1043,4 +945,6 @@ False information may lead to rejection of your application.
        this loan is issues to family who want to quick satisfy their family desire and students want to fulfill their needs in campus urgently 
    </p>
     </body>
-</html>
+     </html>
+                 
+           
