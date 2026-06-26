@@ -742,3 +742,73 @@ footer {
     #ai-chat { padding: 15px; }
     #ai-input-area { padding: 15px; }
 }
+
+/* =========================
+UPGRADE: META SYSTEM LAYER
+(NO REMOVAL MODE)
+========================= */
+
+/* Advanced glow system */
+.glow-on {
+    box-shadow: 0 0 15px rgba(0,242,254,0.4);
+}
+
+/* Smart status badges */
+.status-badge {
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.status-pending { background:#ffcc00; color:#000; }
+.status-approved { background:#00ff88; color:#000; }
+.status-rejected { background:#ff4444; color:#fff; }
+
+/* Floating system console */
+#systemConsole {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.85);
+    color: #00f2fe;
+    font-size: 12px;
+    padding: 10px;
+    font-family: monospace;
+    z-index: 999999;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+/* AI micro indicator */
+.ai-dot {
+    width: 8px;
+    height: 8px;
+    background: #00f2fe;
+    border-radius: 50%;
+    display:inline-block;
+    margin-right:5px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.2; }
+}
+
+/* Loan power meter */
+.power-meter {
+    height: 8px;
+    background: #121236;
+    border-radius: 10px;
+    overflow:hidden;
+    margin-top:5px;
+}
+
+.power-fill {
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00f2fe,#00ff88);
+    transition:0.5s;
+}
