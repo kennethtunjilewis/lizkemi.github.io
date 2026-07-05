@@ -12,7 +12,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liz KEMI Capital FIRM</title>
-<style>.product-matrix{
+<style>#welcomeScreen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#050816;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:999999;
+    font-family:Arial,sans-serif;
+}
+
+.loader{
+    width:70px;
+    height:70px;
+    border:6px solid rgba(255,255,255,.2);
+    border-top:6px solid #00ffcc;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:20px 0;
+}
+
+@keyframes spin{
+    100%{transform:rotate(360deg);}
+}
+
+#loadingText{
+    font-size:18px;
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:.3;}
+}
+  
+  .product-matrix{
     l;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:20px;
@@ -759,7 +798,14 @@ footer {
 </style>
 </head>
 <body>
+<div id="welcomeScreen">
+    <h1>Welcome to LizKemi Capital Firm</h1>
+    <p>Initializing Secure Financial Platform...</p>
 
+    <div class="loader"></div>
+
+    <p id="loadingText">Loading...</p>
+</div>
 <canvas id="canvas"></canvas>
 <div id="text-measure">Liz KEMI Capital FIRM</div>
 
@@ -1661,6 +1707,35 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.innerText = "Submit Application";
     btn.disabled = false;
   });
+});
+  window.addEventListener("load", function () {
+
+    const messages = [
+        "Welcome to LizKemi Capital Firm...",
+        "Initializing Security...",
+        "Encrypting Connection...",
+        "Loading Financial Dashboard...",
+        "Please Wait..."
+    ];
+
+    let i = 0;
+
+    const text = document.getElementById("loadingText");
+
+    const changeText = setInterval(() => {
+        text.innerHTML = messages[i];
+        i++;
+
+        if(i >= messages.length){
+            clearInterval(changeText);
+        }
+
+    },1000);
+
+    setTimeout(() => {
+        document.getElementById("welcomeScreen").style.display="none";
+    },5000);
+
 });
 </script>
   
