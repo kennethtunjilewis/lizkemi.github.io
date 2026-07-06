@@ -1,4 +1,4 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head><!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GF0NDZ155L"></script>
@@ -12,7 +12,70 @@ u<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liz KEMI Capital FIRM</title>
-<style>#welcomeScreen{
+<style>/* ===== FINTECH BACKGROUND ===== */
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:#030712;
+    font-family:'Inter',sans-serif;
+}
+
+.fintech-bg{
+    position:fixed;
+    inset:0;
+    z-index:-10;
+    overflow:hidden;
+
+    background:
+    radial-gradient(circle at 20% 20%,rgba(0,140,255,.18),transparent 35%),
+    radial-gradient(circle at 80% 80%,rgba(0,255,200,.15),transparent 35%),
+    linear-gradient(135deg,#020617,#08111f,#030712);
+}
+
+/* Animated Aurora */
+
+.fintech-bg::before{
+    content:"";
+    position:absolute;
+    width:220%;
+    height:220%;
+    background:
+    radial-gradient(circle,#00bfff55 0%,transparent 35%),
+    radial-gradient(circle,#00ffd555 0%,transparent 30%);
+    animation:moveAurora 25s linear infinite;
+}
+
+/* Financial Grid */
+
+.fintech-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+
+    background-size:60px 60px;
+}
+
+@keyframes moveAurora{
+
+0%{
+transform:translate(-20%,-10%) rotate(0deg);
+}
+
+50%{
+transform:translate(10%,5%) rotate(180deg);
+}
+
+100%{
+transform:translate(-20%,-10%) rotate(360deg);
+}
+
+}
+  #welcomeScreen{
     position:fixed;
     top:0;
     left:0;
@@ -798,6 +861,7 @@ footer {
 </style>
 </head>
 <body>
+  <div class="fintech-bg"></div>
 <div id="welcomeScreen">...
     <h1>Welcome to LizKemi Capital Firm</h1>
     <p>Initializing Secure Financial Platform...</p>
