@@ -14,8 +14,10 @@
 <title>Liz KEMI Capital FIRM</title>
 <style>/* ===== FINTECH BACKGROUND ===== */
 
-body{
-    margin:0;
+body#welcomeScreen{
+
+transition:opacity .6s ease;
+{ margin:0;
     overflow:hidden;
     background:#030712;
     font-family:'Inter',sans-serif;
@@ -1769,12 +1771,25 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.disabled = false;
   });
 
-window.onload = function () {
-    setTimeout(function () {
-        window.location.href = "index.html";
-    }, 8000);
-};
-  
+window.addEventListener("load",()=>{
+
+setTimeout(()=>{
+
+const welcome=document.getElementById("welcomeScreen");
+
+if(welcome){
+
+welcome.style.opacity="0";
+
+setTimeout(()=>{
+
+welcome.remove();
+
+document.body.style.overflow="auto";
+
+},600);
+
+});
 </script>
   
   
