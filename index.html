@@ -1768,36 +1768,13 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.innerText = "Submit Application";
     btn.disabled = false;
   });
-});
-  window.addEventListener("load", function () {
-
-    const messages = [
-        "Welcome to LizKemi Capital Firm...",
-        "Initializing Security...",
-        "Encrypting Connection...",
-        "Loading Financial Dashboard...",
-        "Please Wait..."
-    ];
-
-    let i = 0;
-
-    const text = document.getElementById("loadingText");
-
-    const changeText = setInterval(() => {
-        text.innerHTML = messages[i];
-        i++;
-
-        if(i >= messages.length){
-            clearInterval(changeText);
-        }
-
-}, 10);
-
-    setTimeout(() => {
-    document.getElementById("welcomeScreen").style.display = "none";
-}, 10);
-
-});
+window.onload = function () {
+    setTimeout(function () {
+        document.getElementById("welcome-screen").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+    }, 8000);
+};
+  
 </script>
   
   
