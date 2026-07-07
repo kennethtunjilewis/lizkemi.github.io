@@ -1770,26 +1770,13 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.innerText = "Submit Application";
     btn.disabled = false;
   });
-
-window.addEventListener("load",()=>{
-
-setTimeout(()=>{
-
-const welcome=document.getElementById("welcomeScreen");
-
-if(welcome){
-
-welcome.style.opacity="0";
-
-setTimeout(()=>{
-
-welcome.remove();
-
-document.body.style.overflow="auto";
-
-},600);
-
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+        document.getElementById("welcomeScreen").style.display = "none";
+    }, 3000); // Opens after 3 seconds
 });
+</script>
 </script>
   
   
