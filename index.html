@@ -1768,10 +1768,10 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.innerText = "Submit Application";
     btn.disabled = false;
   });
+
 window.onload = function () {
     setTimeout(function () {
-        document.getElementById("welcome-screen").style.display = "none";
-        document.getElementById("main-content").style.display = "block";
+        window.location.href = "home.html";
     }, 8000);
 };
   
