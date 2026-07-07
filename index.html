@@ -12,7 +12,244 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Liz KEMI Capital FIRM</title>
-<style>/* ===== FINTECH BACKGROUND ===== */
+<style>/* --- Reset & Global Theme --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: #030712; /* Premium rich deep dark background */
+    color: #ffffff;
+    overflow: hidden; /* Lock viewport scrolling during the welcome loading animation */
+    min-height: 100vh;
+}
+
+/* --- SPLASH SCREEN (WELCOME OVERLAY) --- */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(circle at center, #0b1528 0%, #030712 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease-out, visibility 0.8s;
+}
+
+.splash-container {
+    text-align: center;
+    max-width: 450px;
+    padding: 20px;
+}
+
+/* Matrix Network Grid Effect */
+#splash-screen::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    top: -50%;
+    left: -50%;
+    animation: networkShift 25s linear infinite;
+    z-index: -1;
+}
+
+@keyframes networkShift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+}
+
+.splash-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.splash-subtitle {
+    font-size: 1rem;
+    color: #00f0ff; /* UI Electric Cyan */
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+/* Premium Tech Loader Ring */
+.loader-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 35px auto;
+}
+
+.loader-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 3px solid #00f0ff;
+    border-radius: 50%;
+    animation: rotateRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #00f0ff transparent transparent transparent;
+}
+.loader-ring div:nth-child(1) { animation-delay: -0.45s; }
+.loader-ring div:nth-child(2) { animation-delay: -0.3s; }
+.loader-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+@keyframes rotateRing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.status-text {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    min-height: 24px;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+
+/* --- MAIN APP INTERFACE --- */
+#main-content {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Navigation Header */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background-color: #060b18;
+    border-bottom: 1px solid #111827;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-services {
+    background-color: #00f0ff;
+    color: #000000;
+    border: none;
+    padding: 12px 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-services:hover {
+    background-color: #00c8d4;
+}
+
+/* Sticky Right UI Sidebar Tab */
+.side-terminal-tab {
+    position: fixed;
+    right: 0;
+    top: 35%;
+    background-color: #00f0ff;
+    color: #000000;
+    padding: 25px 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border-radius: 8px 0 0 8px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: -4px 0 20px rgba(0, 240, 255, 0.2);
+}
+
+/* Center Hero Layout */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 20px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.hero-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin-bottom: 40px;
+    font-family: monospace;
+}
+
+/* Golden Tiger Crest */
+.logo-container {
+    max-width: 320px;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(212, 175, 55, 0.2); /* Soft ambient gold border circle */
+    padding: 10px;
+}
+
+.tiger-logo {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* --- SYSTEM STATE ANIMATION COUPLING --- */
+body.loaded {
+    overflow: auto; /* Turn scrolling back on once active */
+}
+
+body.loaded #splash-screen {
+    opacity: 0;
+    visibility: hidden;
+}
+
+body.loaded #main-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+  
+  /* ===== FINTECH BACKGROUND ===== */
 
 body.fintech-bg{
     position:fixed;
@@ -848,17 +1085,47 @@ footer {
         right: -105%;
     }
     #ai-chat { padding: 15px; }
-    #ai-input-area { padding: 15px; }
-}
-</style>
-</head>
+    #ai-input-area { padding: 15px; 
+                    
 <body>
-<div id="welcomeScreen">
-    <div class="loader"></div>
-    <h1>Welcome to LizKemi Capital Firm</h1>
-    <p>Initializing Secure Financial Platform...</p>
-    <p id="loadingText">Loading...</p>
-</div>
+    <div id="splash-screen">
+        <div class="splash-container">
+            <h1 class="splash-title">Welcome to LizKemi</h1>
+            <p class="splash-subtitle">Capital Firm</p>
+            
+            <div class="loader-ring"><div></div><div></div><div></div><div></div></div>
+            
+            <div class="status-text" id="status-update">Initializing Secure Financial Platform...</div>
+        </div>
+    </div>
+
+    <main id="main-content">
+        
+        <header class="navbar">
+            <div class="brand">
+                <span class="brand-icon">🦁</span> <h2>Liz KEMI Capital FIRM</h2>
+            </div>
+            <button class="btn-services">Our Services</button>
+        </header>
+        
+        <div class="side-terminal-tab">
+            <span>• LIZKEMI AI TERMINAL</span>
+        </div>
+
+        <section class="hero-section">
+            <h1 class="hero-title">Welcome to LizKemi<br>Capital Firm</h1>
+            <p class="hero-subtitle">Secure Financial Platform Active</p>
+            
+            <div class="logo-container">
+                <img src="YOUR_TIGER_LOGO_IMAGE_URL.png" alt="LizKemi Capital Tiger Logo" class="tiger-logo">
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+  
 <canvas id="canvas"></canvas>
 <div id="text-measure">Liz KEMI Capital FIRM</div>
 
@@ -1760,13 +2027,30 @@ document.getElementById("loanForm").addEventListener("submit", function(e){
     btn.innerText = "Submit Application";
     btn.disabled = false;
   });
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () {
-        document.getElementById("welcomeScreen").style.display = "none";
-    }, 3000); // Opens after 3 seconds
+document.addEventListener("DOMContentLoaded", () => {
+    const statusText = document.getElementById("status-update");
+    
+    // Array containing terminal security sequences and milestones
+    const bootSequences = [
+        { text: "Initializing Secure Financial Platform...", delay: 600 },
+        { text: "Establishing Encrypted 256-bit SSL Layer...", delay: 1400 },
+        { text: "Loading AI Core Matrix Configurations...", delay: 2200 },
+        { text: "Security Clearance Confirmed. Accessing...", delay: 2900 }
+    ];
+
+    // Cycle through and update the status console sequentially
+    bootSequences.forEach((sequence) => {
+        setTimeout(() => {
+            statusText.textContent = sequence.text;
+        }, sequence.delay);
+    });
+
+    // Complete the initialization phase and trigger the page entry fade
+    setTimeout(() => {
+        document.body.classList.add("loaded");
+    }, 3500); // 3.5 seconds total runtime experience
 });
-</script>
+
 </script>
   
   
