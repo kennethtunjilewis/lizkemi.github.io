@@ -1026,7 +1026,30 @@ footer {
             <p style="font-size: 1.15rem; margin-bottom: 2rem; border-left: 3px solid #00f2fe; padding-left: 15px;">
                 <strong>LizKemi Capital Ltd</strong> is a Company set to provide accessible and responsible loan solutions to individuals, small & big businesses, and especially students, empowering them to achieve their financial goals. The Company is looking forward to become the most trusted and innovative Financial Partner for Families and entrepreneurs in Sierra Leone & other nations.
             </p>
-            
+          <section id="impact-monitor" style="background: rgba(0, 242, 254, 0.05); padding: 40px 20px; border-top: 1px solid #00f2fe;">
+    <h2 style="text-align:center; color: #00f2fe; margin-bottom: 30px;">Strategic Community Impact Metrics</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1000px; margin: auto;">
+        
+        <!-- Metric 1 -->
+        <div class="content-block" style="text-align:center;">
+            <div class="val-highlight" id="count-projects" data-target="12">0</div>
+            <p style="color: #aaaaaa;">Active Jui Projects</p>
+        </div>
+
+        <!-- Metric 2 -->
+        <div class="content-block" style="text-align:center;">
+            <div class="val-highlight" id="count-members" data-target="450">0</div>
+            <p style="color: #aaaaaa;">Empowered Individuals</p>
+        </div>
+
+        <!-- Metric 3 -->
+        <div class="content-block" style="text-align:center;">
+            <div class="val-highlight" id="count-days" data-target="365">0</div>
+            <p style="color: #aaaaaa;">Days of Continuous Operation</p>
+        </div>
+    </div>
+</section>
+  
             <h3 style="color:#00f2fe;">Corporate Video Presentation</h3>
             <video autoplay muted loop playsinline width="100%" height="auto">
                         <source src="Lizkemicapitalfirm.MP4" type="video/mp4">
@@ -1849,6 +1872,35 @@ animate();
         }, 500);
         input.value = "";
     }
+function startImpactAnimation() {
+    const counters = document.querySelectorAll('.val-highlight[id^="count-"]');
+    
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / 100; // Speed of animation
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCount, 20);
+            } else {
+                counter.innerText = target + '+';
+            }
+        };
+        updateCount();
+    });
+}
+
+// Trigger when the section comes into view
+const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+        startImpactAnimation();
+        observer.disconnect(); // Run only once
+    }
+});
+
+observer.observe(document.getElementById('impact-monitor'));
 </script>
 </body>
 </html>
