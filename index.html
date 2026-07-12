@@ -484,7 +484,17 @@
         }
     </style>
 </head>
-<body>
+<body><!-- SECURE AUTHENTICATION GATE -->
+<div id="auth-gate" style="position:fixed; top:0; left:0; width:100%; height:100vh; background:#020205; z-index:999999; display:flex; justify-content:center; align-items:center;">
+    <div class="control-panel accent-cyan" style="width:100%; max-width:400px; text-align:center;">
+        <h2 style="color:#00f0ff; margin-bottom:20px;">ACCESS GATEWAY</h2>
+        <input type="email" id="loginEmail" class="cyber-input" placeholder="Email" style="margin-bottom:10px;">
+        <input type="password" id="loginPass" class="cyber-input" placeholder="Strong Password" style="margin-bottom:20px;">
+        <button class="cyber-btn" onclick="handleAuthAction('login')">Login</button>
+        <button class="cyber-btn" style="margin-top:10px;" onclick="handleAuthAction('signup')">Sign Up</button>
+    </div>
+</div>
+
 
     <!-- Loading Boot Sequence Screen -->
     <div id="boot-screen">
