@@ -493,7 +493,7 @@
             <section id="dashboard" class="active-pane">
                 <div class="pane-heading"><span>//</span> SYSTEM OVERVIEW DECK</div>
                 
-                <!-- WEBBY UPDATE: INTEGRATED SIGN-IN PANE LINKED TO SUPABASE -->
+                <!-- SECURE SIGN-IN PANE LINKED TO SUPABASE -->
                 <div class="control-panel accent-cyan" style="margin-bottom: 30px;">
                     <span class="panel-label">Secure Authentication Keyhole</span>
                     <div id="auth-unauthenticated">
@@ -576,6 +576,33 @@
                             <div class="matrix-value cyan" id="totalDisplay">2,400</div>
                         </div>
                     </div>
+                </div>
+
+                <!-- NEW COMPONENT: LIVE CAPITAL APPLICATION MATRIX FORM -->
+                <div class="control-panel accent-cyan" style="margin-bottom: 30px;">
+                    <span class="panel-label">Live Capital Application Matrix</span>
+                    
+                    <div class="input-stack">
+                        <label>Operator Name</label>
+                        <input type="text" id="appName" class="cyber-input" placeholder="Enter Full Legal Name">
+                    </div>
+
+                    <div class="input-stack">
+                        <label>Strategic Purpose Pipeline</label>
+                        <select id="appPurpose" class="cyber-select">
+                            <option value="Infrastructure">Workspace / Infrastructure</option>
+                            <option value="Liquidity">Operational Liquidity</option>
+                            <option value="Trading">Market Access / Trading</option>
+                            <option value="Startup">Student Enterprise / Startup</option>
+                        </select>
+                    </div>
+
+                    <div style="margin:20px 0; display:flex; align-items:center; gap:10px; font-size:0.85rem;">
+                        <input type="checkbox" id="complianceCheck" style="accent-color:#00f0ff; width:16px; height:16px;">
+                        <label for="complianceCheck" style="cursor:pointer; color:#cbd5e1;">Bind request payload to verified LIZKEMI terms</label>
+                    </div>
+
+                    <button class="cyber-btn" onclick="submitLiveLoanApplication()">Submit Priority Application</button>
                 </div>
 
                 <div class="control-panel" style="margin-bottom: 30px;">
@@ -753,12 +780,6 @@
                             [TRACK_METRIC] Target Array: Custom Multi-Phase Macro Capital Adjustments.
                         </div>
                     </div>
-
-                    <div style="margin:20px 0; display:flex; align-items:center; gap:10px; font-size:0.85rem;">
-                        <input type="checkbox" id="complianceCheck" style="accent-color:#00f0ff; width:16px; height:16px;">
-                        <label for="complianceCheck" style="cursor:pointer;">Bind input request parameter payload to verified system terms</label>
-                    </div>
-                    <button class="cyber-btn" onclick="submitLiveLoanApplication()">Submit Priority Parameters Profile</button>
                 </div>
             </section>
         </main>
@@ -847,7 +868,7 @@
             }, 100);
         });
 
-        /* --- WEBBY UPGRADE: LIVE MAGIC LINK AUTHENTICATION PIPELINES --- */
+        /* --- MAGIC LINK AUTHENTICATION PIPELINES --- */
         async function sendMagicLink() {
             const emailInput = document.getElementById('authEmail');
             const terminalFeedNode = document.getElementById("systemLog");
@@ -863,7 +884,7 @@
             const { error } = await supabase.auth.signInWithOtp({
                 email: email,
                 options: {
-                    emailRedirectTo: window.location.href // Returns user back to your live GitHub page
+                    emailRedirectTo: window.location.href 
                 }
             });
 
@@ -890,19 +911,19 @@
 
             if (session && session.user) {
                 currentActiveUser = session.user;
-                unauthDiv.style.display = 'none';
-                authDiv.style.display = 'block';
-                emailDisplay.innerText = session.user.email;
-                terminalFeedNode.innerHTML = `[AUTH_SUCCESS] ${new Date().toLocaleTimeString()} - Operator authenticated: ${session.user.email}<br>` + terminalFeedNode.innerHTML;
+                if (unauthDiv) unauthDiv.style.display = 'none';
+                if (authDiv) authDiv.style.display = 'block';
+                if (emailDisplay) emailDisplay.innerText = session.user.email;
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[AUTH_SUCCESS] ${new Date().toLocaleTimeString()} - Operator authenticated: ${session.user.email}<br>` + terminalFeedNode.innerHTML;
                 fetchLiveProfile(session.user.id);
             } else {
                 currentActiveUser = null;
-                unauthDiv.style.display = 'block';
-                authDiv.style.display = 'none';
+                if (unauthDiv) unauthDiv.style.display = 'block';
+                if (authDiv) authDiv.style.display = 'none';
                 document.getElementById('profile-name-display').innerText = "Guest Operator";
                 document.getElementById('profile-status-display').innerText = "● SECURE HANDSHAKE PENDING";
                 document.getElementById('profile-status-display').style.color = "#00f0ff";
-                convertEquityMatrix(); // Reset data fields safely
+                convertEquityMatrix(); 
             }
         }
 
@@ -1017,7 +1038,6 @@
             document.getElementById('seriesBInit').innerText = currencySymbolString + (2.50 * operationalRateModifier).toFixed(2);
             document.getElementById('seriesBCurr').innerText = currencySymbolString + (3.10 * operationalRateModifier).toFixed(2);
 
-            // Fetch live cloud statistics if logged in, otherwise apply modification multiplier safely to UI baseline
             if (currentActiveUser) {
                 fetchLiveProfile(currentActiveUser.id);
             } else {
@@ -1040,7 +1060,6 @@
 
         /* --- Live Profile Fetch Operations --- */
         async function fetchLiveProfile(userId) {
-            // Check if profiles table exists and select user rows safely
             const { data: profile, error } = await supabase
                 .from('profiles')
                 .select('*')
@@ -1072,7 +1091,6 @@
                     statusDisplay.style.color = profile.is_executive ? "#10b981" : "#00f0ff";
                 }
             } else {
-                // Fallback for new user with empty profiles table entry
                 document.getElementById('dashCapital').innerText = currencySymbolString + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
                 document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
                 if (nameDisplay) nameDisplay.innerText = currentActiveUser.email.split('@')[0];
@@ -1083,24 +1101,46 @@
             }
         }
 
-        /* --- Live Cloud Form Application Deliveries --- */
+        /* --- UPDATED: LIVE CLOUD FORM APPLICATION DELIVERIES --- */
         async function submitLiveLoanApplication() {
+            const terminalFeedNode = document.getElementById("systemLog");
+
+            // 1. Authenticated Node Validation Rule
+            if (!currentActiveUser) {
+                alert("[ERROR] Session unverified. You must sign in using your authentication keyhole before deploying applications.");
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Submission blocked. Missing authorization handshake code.<br>` + terminalFeedNode.innerHTML;
+                return;
+            }
+
+            // 2. Extract inputs from both calculation select dropdown and text forms
             const selectVal = document.getElementById('loanAmount');
+            const nameInput = document.getElementById('appName').value.trim();
+            const purposeInput = document.getElementById('appPurpose').value;
+            const compliance = document.getElementById('complianceCheck').checked;
+
             const principal = parseInt(selectVal.value);
             const interest = Math.round(principal * 0.20);
             const total = principal + interest;
-            const compliance = document.getElementById('complianceCheck').checked;
 
-            const terminalFeedNode = document.getElementById("systemLog");
+            // 3. Complete Field Verification Checks
+            if (!nameInput) {
+                alert("[ERROR] Please provide your full legal operator name.");
+                return;
+            }
+            if (!compliance) {
+                alert("[ERROR] Compliance checkpoint error. You must bind this transaction array payload to standard LIZKEMI terms.");
+                return;
+            }
 
-            terminalFeedNode.innerHTML = `[LEDGER_PULSE] ${new Date().toLocaleTimeString()} - Transmitting loan parameter structure to Supabase...<br>` + terminalFeedNode.innerHTML;
+            if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_PULSE] ${new Date().toLocaleTimeString()} - Transmitting application profile ($${principal.toLocaleString()} base) to Supabase...<br>` + terminalFeedNode.innerHTML;
 
+            // 4. Data insertion process straight to user's database
             const { data, error } = await supabase
                 .from('loan_applications')
                 .insert([
                     { 
-                        user_id: currentActiveUser ? currentActiveUser.id : null,
-                        user_email: currentActiveUser ? currentActiveUser.email : 'guest_anonymous',
+                        user_id: currentActiveUser.id,
+                        user_email: currentActiveUser.email,
                         principal_amount: principal, 
                         interest_accrued: interest, 
                         total_repayment: total,
@@ -1110,11 +1150,15 @@
                 ]);
 
             if (error) {
-                terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
                 alert('Database Error: ' + error.message);
             } else {
-                terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Capital request pipeline initialized successfully.<br>` + terminalFeedNode.innerHTML;
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Application data record created successfully.<br>` + terminalFeedNode.innerHTML;
                 alert('Application routing verified. Priority structural token assigned to database queue.');
+                
+                // Clear out operational text parameters upon execution victory
+                document.getElementById('appName').value = '';
+                document.getElementById('complianceCheck').checked = false;
             }
         }
 
@@ -1173,7 +1217,7 @@
                 if (rawInputValue === "") return;
 
                 const terminalFeedNode = document.getElementById("systemLog");
-                terminalFeedNode.innerHTML = `[USER_COMMAND] ${new Date().toLocaleTimeString()} - Executing statement: "${rawInputValue}"<br>` + terminalFeedNode.innerHTML;
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[USER_COMMAND] ${new Date().toLocaleTimeString()} - Executing statement: "${rawInputValue}"<br>` + terminalFeedNode.innerHTML;
 
                 // Async Cloud Telemetry Pipeline Delivery
                 supabase.from('terminal_logs').insert([
@@ -1191,7 +1235,7 @@
                 // --- INTERCEPT LOAN EXTRACTION ARRAY ---
                 if (rawInputValue.toLowerCase().startsWith('apply')) {
                     handleTerminalLoanCommand(rawInputValue).then(terminalResponse => {
-                        terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
+                        if (terminalFeedNode) terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
                     });
                     this.value = "";
                     return;
@@ -1235,7 +1279,7 @@
                 else if (formattedQueryLower.includes("loan") || formattedQueryLower.includes("capital")) {
                     engineResponseString = "Lending Core Output: Term Loans, SBA Credit Frameworks, Revolving Lines, and Micro Structures operating nominally at 20% Base.";
                 } else if (formattedQueryLower === "clear") {
-                    terminalFeedNode.innerHTML = "[SYS_INFO] Log history pipeline cleared locally.<br>";
+                    if (terminalFeedNode) terminalFeedNode.innerHTML = "[SYS_INFO] Log history pipeline cleared locally.<br>";
                     this.value = "";
                     return;
                 } else if (formattedQueryLower === "status") {
@@ -1243,7 +1287,7 @@
                 }
 
                 setTimeout(() => {
-                    terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${engineResponseString}<br>` + terminalFeedNode.innerHTML;
+                    if (terminalFeedNode) terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${engineResponseString}<br>` + terminalFeedNode.innerHTML;
                 }, 400);
 
                 this.value = "";
