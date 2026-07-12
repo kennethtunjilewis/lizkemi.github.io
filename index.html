@@ -461,7 +461,6 @@
         <aside>
             <div class="brand-panel">
                 <div class="brand-title">LizKemi Capital</div>
-                <!-- VERSION INJECTED: Upgraded to Enterprise Level Max Build -->
                 <div class="brand-subtitle">FIRMS / SYSTEM v9.9.9-MAX</div>
             </div>
             
@@ -494,6 +493,26 @@
             <section id="dashboard" class="active-pane">
                 <div class="pane-heading"><span>//</span> SYSTEM OVERVIEW DECK</div>
                 
+                <!-- WEBBY UPDATE: INTEGRATED SIGN-IN PANE LINKED TO SUPABASE -->
+                <div class="control-panel accent-cyan" style="margin-bottom: 30px;">
+                    <span class="panel-label">Secure Authentication Keyhole</span>
+                    <div id="auth-unauthenticated">
+                        <p class="desc">Access restricted. Inject your email authorization token below to open systemic loan parameters routing.</p>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            <input type="email" id="authEmail" class="cyber-input" placeholder="operator@domain.com" style="max-width: 400px; flex: 1;">
+                            <button class="cyber-btn" onclick="sendMagicLink()" style="width: auto;">Request Magic Entry Key</button>
+                        </div>
+                    </div>
+                    <div id="auth-authenticated" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                            <div>
+                                <span style="color: #10b981; font-weight: bold;">[ACCESS GRANTED]</span> Signed in as: <span id="currentUserEmail" style="color: #00f0ff;"></span>
+                            </div>
+                            <button class="cyber-btn" onclick="terminateSession()" style="width: auto; border-color: #ef4444; color: #ef4444; padding: 6px 15px;">Terminate Session</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="cyber-grid">
                     <div class="control-panel accent-cyan">
                         <span class="panel-label">Operational Metrics</span>
@@ -695,12 +714,12 @@
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
                             <div style="width:36px; height:36px; background:rgba(9, 9, 20, 0.6); border:1px solid #00f0ff; display:flex; align-items:center; justify-content:center; color:#00f0ff; font-weight:bold; font-size:0.8rem;">KL</div>
                             <div>
-                                <div style="font-size:0.9rem; font-weight:bold; color:#ffffff;">Kennedy Lewis</div>
-                                <div style="font-size:0.7rem; color:#10b981;">● EXECUTIVE ROUTE SIGNED</div>
+                                <div style="font-size:0.9rem; font-weight:bold; color:#ffffff;" id="profile-name-display">Guest Operator</div>
+                                <div style="font-size:0.7rem; color:#00f0ff;" id="profile-status-display">● SECURE HANDSHAKE PENDING</div>
                             </div>
                         </div>
-                        <div style="font-size:0.8rem; margin-bottom:8px; display:flex; justify-content:space-between;"><span>Core Capital:</span><span id="dashCapital" style="color:#00f0ff;">$154,200.00</span></div>
-                        <div style="font-size:0.8rem; margin-bottom:15px; display:flex; justify-content:space-between;"><span>Accrued Yields:</span><span id="dashYield" style="color:#10b981;">+$12,480.00</span></div>
+                        <div style="font-size:0.8rem; margin-bottom:8px; display:flex; justify-content:space-between;"><span>Core Capital:</span><span id="dashCapital" style="color:#00f0ff;">$0.00</span></div>
+                        <div style="font-size:0.8rem; margin-bottom:15px; display:flex; justify-content:space-between;"><span>Accrued Yields:</span><span id="dashYield" style="color:#10b981;">+$0.00</span></div>
                         <button class="cyber-btn" style="font-size:0.75rem; padding:8px;" onclick="alert('Accessing localized secure node... Redirecting to full ledger database.')">Launch Executive Node</button>
                     </div>
                 </div>
@@ -818,17 +837,74 @@
                         document.getElementById("boot-screen").style.opacity = "0";
                         document.getElementById("boot-screen").style.visibility = "hidden";
                         triggerAnimateMetrics();
+                        
                         // Listen for Auth changes automatically
-                        supabase.auth.getSession().then(({ data: { session } }) => {
-                            if (session) {
-                                currentActiveUser = session.user;
-                                fetchLiveProfile(session.user.id);
-                            }
+                        supabase.auth.onAuthStateChange((event, session) => {
+                            handleAuthChange(session);
                         });
                     }, 300);
                 }
             }, 100);
         });
+
+        /* --- WEBBY UPGRADE: LIVE MAGIC LINK AUTHENTICATION PIPELINES --- */
+        async function sendMagicLink() {
+            const emailInput = document.getElementById('authEmail');
+            const terminalFeedNode = document.getElementById("systemLog");
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                alert("Please enter a valid systemic operational email alignment.");
+                return;
+            }
+
+            terminalFeedNode.innerHTML = `[AUTH_REQUEST] ${new Date().toLocaleTimeString()} - Dispatching OTP link to "${email}"...<br>` + terminalFeedNode.innerHTML;
+
+            const { error } = await supabase.auth.signInWithOtp({
+                email: email,
+                options: {
+                    emailRedirectTo: window.location.href // Returns user back to your live GitHub page
+                }
+            });
+
+            if (error) {
+                terminalFeedNode.innerHTML = `[AUTH_ERROR] Initialization aborted: ${error.message}<br>` + terminalFeedNode.innerHTML;
+                alert("Auth Node Error: " + error.message);
+            } else {
+                terminalFeedNode.innerHTML = `[AUTH_DISPATCH] Magic Key sent successfully. Inspect inbox matrix at ${email}.<br>` + terminalFeedNode.innerHTML;
+                alert("Handshake payload sent! Check your email inbox for the magic authentication link.");
+            }
+        }
+
+        async function terminateSession() {
+            const terminalFeedNode = document.getElementById("systemLog");
+            await supabase.auth.signOut();
+            terminalFeedNode.innerHTML = `[AUTH_LOGOUT] ${new Date().toLocaleTimeString()} - Active session destroyed.<br>` + terminalFeedNode.innerHTML;
+        }
+
+        function handleAuthChange(session) {
+            const unauthDiv = document.getElementById('auth-unauthenticated');
+            const authDiv = document.getElementById('auth-authenticated');
+            const emailDisplay = document.getElementById('currentUserEmail');
+            const terminalFeedNode = document.getElementById("systemLog");
+
+            if (session && session.user) {
+                currentActiveUser = session.user;
+                unauthDiv.style.display = 'none';
+                authDiv.style.display = 'block';
+                emailDisplay.innerText = session.user.email;
+                terminalFeedNode.innerHTML = `[AUTH_SUCCESS] ${new Date().toLocaleTimeString()} - Operator authenticated: ${session.user.email}<br>` + terminalFeedNode.innerHTML;
+                fetchLiveProfile(session.user.id);
+            } else {
+                currentActiveUser = null;
+                unauthDiv.style.display = 'block';
+                authDiv.style.display = 'none';
+                document.getElementById('profile-name-display').innerText = "Guest Operator";
+                document.getElementById('profile-status-display').innerText = "● SECURE HANDSHAKE PENDING";
+                document.getElementById('profile-status-display').style.color = "#00f0ff";
+                convertEquityMatrix(); // Reset data fields safely
+            }
+        }
 
         /* --- Background Hardware Matrix Grid Animation --- */
         const canvas = document.getElementById('matrixCanvas');
@@ -945,8 +1021,8 @@
             if (currentActiveUser) {
                 fetchLiveProfile(currentActiveUser.id);
             } else {
-                document.getElementById('dashCapital').innerText = currencySymbolString + (154200 * operationalRateModifier).toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (12480 * operationalRateModifier).toLocaleString(undefined, {minimumFractionDigits: 2});
+                document.getElementById('dashCapital').innerText = currencySymbolString + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
+                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
             }
         }
 
@@ -964,35 +1040,45 @@
 
         /* --- Live Profile Fetch Operations --- */
         async function fetchLiveProfile(userId) {
+            // Check if profiles table exists and select user rows safely
             const { data: profile, error } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', userId)
-                .single();
+                .maybeSingle();
 
             if (error) {
                 console.error("[SYS_ERROR] Could not fetch data matrix:", error.message);
                 return;
             }
 
-            if (profile) {
-                const selectorCode = document.getElementById('currencySelector').value;
-                const operationalRateModifier = (selectorCode === "SLL") ? 22.5 : 1;
-                const currencySymbolString = (selectorCode === "SLL") ? "Le " : "$";
+            const selectorCode = document.getElementById('currencySelector').value;
+            const operationalRateModifier = (selectorCode === "SLL") ? 22.5 : 1;
+            const currencySymbolString = (selectorCode === "SLL") ? "Le " : "$";
 
-                const originalCapital = profile.core_capital * operationalRateModifier;
-                const originalYield = profile.accrued_yield * operationalRateModifier;
+            const nameDisplay = document.getElementById('profile-name-display');
+            const statusDisplay = document.getElementById('profile-status-display');
+
+            if (profile) {
+                const originalCapital = (profile.core_capital || 0) * operationalRateModifier;
+                const originalYield = (profile.accrued_yield || 0) * operationalRateModifier;
 
                 document.getElementById('dashCapital').innerText = currencySymbolString + originalCapital.toLocaleString(undefined, {minimumFractionDigits: 2});
                 document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + originalYield.toLocaleString(undefined, {minimumFractionDigits: 2});
                 
-                const nameNode = document.querySelector(".control-panel.accent-cyan div div:nth-child(1)");
-                const statusNode = document.querySelector(".control-panel.accent-cyan div div:nth-child(2)");
-                
-                if (nameNode) nameNode.innerText = profile.full_name;
-                if (statusNode) {
-                    statusNode.innerText = profile.is_executive ? "● EXECUTIVE ROUTE SIGNED" : "● CLIENT NODE VERIFIED";
-                    statusNode.style.color = profile.is_executive ? "#10b981" : "#00f0ff";
+                if (nameDisplay) nameDisplay.innerText = profile.full_name || currentActiveUser.email.split('@')[0];
+                if (statusDisplay) {
+                    statusDisplay.innerText = profile.is_executive ? "● EXECUTIVE ROUTE SIGNED" : "● CLIENT NODE VERIFIED";
+                    statusDisplay.style.color = profile.is_executive ? "#10b981" : "#00f0ff";
+                }
+            } else {
+                // Fallback for new user with empty profiles table entry
+                document.getElementById('dashCapital').innerText = currencySymbolString + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
+                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
+                if (nameDisplay) nameDisplay.innerText = currentActiveUser.email.split('@')[0];
+                if (statusDisplay) {
+                    statusDisplay.innerText = "● COHORT ACTIVE NODE";
+                    statusDisplay.style.color = "#00f0ff";
                 }
             }
         }
@@ -1007,11 +1093,14 @@
 
             const terminalFeedNode = document.getElementById("systemLog");
 
+            terminalFeedNode.innerHTML = `[LEDGER_PULSE] ${new Date().toLocaleTimeString()} - Transmitting loan parameter structure to Supabase...<br>` + terminalFeedNode.innerHTML;
+
             const { data, error } = await supabase
                 .from('loan_applications')
                 .insert([
                     { 
                         user_id: currentActiveUser ? currentActiveUser.id : null,
+                        user_email: currentActiveUser ? currentActiveUser.email : 'guest_anonymous',
                         principal_amount: principal, 
                         interest_accrued: interest, 
                         total_repayment: total,
@@ -1022,6 +1111,7 @@
 
             if (error) {
                 terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
+                alert('Database Error: ' + error.message);
             } else {
                 terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Capital request pipeline initialized successfully.<br>` + terminalFeedNode.innerHTML;
                 alert('Application routing verified. Priority structural token assigned to database queue.');
@@ -1045,6 +1135,7 @@
                 .insert([
                     {
                         user_id: currentActiveUser ? currentActiveUser.id : null,
+                        user_email: currentActiveUser ? currentActiveUser.email : 'terminal_guest',
                         principal_amount: amountParam,
                         interest_accrued: calculatedInterest,
                         total_repayment: aggregateTotal,
@@ -1106,51 +1197,41 @@
                     return;
                 }
 
-                // --- FULL 1-TO-MAX CHRONOLOGICAL LEVEL CORE INTERCEPT SYSTEMS ---
-                
-                // LEVEL 1: Operational Core Deployment Profile
+                // --- FULL CHRONOLOGICAL LEVEL CORE INTERCEPT SYSTEMS ---
                 if (formattedQueryLower === "level1" || formattedQueryLower === "l1" || formattedQueryLower.includes("operationalstats")) {
                     const days = document.getElementById('count-days').innerText;
                     const members = document.getElementById('count-members').innerText;
                     const infrastructure = document.getElementById('count-projects').innerText;
                     engineResponseString = `[METRIC_L1_SUCCESS] Extraction complete. ${days} Deployment periods active, ${members} Cohorts mapped, ${infrastructure} Regional Jui nodes active.`;
                 }
-                // LEVEL 2: Loan Matrix Allocation Profile
                 else if (formattedQueryLower === "level2" || formattedQueryLower === "l2" || formattedQueryLower.includes("loanparameter")) {
                     const principal = document.getElementById('loanAmount').value;
                     const currentInterest = document.getElementById('interestDisplay').innerText;
                     engineResponseString = `[LOAN_L2_METRIC] Matrix Active. Selected Principle Base: $${principal} // Target Interest Modifier Yield (20%): $${currentInterest}.`;
                 }
-                // LEVEL 3: Core Capital Position Mapping
                 else if (formattedQueryLower === "level3" || formattedQueryLower === "l3" || formattedQueryLower.includes("bankbalance")) {
                     const currentCap = document.getElementById('dashCapital').innerText;
                     const currentYield = document.getElementById('dashYield').innerText;
                     engineResponseString = `[BANK_L3_SUCCESS] Liquidity Map Verified. Base Tier Holdings: ${currentCap} // Accrued Yield Balance: ${currentYield}. Status: Liquidity Stable.`;
                 } 
-                // LEVEL 4: Strategic Compound Horizon Forecast
                 else if (formattedQueryLower === "level4" || formattedQueryLower === "l4" || formattedQueryLower.includes("wealthforecast")) {
                     const matureCalc = document.getElementById('matureValuationDisplay').innerText;
                     engineResponseString = `[WEALTH_L4_FORECAST] Simulation compiled matching 10% annual baseline. Expected Horizon Maturity Yield: ${matureCalc}.`;
                 }
-                // LEVEL 5: High-Frequency Local Arbitrage Engine
                 else if (formattedQueryLower === "level5" || formattedQueryLower === "l5" || formattedQueryLower.includes("arbitrage")) {
                     engineResponseString = "[BANK_L5_PIPELINE] Initializing High-Frequency Arbitrage Engine... Spread targets isolated on regional Jui hubs. Operational risk index minimized under 0.04%. Delta liquidity parameters locked.";
                 } 
-                // LEVEL 6: Equities Matriculation Index
                 else if (formattedQueryLower === "level6" || formattedQueryLower === "l6" || formattedQueryLower.includes("equitymatrix")) {
                     const seriesA = document.getElementById('seriesACurr').innerText;
                     const seriesB = document.getElementById('seriesBCurr').innerText;
                     engineResponseString = `[EQUITY_L6_INDEX] Real-time matriculation analysis completed. Series A Common Valuation: ${seriesA} | Series B Preferred Lock: ${seriesB}.`;
                 }
-                // LEVEL 7: Cryptographic Clearing Settlement Array
                 else if (formattedQueryLower === "level7" || formattedQueryLower === "l7" || formattedQueryLower.includes("clearledger")) {
                     engineResponseString = `[BANK_L7_LEDGER] Executing Cross-Border Settlement Array. 256-Bit cryptographic clearance codes broadcasted. Pending regional clearing tokens matching host interface updated to ZERO anomalies. Sync confirmed.`;
                 } 
-                // LEVEL MAX: Total Presidential Node Override
                 else if (formattedQueryLower === "executelevelmax" || formattedQueryLower === "levelmax" || formattedQueryLower === "lmax" || formattedQueryLower.includes("systemoverride")) {
                     engineResponseString = "[BANK_ULTRA_GATEWAY] Presidential Node Active. Multi-Phase Macro Capital adjustments running across all sectors: L1-L4 Parameters verified, L5 Arbitrage maximized, L6 Equities stabilized, L7 Cross-border clearing parameters executed flawlessly. System architecture optimization absolute.";
                 }
-                // Standard Keyword Alternatives
                 else if (formattedQueryLower.includes("loan") || formattedQueryLower.includes("capital")) {
                     engineResponseString = "Lending Core Output: Term Loans, SBA Credit Frameworks, Revolving Lines, and Micro Structures operating nominally at 20% Base.";
                 } else if (formattedQueryLower === "clear") {
