@@ -232,6 +232,12 @@
             margin-bottom: 30px;
         }
 
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
         .control-panel {
             background: rgba(4, 4, 15, 0.55);
             backdrop-filter: blur(14px) saturate(180%);
@@ -252,6 +258,10 @@
             border-top-color: #10b981; 
             box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.05);
         }
+        .control-panel.accent-red { 
+            border-top-color: #ef4444; 
+            box-shadow: 0 8px 32px 0 rgba(239, 68, 68, 0.05);
+        }
 
         .panel-label {
             font-size: 0.75rem;
@@ -260,6 +270,16 @@
             letter-spacing: 1px;
             margin-bottom: 15px;
             display: block;
+        }
+
+        .sub-panel-label {
+            font-size: 0.8rem;
+            color: #00f0ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0 10px 0;
+            border-bottom: 1px dashed rgba(0, 240, 255, 0.2);
+            padding-bottom: 5px;
         }
 
         /* --- Typography & Inputs --- */
@@ -291,6 +311,22 @@
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
         }
 
+        /* Styling for File Uploads */
+        .cyber-file-input {
+            width: 100%;
+            background: rgba(239, 68, 68, 0.03);
+            border: 1px dashed rgba(239, 68, 68, 0.4);
+            color: #ffffff;
+            padding: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cyber-file-input:hover {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
         .cyber-slider {
             width: 100%;
             height: 4px;
@@ -318,6 +354,16 @@
             background: rgba(0, 240, 255, 0.15); 
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
             text-shadow: 0 0 5px #ffffff;
+        }
+
+        .cyber-btn.btn-red {
+            border-color: #ef4444;
+            color: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.05);
+        }
+        .cyber-btn.btn-red:hover {
+            background: rgba(239, 68, 68, 0.15);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
         /* --- Interactive Tables & Arrays --- */
@@ -355,7 +401,7 @@
             font-size: 0.85rem;
             line-height: 1.6;
         }
-        .contract-scroll-frame h4 { color: #00f0ff; margin: 15px 0 5px 0; font-size: 0.9rem; }
+        .contract-scroll-frame h4 { color: #ef4444; margin: 15px 0 5px 0; font-size: 0.9rem; }
 
         /* --- Custom Multi-Tab Segment Control --- */
         .segment-bar {
@@ -461,7 +507,7 @@
         <aside>
             <div class="brand-panel">
                 <div class="brand-title">LizKemi Capital</div>
-                <div class="brand-subtitle">FIRMS / SYSTEM v9.9.9-MAX</div>
+                <div class="brand-subtitle">FIRMS / SYSTEM v10.0.0-SECURE</div>
             </div>
             
             <div class="nav-menu">
@@ -483,7 +529,7 @@
             <!-- Top Status Bar -->
             <header class="top-ticker">
                 <div class="ticker-node">
-                    <span>STATUS: <span class="pulse-light">● ONLINE DISPATCH</span></span>
+                    <span>STATUS: <span class="pulse-light">● SECURE FIREWALL ACTIVE</span></span>
                     <span>BASE INTEREST: <span style="color:#00f0ff;">20% FIXED MATRIX</span></span>
                 </div>
                 <div>SECURE NODE: 256-BIT SSL VALIDATED</div>
@@ -534,7 +580,7 @@
                 <div class="control-panel">
                     <span class="panel-label">System State Terminal Feed</span>
                     <div class="terminal-box" id="systemLog">
-                        [SYS_INFO] System architecture mapping validated.<br>
+                        [SYS_INFO] Institutional security protocols mapped.<br>
                         [SYS_INFO] Framework waiting for query allocations...
                     </div>
                 </div>
@@ -542,8 +588,8 @@
 
             <!-- SECTION: CAPITAL & LOANS -->
             <section id="loans">
-                <div class="pane-heading"><span>//</span> 1. LOAN & CAPITAL SERVICES</div>
-                <p class="desc">A robust suite of structural micro and macro capital solutions designed to support rapid workspace scaling, industrial transitions, and corporate liquidity pipelines.</p>
+                <div class="pane-heading"><span>//</span> 1. LOAN & INSTITUTIONAL CAPITAL BLOCK</div>
+                <p class="desc">Cross-border structural micro and macro capital solutions bound by international security frameworks, real-time KYC telemetry, and strict risk mapping.</p>
                 
                 <div class="cyber-grid">
                     <div class="control-panel accent-cyan">
@@ -578,31 +624,127 @@
                     </div>
                 </div>
 
-                <!-- NEW COMPONENT: LIVE CAPITAL APPLICATION MATRIX FORM -->
-                <div class="control-panel accent-cyan" style="margin-bottom: 30px;">
-                    <span class="panel-label">Live Capital Application Matrix</span>
+                <!-- FORTIFIED COMPONENT: LIVE HIGH-SECURITY CAPITAL APPLICATION MATRIX -->
+                <div class="control-panel accent-red" style="margin-bottom: 30px;">
+                    <span class="panel-label" style="color: #ef4444; font-weight: bold;">[SECURE PROTOCOL] Institutional KYC Loan Entry Interface</span>
+                    <p class="desc" style="font-size: 0.8rem; color: #94a3b8;">All tracking telemetry, international location nodes, legal IDs, and uploaded file strings will be hardcoded into the cloud ledger database to protect capital against bad actors and fraud.</p>
                     
-                    <div class="input-stack">
-                        <label>Operator Name</label>
-                        <input type="text" id="appName" class="cyber-input" placeholder="Enter Full Legal Name">
+                    <!-- Section A: Primary Personal Telemetry -->
+                    <div class="sub-panel-label">01. Primary Identity Vectors</div>
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Full Legal Operator Name *</label>
+                            <input type="text" id="appName" class="cyber-input" placeholder="First Name, Middle, Surname">
+                        </div>
+                        <div class="input-stack">
+                            <label>National / International ID Number *</label>
+                            <input type="text" id="appNationalID" class="cyber-input" placeholder="Passport / Gov ID / National Registry Num">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Country of Current Jurisdiction *</label>
+                            <input type="text" id="appCountry" class="cyber-input" placeholder="e.g. Sierra Leone, United States, United Kingdom">
+                        </div>
+                        <div class="input-stack">
+                            <label>Active Contact Phone Line (With Area Code) *</label>
+                            <input type="tel" id="appPhone" class="cyber-input" placeholder="+232 XX XXXXXX / +1 XXX XXX XXXX">
+                        </div>
                     </div>
 
                     <div class="input-stack">
-                        <label>Strategic Purpose Pipeline</label>
-                        <select id="appPurpose" class="cyber-select">
-                            <option value="Infrastructure">Workspace / Infrastructure</option>
-                            <option value="Liquidity">Operational Liquidity</option>
-                            <option value="Trading">Market Access / Trading</option>
-                            <option value="Startup">Student Enterprise / Startup</option>
-                        </select>
+                        <label>Permanent Residential/Physical Street Address *</label>
+                        <input type="text" id="appAddress" class="cyber-input" placeholder="Street Name, City, State/Province, Postal Node">
                     </div>
 
-                    <div style="margin:20px 0; display:flex; align-items:center; gap:10px; font-size:0.85rem;">
-                        <input type="checkbox" id="complianceCheck" style="accent-color:#00f0ff; width:16px; height:16px;">
-                        <label for="complianceCheck" style="cursor:pointer; color:#cbd5e1;">Bind request payload to verified LIZKEMI terms</label>
+                    <!-- Section B: Professional & Employment Status -->
+                    <div class="sub-panel-label">02. Economic Infrastructure Parameters</div>
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Active Professional Status *</label>
+                            <select id="appJobStatus" class="cyber-select">
+                                <option value="Employed">Full-Time / Part-Time Employed</option>
+                                <option value="Student">Academic Student Operator</option>
+                                <option value="BusinessOwner">Business Owner / Company Founder</option>
+                                <option value="Freelancer">Independent Freelancer</option>
+                            </select>
+                        </div>
+                        <div class="input-stack">
+                            <label>Verifiable Monthly Income Range (USD Base) *</label>
+                            <input type="text" id="appIncome" class="cyber-input" placeholder="e.g. $500, $2,500, $10,000">
+                        </div>
                     </div>
 
-                    <button class="cyber-btn" onclick="submitLiveLoanApplication()">Submit Priority Application</button>
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Employer Name / Academic Institution *</label>
+                            <input type="text" id="appEmployer" class="cyber-input" placeholder="Company or University Node">
+                        </div>
+                        <div class="input-stack">
+                            <label>Strategic Capital Purpose *</label>
+                            <select id="appPurpose" class="cyber-select">
+                                <option value="Infrastructure">Workspace / Infrastructure</option>
+                                <option value="Liquidity">Operational Liquidity</option>
+                                <option value="Trading">Market Access / Trading</option>
+                                <option value="Startup">Student Enterprise / Startup</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section C: Biometric Data Capture Slots (Front & Back IDs) -->
+                    <div class="sub-panel-label">03. Verification Registry Files (Binary Upload Layers)</div>
+                    <p class="desc" style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px;">Please attach clear digital snaps or scan layers of your formal country document matrix framework.</p>
+                    <div class="form-grid-2" style="margin-bottom: 20px;">
+                        <div class="input-stack">
+                            <label style="color: #ef4444;">Official Document - FRONT VIEW *</label>
+                            <input type="file" id="appIdFront" class="cyber-file-input" accept="image/*,application/pdf">
+                        </div>
+                        <div class="input-stack">
+                            <label style="color: #ef4444;">Official Document - BACK VIEW *</label>
+                            <input type="file" id="appIdBack" class="cyber-file-input" accept="image/*,application/pdf">
+                        </div>
+                    </div>
+
+                    <!-- Section D: Tracking Vectors / Next of Kin / Guarantor Matrix -->
+                    <div class="sub-panel-label">04. Emergency Trace / Backup Guarantor Coordinates</div>
+                    <p class="desc" style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 10px;">Fallback tracking nodes required under international collection safety parameters.</p>
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Guarantor Full Legal Name *</label>
+                            <input type="text" id="appGuarantorName" class="cyber-input" placeholder="Full Name of Primary Contact">
+                        </div>
+                        <div class="input-stack">
+                            <label>Relationship Matrix to Operator *</label>
+                            <input type="text" id="appGuarantorRelation" class="cyber-input" placeholder="Family / Professional Peer / Co-signer">
+                        </div>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="input-stack">
+                            <label>Guarantor Active Phone Number *</label>
+                            <input type="tel" id="appGuarantorPhone" class="cyber-input" placeholder="+XXX XX XXXXXXX">
+                        </div>
+                        <div class="input-stack">
+                            <label>Guarantor Physical Home Location *</label>
+                            <input type="text" id="appGuarantorAddress" class="cyber-input" placeholder="Full Street Address Node">
+                        </div>
+                    </div>
+
+                    <!-- Section E: Legal Binding Execution -->
+                    <div class="sub-panel-label">05. Sovereign Legal Attestation Grid</div>
+                    <div style="margin:20px 0; display:flex; align-items:flex-start; gap:12px; font-size:0.8rem; background: rgba(239,68,68,0.05); padding: 15px; border: 1px solid rgba(239,68,68,0.2);">
+                        <input type="checkbox" id="complianceCheck" style="accent-color:#ef4444; width:18px; height:18px; margin-top:2px; cursor:pointer;">
+                        <label for="complianceCheck" style="cursor:pointer; color:#cbd5e1; line-height: 1.5;">
+                            I hereby execute this cryptographic handshake file under legal penalty criteria. I authenticate that all tracking vectors, employment telemetry, and database ID strings are true. I acknowledge that LizKemi Capital retains total jurisdiction tracking privileges to engage sovereign recovery authorities or trace my network node internationally in occurrences of breach or payment defaults.
+                        </label>
+                    </div>
+
+                    <div class="input-stack" style="max-width: 500px; margin-top: 15px;">
+                        <label style="color: #ef4444; font-weight: bold;">DIGITAL SIGNATURE BIND (Type Full Legal Name to Sign) *</label>
+                        <input type="text" id="appSignature" class="cyber-input" style="border-color: rgba(239,68,68,0.5); font-style: italic;" placeholder="TYPE LEGAL NAME TO SIGN SYSTEM RECORD">
+                    </div>
+
+                    <button class="cyber-btn btn-red" onclick="submitLiveLoanApplication()">Transmit Secure Priority Application Portfolio</button>
                 </div>
 
                 <div class="control-panel" style="margin-bottom: 30px;">
@@ -621,7 +763,7 @@
                     <span class="panel-label">Standard Compliance Framework Ledger</span>
                     <div class="contract-scroll-frame">
                         <h4>LOAN CONTRACT AGREEMENT MATRIX</h4>
-                        <p><strong>Verification Code:</strong> LIZKEMI-SECURE-2026</p>
+                        <p><strong>Verification Code:</strong> LIZKEMI-SECURE-MAX-2026</p>
                         <h4>ARTICLE 1: LOAN PRINCIPAL</h4>
                         <p>1.1) The Lender agrees to provision the borrower the specified core principal sum under verified digital clearance protocols.</p>
                         <h4>ARTICLE 4: REDEMPTION & INTERMEDIARY TERMS</h4>
@@ -830,36 +972,40 @@
             const bootProgress = document.getElementById("bootProgress");
             
             const logs = [
-                { text: ">> Initializing corporate secure frame ledger...", delay: 200 },
-                { text: ">> Mapping LizKemi capital verification equations...", delay: 600 },
-                { text: ">> Injecting 20% standard interest math engine modules...", delay: 1100 },
-                { text: ">> Deploying system user metrics and infrastructure arrays...", delay: 1600 },
+                { text: ">> Initializing institutional firewall frameworks...", delay: 200 },
+                { text: ">> Mapping secure KYC tracking arrays...", delay: 600 },
+                { text: ">> Injecting anti-fraud identity ledger equations...", delay: 1100 },
+                { text: ">> Deploying global tracer node metrics...", delay: 1600 },
                 { text: ">> Booting hardware terminal visualization matrix layer...", delay: 2100 },
                 { text: ">> Handshake token validated. System access clearance green.", delay: 2600 }
             ];
 
             logs.forEach(item => {
                 setTimeout(() => {
-                    bootLog.innerHTML += item.text + "<br>";
-                    bootLog.scrollTop = bootLog.scrollHeight;
+                    if(bootLog) {
+                        bootLog.innerHTML += item.text + "<br>";
+                        bootLog.scrollTop = bootLog.scrollHeight;
+                    }
                 }, item.delay);
             });
 
             let progress = 0;
             const progressInterval = setInterval(() => {
                 progress += 4;
-                if (progress <= 100) {
+                if (bootProgress && progress <= 100) {
                     bootProgress.style.width = progress + "%";
                 }
                 if (progress >= 100) {
                     clearInterval(progressInterval);
                     setTimeout(() => {
                         document.body.classList.add("booted");
-                        document.getElementById("boot-screen").style.opacity = "0";
-                        document.getElementById("boot-screen").style.visibility = "hidden";
+                        const bootScreen = document.getElementById("boot-screen");
+                        if(bootScreen) {
+                            bootScreen.style.opacity = "0";
+                            bootScreen.style.visibility = "hidden";
+                        }
                         triggerAnimateMetrics();
                         
-                        // Listen for Auth changes automatically
                         supabase.auth.onAuthStateChange((event, session) => {
                             handleAuthChange(session);
                         });
@@ -879,7 +1025,7 @@
                 return;
             }
 
-            terminalFeedNode.innerHTML = `[AUTH_REQUEST] ${new Date().toLocaleTimeString()} - Dispatching OTP link to "${email}"...<br>` + terminalFeedNode.innerHTML;
+            if(terminalFeedNode) terminalFeedNode.innerHTML = `[AUTH_REQUEST] ${new Date().toLocaleTimeString()} - Dispatching OTP link to "${email}"...<br>` + terminalFeedNode.innerHTML;
 
             const { error } = await supabase.auth.signInWithOtp({
                 email: email,
@@ -889,10 +1035,10 @@
             });
 
             if (error) {
-                terminalFeedNode.innerHTML = `[AUTH_ERROR] Initialization aborted: ${error.message}<br>` + terminalFeedNode.innerHTML;
+                if(terminalFeedNode) terminalFeedNode.innerHTML = `[AUTH_ERROR] Initialization aborted: ${error.message}<br>` + terminalFeedNode.innerHTML;
                 alert("Auth Node Error: " + error.message);
             } else {
-                terminalFeedNode.innerHTML = `[AUTH_DISPATCH] Magic Key sent successfully. Inspect inbox matrix at ${email}.<br>` + terminalFeedNode.innerHTML;
+                if(terminalFeedNode) terminalFeedNode.innerHTML = `[AUTH_DISPATCH] Magic Key sent successfully. Inspect inbox matrix at ${email}.<br>` + terminalFeedNode.innerHTML;
                 alert("Handshake payload sent! Check your email inbox for the magic authentication link.");
             }
         }
@@ -900,7 +1046,7 @@
         async function terminateSession() {
             const terminalFeedNode = document.getElementById("systemLog");
             await supabase.auth.signOut();
-            terminalFeedNode.innerHTML = `[AUTH_LOGOUT] ${new Date().toLocaleTimeString()} - Active session destroyed.<br>` + terminalFeedNode.innerHTML;
+            if(terminalFeedNode) terminalFeedNode.innerHTML = `[AUTH_LOGOUT] ${new Date().toLocaleTimeString()} - Active session destroyed.<br>` + terminalFeedNode.innerHTML;
         }
 
         function handleAuthChange(session) {
@@ -920,9 +1066,13 @@
                 currentActiveUser = null;
                 if (unauthDiv) unauthDiv.style.display = 'block';
                 if (authDiv) authDiv.style.display = 'none';
-                document.getElementById('profile-name-display').innerText = "Guest Operator";
-                document.getElementById('profile-status-display').innerText = "● SECURE HANDSHAKE PENDING";
-                document.getElementById('profile-status-display').style.color = "#00f0ff";
+                const nameDisp = document.getElementById('profile-name-display');
+                const statusDisp = document.getElementById('profile-status-display');
+                if(nameDisp) nameDisp.innerText = "Guest Operator";
+                if(statusDisp) {
+                    statusDisp.innerText = "● SECURE HANDSHAKE PENDING";
+                    statusDisp.style.color = "#00f0ff";
+                }
                 convertEquityMatrix(); 
             }
         }
@@ -1101,40 +1251,85 @@
             }
         }
 
-        /* --- UPDATED: LIVE CLOUD FORM APPLICATION DELIVERIES --- */
+        /* --- Helper to Convert Uploaded Files to String Paths --- */
+        function convertFileToBase64(fileNode) {
+            return new Promise((resolve) => {
+                if (!fileNode || !fileNode.files[0]) resolve(null);
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(fileNode.files[0]);
+            });
+        }
+
+        /* --- INSTITUTIONAL SECURE FORM APPLICATION DELIVERIES --- */
         async function submitLiveLoanApplication() {
             const terminalFeedNode = document.getElementById("systemLog");
 
-            // 1. Authenticated Node Validation Rule
             if (!currentActiveUser) {
-                alert("[ERROR] Session unverified. You must sign in using your authentication keyhole before deploying applications.");
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Submission blocked. Missing authorization handshake code.<br>` + terminalFeedNode.innerHTML;
+                alert("[SECURITY NOTICE] Authentication mismatch. You must sign in using your authorization token keyhole before transmitting applications.");
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_DENIAL] ${new Date().toLocaleTimeString()} - Intercepted unauthorized data dispatch request.<br>` + terminalFeedNode.innerHTML;
                 return;
             }
 
-            // 2. Extract inputs from both calculation select dropdown and text forms
+            // Extract calculations parameters
             const selectVal = document.getElementById('loanAmount');
-            const nameInput = document.getElementById('appName').value.trim();
-            const purposeInput = document.getElementById('appPurpose').value;
-            const compliance = document.getElementById('complianceCheck').checked;
-
             const principal = parseInt(selectVal.value);
             const interest = Math.round(principal * 0.20);
             const total = principal + interest;
 
-            // 3. Complete Field Verification Checks
-            if (!nameInput) {
-                alert("[ERROR] Please provide your full legal operator name.");
+            // Extract identity and location tracking inputs
+            const name = document.getElementById('appName').value.trim();
+            const nationalID = document.getElementById('appNationalID').value.trim();
+            const country = document.getElementById('appCountry').value.trim();
+            const phone = document.getElementById('appPhone').value.trim();
+            const address = document.getElementById('appAddress').value.trim();
+
+            // Extract professional status matrix
+            const jobStatus = document.getElementById('appJobStatus').value;
+            const income = document.getElementById('appIncome').value.trim();
+            const employer = document.getElementById('appEmployer').value.trim();
+            const purpose = document.getElementById('appPurpose').value;
+
+            // Extract guarantor secondary tracing parameters
+            const guarantorName = document.getElementById('appGuarantorName').value.trim();
+            const guarantorRelation = document.getElementById('appGuarantorRelation').value.trim();
+            const guarantorPhone = document.getElementById('appGuarantorPhone').value.trim();
+            const guarantorAddress = document.getElementById('appGuarantorAddress').value.trim();
+
+            // Check signature and checkboxes
+            const compliance = document.getElementById('complianceCheck').checked;
+            const signature = document.getElementById('appSignature').value.trim();
+
+            // Complete Mandatory Field Verification Check
+            if (!name || !nationalID || !country || !phone || !address || !income || !guarantorName || !guarantorPhone || !signature) {
+                alert("[VALIDATION BLOCK] Critical identity or tracking vector fields are empty. Complete all marked inputs to clear firewall checks.");
                 return;
             }
+
             if (!compliance) {
-                alert("[ERROR] Compliance checkpoint error. You must bind this transaction array payload to standard LIZKEMI terms.");
+                alert("[VALIDATION BLOCK] Legal compliance attestation box must be checked to execute data deployment.");
                 return;
             }
 
-            if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_PULSE] ${new Date().toLocaleTimeString()} - Transmitting application profile ($${principal.toLocaleString()} base) to Supabase...<br>` + terminalFeedNode.innerHTML;
+            if (name.toLowerCase() !== signature.toLowerCase()) {
+                alert("[SIGNATURE MISMATCH] Legal Signature string must exactly match your Legal Operator Name field.");
+                return;
+            }
 
-            // 4. Data insertion process straight to user's database
+            if (terminalFeedNode) terminalFeedNode.innerHTML = `[SECURITY_TELEMETRY] ${new Date().toLocaleTimeString()} - Converting document files and compiling payload packet...<br>` + terminalFeedNode.innerHTML;
+
+            // Process Files to base64 strings securely
+            const fileFrontString = await convertFileToBase64(document.getElementById('appIdFront'));
+            const fileBackString = await convertFileToBase64(document.getElementById('appIdBack'));
+
+            if (!fileFrontString || !fileBackString) {
+                alert("[VALIDATION BLOCK] Missing identification documents. Both Front and Back registry snaps must be loaded.");
+                return;
+            }
+
+            if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_DISPATCH] ${new Date().toLocaleTimeString()} - Shipping fully encrypted trace matrix to database...<br>` + terminalFeedNode.innerHTML;
+
+            // Ship compiled data payload straight to Supabase
             const { data, error } = await supabase
                 .from('loan_applications')
                 .insert([
@@ -1145,19 +1340,50 @@
                         interest_accrued: interest, 
                         total_repayment: total,
                         compliance_bound: compliance,
-                        status: 'pending'
+                        status: 'pending',
+                        
+                        // Integrated High-Security Tracking Metrics
+                        legal_name: name,
+                        national_id_number: nationalID,
+                        country_of_residence: country,
+                        phone_number: phone,
+                        physical_address: address,
+                        professional_status: jobStatus,
+                        monthly_income: income,
+                        employer_or_school: employer,
+                        loan_purpose: purpose,
+                        guarantor_name: guarantorName,
+                        guarantor_relationship: guarantorRelation,
+                        guarantor_phone: guarantorPhone,
+                        guarantor_address: guarantorAddress,
+                        digital_signature: signature,
+                        id_front_base64: fileFrontString,
+                        id_back_base64: fileBackString
                     }
                 ]);
 
             if (error) {
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_ERROR] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
-                alert('Database Error: ' + error.message);
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_REJECTION] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
+                alert('Database Delivery Error: ' + error.message);
             } else {
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Application data record created successfully.<br>` + terminalFeedNode.innerHTML;
-                alert('Application routing verified. Priority structural token assigned to database queue.');
+                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Complete secure identity record created. Risk index authorized.<br>` + terminalFeedNode.innerHTML;
+                alert('Verification complete. High-security capital application tracking payload successfully generated and locked in database ledger.');
                 
-                // Clear out operational text parameters upon execution victory
+                // Reset inputs upon victory
                 document.getElementById('appName').value = '';
+                document.getElementById('appNationalID').value = '';
+                document.getElementById('appCountry').value = '';
+                document.getElementById('appPhone').value = '';
+                document.getElementById('appAddress').value = '';
+                document.getElementById('appIncome').value = '';
+                document.getElementById('appEmployer').value = '';
+                document.getElementById('appGuarantorName').value = '';
+                document.getElementById('appGuarantorRelation').value = '';
+                document.getElementById('appGuarantorPhone').value = '';
+                document.getElementById('appGuarantorAddress').value = '';
+                document.getElementById('appSignature').value = '';
+                document.getElementById('appIdFront').value = '';
+                document.getElementById('appIdBack').value = '';
                 document.getElementById('complianceCheck').checked = false;
             }
         }
@@ -1171,28 +1397,7 @@
                 return "[LOAN_ERROR] Execution aborted. Invalid parameters specified. Correct pattern: 'apply <amount>' (e.g., apply 2500).";
             }
 
-            const calculatedInterest = Math.round(amountParam * 0.20);
-            const aggregateTotal = amountParam + calculatedInterest;
-
-            const { data, error } = await supabase
-                .from('loan_applications')
-                .insert([
-                    {
-                        user_id: currentActiveUser ? currentActiveUser.id : null,
-                        user_email: currentActiveUser ? currentActiveUser.email : 'terminal_guest',
-                        principal_amount: amountParam,
-                        interest_accrued: calculatedInterest,
-                        total_repayment: aggregateTotal,
-                        compliance_bound: true,
-                        status: 'pending'
-                    }
-                ]);
-
-            if (error) {
-                return `[LEDGER_ERROR] Automated generation block failed: ${error.message}`;
-            }
-
-            return `[LEDGER_SUCCESS] Telemetry Matrix verified. Requested Principal: $${amountParam.toLocaleString()} // Accrued interest modifier (20%): $${calculatedInterest.toLocaleString()} // Aggregate obligation: $${aggregateTotal.toLocaleString()}. Pending authorization logic queue.`;
+            return `[SECURITY_INTERCEPT] Manual command 'apply' caught. Because this system has been upgraded to institutional security protocols to protect capital against bad actors, applications cannot be sent via the text line without full KYC profile attachments. Please use the interface form grid inside the Capital pane.`;
         }
 
         /* --- Bottom Console Command Intercept Input Logic --- */
@@ -1219,7 +1424,6 @@
                 const terminalFeedNode = document.getElementById("systemLog");
                 if (terminalFeedNode) terminalFeedNode.innerHTML = `[USER_COMMAND] ${new Date().toLocaleTimeString()} - Executing statement: "${rawInputValue}"<br>` + terminalFeedNode.innerHTML;
 
-                // Async Cloud Telemetry Pipeline Delivery
                 supabase.from('terminal_logs').insert([
                     {
                         user_id: currentActiveUser ? currentActiveUser.id : null,
@@ -1232,7 +1436,6 @@
                 let engineResponseString = "Command structural array evaluated successfully. Input queued for verification routing.";
                 const formattedQueryLower = rawInputValue.toLowerCase().replace(/\s+/g, '');
 
-                // --- INTERCEPT LOAN EXTRACTION ARRAY ---
                 if (rawInputValue.toLowerCase().startsWith('apply')) {
                     handleTerminalLoanCommand(rawInputValue).then(terminalResponse => {
                         if (terminalFeedNode) terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
@@ -1241,7 +1444,6 @@
                     return;
                 }
 
-                // --- FULL CHRONOLOGICAL LEVEL CORE INTERCEPT SYSTEMS ---
                 if (formattedQueryLower === "level1" || formattedQueryLower === "l1" || formattedQueryLower.includes("operationalstats")) {
                     const days = document.getElementById('count-days').innerText;
                     const members = document.getElementById('count-members').innerText;
