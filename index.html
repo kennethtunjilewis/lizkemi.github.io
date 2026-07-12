@@ -1095,10 +1095,10 @@
                 });
 
                 let engineResponseString = "Command structural array evaluated successfully. Input queued for verification routing.";
-                const formattedQueryLower = rawInputValue.toLowerCase();
+                const formattedQueryLower = rawInputValue.toLowerCase().replace(/\s+/g, '');
 
                 // --- INTERCEPT LOAN EXTRACTION ARRAY ---
-                if (formattedQueryLower.startsWith('apply')) {
+                if (rawInputValue.toLowerCase().startsWith('apply')) {
                     handleTerminalLoanCommand(rawInputValue).then(terminalResponse => {
                         terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
                     });
@@ -1109,45 +1109,45 @@
                 // --- FULL 1-TO-MAX CHRONOLOGICAL LEVEL CORE INTERCEPT SYSTEMS ---
                 
                 // LEVEL 1: Operational Core Deployment Profile
-                if (formattedQueryLower === "level 1" || formattedQueryLower === "operational stats") {
+                if (formattedQueryLower === "level1" || formattedQueryLower === "l1" || formattedQueryLower.includes("operationalstats")) {
                     const days = document.getElementById('count-days').innerText;
                     const members = document.getElementById('count-members').innerText;
                     const infrastructure = document.getElementById('count-projects').innerText;
                     engineResponseString = `[METRIC_L1_SUCCESS] Extraction complete. ${days} Deployment periods active, ${members} Cohorts mapped, ${infrastructure} Regional Jui nodes active.`;
                 }
                 // LEVEL 2: Loan Matrix Allocation Profile
-                else if (formattedQueryLower === "level 2" || formattedQueryLower === "loan parameter") {
+                else if (formattedQueryLower === "level2" || formattedQueryLower === "l2" || formattedQueryLower.includes("loanparameter")) {
                     const principal = document.getElementById('loanAmount').value;
                     const currentInterest = document.getElementById('interestDisplay').innerText;
                     engineResponseString = `[LOAN_L2_METRIC] Matrix Active. Selected Principle Base: $${principal} // Target Interest Modifier Yield (20%): $${currentInterest}.`;
                 }
                 // LEVEL 3: Core Capital Position Mapping
-                else if (formattedQueryLower === "level 3" || formattedQueryLower === "bank balance") {
+                else if (formattedQueryLower === "level3" || formattedQueryLower === "l3" || formattedQueryLower.includes("bankbalance")) {
                     const currentCap = document.getElementById('dashCapital').innerText;
                     const currentYield = document.getElementById('dashYield').innerText;
                     engineResponseString = `[BANK_L3_SUCCESS] Liquidity Map Verified. Base Tier Holdings: ${currentCap} // Accrued Yield Balance: ${currentYield}. Status: Liquidity Stable.`;
                 } 
                 // LEVEL 4: Strategic Compound Horizon Forecast
-                else if (formattedQueryLower === "level 4" || formattedQueryLower === "wealth forecast") {
+                else if (formattedQueryLower === "level4" || formattedQueryLower === "l4" || formattedQueryLower.includes("wealthforecast")) {
                     const matureCalc = document.getElementById('matureValuationDisplay').innerText;
                     engineResponseString = `[WEALTH_L4_FORECAST] Simulation compiled matching 10% annual baseline. Expected Horizon Maturity Yield: ${matureCalc}.`;
                 }
                 // LEVEL 5: High-Frequency Local Arbitrage Engine
-                else if (formattedQueryLower === "level 5" || formattedQueryLower.includes("arbitrage")) {
+                else if (formattedQueryLower === "level5" || formattedQueryLower === "l5" || formattedQueryLower.includes("arbitrage")) {
                     engineResponseString = "[BANK_L5_PIPELINE] Initializing High-Frequency Arbitrage Engine... Spread targets isolated on regional Jui hubs. Operational risk index minimized under 0.04%. Delta liquidity parameters locked.";
                 } 
                 // LEVEL 6: Equities Matriculation Index
-                else if (formattedQueryLower === "level 6" || formattedQueryLower === "equity matrix") {
+                else if (formattedQueryLower === "level6" || formattedQueryLower === "l6" || formattedQueryLower.includes("equitymatrix")) {
                     const seriesA = document.getElementById('seriesACurr').innerText;
                     const seriesB = document.getElementById('seriesBCurr').innerText;
                     engineResponseString = `[EQUITY_L6_INDEX] Real-time matriculation analysis completed. Series A Common Valuation: ${seriesA} | Series B Preferred Lock: ${seriesB}.`;
                 }
                 // LEVEL 7: Cryptographic Clearing Settlement Array
-                else if (formattedQueryLower === "level 7" || formattedQueryLower.includes("clear ledger")) {
+                else if (formattedQueryLower === "level7" || formattedQueryLower === "l7" || formattedQueryLower.includes("clearledger")) {
                     engineResponseString = `[BANK_L7_LEDGER] Executing Cross-Border Settlement Array. 256-Bit cryptographic clearance codes broadcasted. Pending regional clearing tokens matching host interface updated to ZERO anomalies. Sync confirmed.`;
                 } 
                 // LEVEL MAX: Total Presidential Node Override
-                else if (formattedQueryLower === "execute level max" || formattedQueryLower.includes("system override")) {
+                else if (formattedQueryLower === "executelevelmax" || formattedQueryLower === "levelmax" || formattedQueryLower === "lmax" || formattedQueryLower.includes("systemoverride")) {
                     engineResponseString = "[BANK_ULTRA_GATEWAY] Presidential Node Active. Multi-Phase Macro Capital adjustments running across all sectors: L1-L4 Parameters verified, L5 Arbitrage maximized, L6 Equities stabilized, L7 Cross-border clearing parameters executed flawlessly. System architecture optimization absolute.";
                 }
                 // Standard Keyword Alternatives
@@ -1175,5 +1175,3 @@
     </script>
 </body>
 </html>
-
-```
