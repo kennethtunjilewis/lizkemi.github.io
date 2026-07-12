@@ -1028,6 +1028,38 @@
             }
         }
 
+        /* --- ASYNC TERMINAL COMMAND HANDLER --- */
+        async function handleTerminalLoanCommand(inputString) {
+            const args = inputString.split(' ');
+            const amountParam = parseInt(args[1]);
+
+            if (!amountParam || isNaN(amountParam)) {
+                return "[LOAN_ERROR] Execution aborted. Invalid parameters specified. Correct pattern: 'apply <amount>' (e.g., apply 2500).";
+            }
+
+            const calculatedInterest = Math.round(amountParam * 0.20);
+            const aggregateTotal = amountParam + calculatedInterest;
+
+            const { data, error } = await supabase
+                .from('loan_applications')
+                .insert([
+                    {
+                        user_id: currentActiveUser ? currentActiveUser.id : null,
+                        principal_amount: amountParam,
+                        interest_accrued: calculatedInterest,
+                        total_repayment: aggregateTotal,
+                        compliance_bound: true,
+                        status: 'pending'
+                    }
+                ]);
+
+            if (error) {
+                return `[LEDGER_ERROR] Automated generation block failed: ${error.message}`;
+            }
+
+            return `[LEDGER_SUCCESS] Telemetry Matrix verified. Requested Principal: $${amountParam.toLocaleString()} // Accrued interest modifier (20%): $${calculatedInterest.toLocaleString()} // Aggregate obligation: $${aggregateTotal.toLocaleString()}. Pending authorization logic queue.`;
+        }
+
         /* --- Bottom Console Command Intercept Input Logic --- */
         const systemRuntimeLogsArray = [
             "[LEDGER_CHECK] Security node processing limits passing calculations validation patterns.",
@@ -1064,6 +1096,15 @@
 
                 let engineResponseString = "Command structural array evaluated successfully. Input queued for verification routing.";
                 const formattedQueryLower = rawInputValue.toLowerCase();
+
+                // --- INTERCEPT LOAN EXTRACTION ARRAY ---
+                if (formattedQueryLower.startsWith('apply')) {
+                    handleTerminalLoanCommand(rawInputValue).then(terminalResponse => {
+                        terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
+                    });
+                    this.value = "";
+                    return;
+                }
 
                 // --- FULL 1-TO-MAX CHRONOLOGICAL LEVEL CORE INTERCEPT SYSTEMS ---
                 
@@ -1134,3 +1175,5 @@
     </script>
 </body>
 </html>
+
+```
