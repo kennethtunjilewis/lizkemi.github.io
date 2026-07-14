@@ -994,6 +994,63 @@
         alert("Authentication Denied: " + error.message);
     }
   };
+    // Add this inside your script tag below the auth handler
+window.addEventListener('load', () => {
+    const bootLog = document.getElementById('bootLog');
+    const bootProgress = document.getElementById('bootProgress');
+    const logs = [
+        "[SYS] Initializing Network...",
+        "[SYS] Encrypting Data Channels...",
+        "[SYS] Syncing Ledger v10.0...",
+        "[SYS] Authentication Gateway Active."
+    ];
+    
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < logs.length) {
+            bootLog.innerHTML += logs[i] + "<br>";
+            bootProgress.style.width = (i + 1) * 25 + "%";
+            i++;
+        } else {
+            clearInterval(interval);
+            setTimeout(() => {
+                document.getElementById('boot-screen').style.opacity = '0';
+                document.getElementById('boot-screen').style.visibility = 'hidden';
+                document.body.classList.add('booted');
+            }, 500);
+        }
+    }, 800);
+});
+
+ document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Remove active class from all
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active-pane'));
+        
+        // Activate selected
+        item.classList.add('active');
+        document.getElementById(item.getAttribute('data-target')).classList.add('active-pane');
+    });
+});
+
+  window.runLoanEngine = function() {
+    const principal = parseFloat(document.getElementById('loanAmount').value);
+    const interest = principal * 0.20;
+    document.getElementById('interestDisplay').innerText = interest.toLocaleString();
+    document.getElementById('totalDisplay').innerText = (principal + interest).toLocaleString();
+};
+
+window.runWealthEngine = function() {
+    const cap = document.getElementById('investmentCapital').value;
+    const dur = document.getElementById('investmentDuration').value;
+    document.getElementById('capitalVal').innerText = '$' + parseInt(cap).toLocaleString();
+    document.getElementById('durationVal').innerText = dur + ' Years';
+    const total = cap * Math.pow(1.10, dur);
+    document.getElementById('matureValuationDisplay').innerText = '$' + Math.round(total).toLocaleString();
+};
+  
 </script>
 
 </body>
