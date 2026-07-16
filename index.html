@@ -1061,6 +1061,40 @@ window.runWealthEngine = function() {
     const total = cap * Math.pow(1.10, dur);
     document.getElementById('matureValuationDisplay').innerText = '$' + Math.round(total).toLocaleString();
 };
+window.submitLiveLoanApplication = async function() {
+    // 1. Collect inputs
+    const appData = {
+        name: document.getElementById("appName").value,
+        idNumber: document.getElementById("appNationalID").value,
+        country: document.getElementById("appCountry").value,
+        phone: document.getElementById("appPhone").value,
+        address: document.getElementById("appAddress").value,
+        jobStatus: document.getElementById("appJobStatus").value,
+        income: document.getElementById("appIncome").value,
+        employer: document.getElementById("appEmployer").value,
+        purpose: document.getElementById("appPurpose").value,
+        guarantorName: document.getElementById("appGuarantorName").value,
+        guarantorRelation: document.getElementById("appGuarantorRelation").value,
+        guarantorPhone: document.getElementById("appGuarantorPhone").value,
+        guarantorAddress: document.getElementById("appGuarantorAddress").value,
+        timestamp: new Date()
+    };
+
+    // 2. Simple Validation
+    if (!document.getElementById("complianceCheck").checked || !document.getElementById("appSignature").value) {
+        alert("Please accept the terms and provide a digital signature.");
+        return;
+    }
+
+    // 3. Send to Firestore
+    try {
+        const docRef = await addDoc(collection(db, "loanApplications"), appData);
+        alert("Application transmitted successfully! Record ID: " + docRef.id);
+    } catch (e) {
+        console.error("Transmission Error: ", e);
+        alert("Error: Data transmission failed. Check console for logs.");
+    }
+};
 
 </script>
 
