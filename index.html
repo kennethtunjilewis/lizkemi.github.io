@@ -1002,12 +1002,7 @@ import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase
         maxLevel: 50
     });
 }
-        document.getElementById("auth-gate").style.display = "none";
-        alert("Handshake confirmed. Welcome to the Terminal.");
-    } catch (error) {
-        alert("Authentication Denied: " + error.message);
-    }
-  };
+
     
     // Add this inside your script tag below the auth handler
 window.addEventListener('load', () => {
