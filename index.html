@@ -575,11 +575,21 @@
                         <div class="matrix-value cyan" id="count-days" data-target="365">0</div>
                         <p class="desc">Days of Continuous Financial Deployment</p>
                     </div>
+                    <div class="control-panel">
+    <span class="panel-label">Operator Rank</span>
+    <div class="matrix-value cyan" id="display-level">LVL 1</div>
+    <div class="boot-progress-bar" style="margin-top:10px;">
+        <div class="boot-progress-fill" id="xp-progress" style="width: 20%;"></div>
+    </div>
+    <p class="desc" style="font-size: 0.7rem; margin-top:5px;">XP Progress towards next deployment</p>
+</div>
+
                     <div class="control-panel accent-green">
                         <span class="panel-label">Empowered Cohorts</span>
                         <div class="matrix-value green" id="count-members" data-target="450">0</div>
                         <p class="desc">Active Empowered Individuals Worldwide</p>
                     </div>
+                    
                     <div class="control-panel">
                         <span class="panel-label">Regional Growth Nodes</span>
                         <div class="matrix-value" id="count-projects" data-target="12">0</div>
@@ -953,6 +963,18 @@
   import { getFirestore } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
   import { getStorage } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+// Inside handleAuthAction, specifically for 'signup'
+if (type === 'signup') {
+    const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+    await setDoc(doc(db, "users", userCred.user.uid), {
+        email: email,
+        level: 1,
+        xp: 0,
+        maxLevel: 50
+    });
+}
 
   const firebaseConfig = {
     apiKey: "AIzaSyBW_e2guZ9LsVVQ0PrADM-74LGfFQwvBLI",
@@ -1049,6 +1071,34 @@ window.runWealthEngine = function() {
     const total = cap * Math.pow(1.10, dur);
     document.getElementById('matureValuationDisplay').innerText = '$' + Math.round(total).toLocaleString();
 };
+
+  import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+async function updateUserXP(userId, xpGain) {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+        let { level, xp, maxLevel } = userSnap.data();
+        
+        // Add XP
+        xp += xpGain;
+        
+        // Leveling Formula: Required XP = Level * 200
+        let requiredXP = level * 200; 
+
+        if (xp >= requiredXP && level < maxLevel) {
+            level += 1;
+            xp = 0; // Reset XP or carry over excess
+            console.log(`System Alert: User reached Level ${level}`);
+        }
+
+        await updateDoc(userRef, {
+            level: level,
+            xp: xp
+        });
+    }
+}
   
 </script>
 
