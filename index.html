@@ -1062,34 +1062,6 @@ window.runWealthEngine = function() {
     document.getElementById('matureValuationDisplay').innerText = '$' + Math.round(total).toLocaleString();
 };
 
-  import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-async function updateUserXP(userId, xpGain) {
-    const userRef = doc(db, "users", userId);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-        let { level, xp, maxLevel } = userSnap.data();
-        
-        // Add XP
-        xp += xpGain;
-        
-        // Leveling Formula: Required XP = Level * 200
-        let requiredXP = level * 200; 
-
-        if (xp >= requiredXP && level < maxLevel) {
-            level += 1;
-            xp = 0; // Reset XP or carry over excess
-            console.log(`System Alert: User reached Level ${level}`);
-        }
-
-        await updateDoc(userRef, {
-            level: level,
-            xp: xp
-        });
-    }
-}
-  
 </script>
 
 </body>
