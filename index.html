@@ -983,7 +983,23 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/fireba
   const storage = getStorage(app);
   const analytics = getAnalytics(app);
 
-  // Expose function to window so the HTML 'onclick' can reach it
+
+  // 2. ADD THIS FUNCTION: Fixes the Export Data Manifest button
+  window.exportContractManifest = function() {
+    const principal = document.getElementById('loanAmount').value;
+    const interest = document.getElementById('interestDisplay').innerText;
+    const total = document.getElementById('totalDisplay').innerText;
+    
+    const content = `LizKemi Capital - Data Manifest\nPrincipal: ${principal}\nInterest: ${interest}\nTotal: ${total}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Loan_Manifest.txt';
+    a.click();
+  };
+ // Expose function to window so the HTML 'onclick' can reach it
   window.handleAuthAction = async function(type) {
     const email = document.getElementById("loginEmail").value;
     const pass = document.getElementById("loginPass").value;
@@ -1000,7 +1016,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/fireba
             await createUserWithEmailAndPassword(auth, email, pass);
         }
         document.getElementById("auth-gate").style.display = "none";
-        alert("Handshake confirmed. Welcome to the Terminal.");
+        alert("welcome to our website, do you have. a question s about our website  contact us wait for your  reply.");
     } catch (error) {
         alert("Authentication Denied: " + error.message);
     }
