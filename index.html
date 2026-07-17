@@ -959,7 +959,8 @@
     </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
   import { getStorage } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
@@ -1094,6 +1095,20 @@ window.submitLiveLoanApplication = async function() {
         console.error("Transmission Error: ", e);
         alert("Error: Data transmission failed. Check console for logs.");
     }
+};
+window.exportContractManifest = function() {
+    const principal = document.getElementById('loanAmount').value;
+    const interest = document.getElementById('interestDisplay').innerText;
+    const total = document.getElementById('totalDisplay').innerText;
+    
+    const content = `LizKemi Capital - Data Manifest\nPrincipal: ${principal}\nInterest: ${interest}\nTotal: ${total}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Loan_Manifest.txt';
+    a.click();
 };
 
 </script>
