@@ -1,1130 +1,1733 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liz KEMI Capital FIRM // Terminal Hub</title>
-    <style>
-      /* --- Reset & Core Architecture --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIZKEMI CAPITAL MATRIX</title>
+<style>
+    /* --- Reset & Global Matrix Theme --- */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, monospace;
+    }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track { background: #020205; }
-        ::-webkit-scrollbar-thumb { background: #00f0ff; border-radius: 3px; }
+    body {
+        background: #02020a; 
+        color: #ffffff;
+        overflow-x: hidden;
+        line-height: 1.6;
+        min-height: 100vh;
+    }
 
-        body {
-            background-color: #020205;
-            color: #d1d5db;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
+    /* --- Particle Background Layer --- */
+    canvas#canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+    }
 
-        /* --- Background Matrix Network --- */
-        canvas#matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.38; 
-        }
+    #text-measure {
+        position: absolute;
+        visibility: hidden;
+        font-size: 70px;
+        font-weight: bold;
+    }
 
-        /* --- Loading Boot Sequence Screen --- */
-        #boot-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #020205;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-            transition: opacity 0.6s ease-out, visibility 0.6s;
-            padding: 20px;
-        }
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+        margin-top: 130px;
+        transition: transform 0.4s cubic-bezier(0.05, 0.74, 0.2, 0.99);
+    }
 
-        .boot-box {
-            width: 100%;
-            max-width: 500px;
-            border: 1px solid #00f0ff;
-            background: rgba(4, 4, 12, 0.95);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
-            padding: 25px;
-        }
+    body.ai-open .container {
+        transform: scale(0.96) translateX(-50px);
+    }
 
-        .boot-header {
-            color: #00f0ff;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.3);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-        }
+    /* --- Top Fixed Navbar --- */
+    nav {
+        background-color: rgba(2, 2, 10, 0.9); 
+        backdrop-filter: blur(15px);
+        padding: 15px 24px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        border-bottom: 2px solid rgba(0, 242, 254, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .boot-log {
-            font-size: 0.85rem;
-            height: 120px;
-            overflow-y: auto;
-            color: #a7f3d0;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
+    .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        font-size: 1.2rem;
+        color: #ffffff;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
 
-        .boot-progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
+    .nav-logo span {
+        background: linear-gradient(135deg, #ffffff 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-        .boot-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: #00f0ff;
-            box-shadow: 0 0 8px #00f0ff;
-            transition: width 0.1s linear;
-        }
+    .nav-logo-img {
+        height: 1.5rem;
+        width: auto;
+        object-fit: contain;
+    }
 
-        /* --- Layout Grid Wrapper --- */
-        #workspace {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 100vh;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
 
-        body.booted #workspace { opacity: 1; }
+    .dropbtn {
+        background-color: transparent;
+        color: #00f2fe;
+        border: 1px solid rgba(0, 242, 254, 0.4);
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
 
-        /* --- Left Sidebar Navigation Pane --- */
-        aside {
-            background: rgba(3, 3, 8, 0.75);
-            backdrop-filter: blur(12px) saturate(160%);
-            -webkit-backdrop-filter: blur(12px) saturate(160%);
-            border-right: 1px solid rgba(30, 41, 59, 0.5);
-            padding: 25px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-        }
+    .dropbtn:hover {
+        background-color: #00f2fe;
+        color: #02020a;
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
 
-        .brand-panel {
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            padding-bottom: 20px;
-        }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #060b18;
+        min-width: 260px;
+        box-shadow: 0px 8px 32px rgba(0,0,0,0.8);
+        z-index: 1;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
 
-        .brand-title {
-            color: #ffffff;
-            font-size: 1.1rem;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
+    .dropdown-content a {
+        color: #cccccc;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 0.9rem;
+        font-family: monospace;
+    }
 
-        .brand-subtitle {
-            color: #00f0ff;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            margin-top: 4px;
-        }
+    .dropdown-content a:hover {
+        background-color: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+    }
 
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
-        }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
-        .nav-item {
-            color: #9ca3af;
-            text-decoration: none;
-            padding: 10px 14px;
-            font-size: 0.85rem;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-left: 2px solid transparent;
-        }
+    /* --- Live Running Market Ticker Bar --- */
+    .ticker-wrap {
+        position: fixed;
+        top: 73px;
+        left: 0;
+        width: 100%;
+        background: #02020a;
+        border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+        z-index: 999;
+        overflow: hidden;
+        padding: 8px 0;
+    }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(0, 240, 255, 0.05);
-            color: #00f0ff;
-            border-left-color: #00f0ff;
-        }
+    .ticker {
+        display: flex;
+        white-space: nowrap;
+        animation: marquee 35s linear infinite;
+        gap: 60px;
+    }
 
-        .nav-section-tag {
-            font-size: 0.7rem;
-            color: #4b5563;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 15px 0 5px 10px;
-        }
+    .ticker-item {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: bold;
+        font-family: monospace;
+        letter-spacing: 0.05em;
+    }
 
-        /* --- Main Content Environment --- */
-        main {
-            padding: 40px;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-        }
+    .ticker-green { color: #00ff88; }
+    .ticker-blue { color: #00f2fe; }
 
-        header.top-ticker {
-            background: rgba(4, 4, 12, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(30, 41, 59, 0.5);
-            padding: 12px 20px;
-            margin-bottom: 35px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
-        }
+    @keyframes marquee {
+        0% { transform: translate3d(100%, 0, 0); }
+        100% { transform: translate3d(-100%, 0, 0); }
+    }
 
-        .ticker-node { display: flex; gap: 20px; }
-        .pulse-light { color: #10b981; animation: blink 2s infinite; }
+    /* --- Hero Header Layout --- */
+    .hero-header {
+        text-align: center;
+        padding: 60px 20px 40px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero-main-img {
+        width: 100%;
+        max-width: 140px;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 20px;
+    }
 
-        section {
-            margin-bottom: 50px;
-            display: none; 
-        }
+    .hero-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #ffffff 30%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1.2;
+    }
 
-        section.active-pane { display: block; }
+    .hero-header p {
+        font-size: 1rem;
+        color: #9ca3af;
+        font-family: monospace;
+    }
 
-        .pane-heading {
-            font-size: 1.4rem;
-            color: #ffffff;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    /* --- Layout Structures --- */
+    section {
+        padding: 40px 0;
+        border-bottom: 1px solid rgba(0, 242, 254, 0.1);
+        scroll-margin-top: 140px;
+    }
 
-        .pane-heading span { color: #00f0ff; }
+    section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-        /* --- Grid & Panel Layout Modules --- */
-        .cyber-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
+    section h2::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        background: #00f2fe;
+    }
 
-        .form-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
+    .content-block {
+        background: rgba(6, 11, 24, 0.45);
+        backdrop-filter: blur(5px);
+        padding: 30px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 242, 254, 0.1);
+        margin-bottom: 20px;
+        position: relative;
+    }
 
-        .control-panel {
-            background: rgba(4, 4, 15, 0.55);
-            backdrop-filter: blur(14px) saturate(180%);
-            -webkit-backdrop-filter: blur(14px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-top: 2px solid rgba(51, 65, 85, 0.8);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            padding: 25px;
-            position: relative;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
+    .content-block::after {
+        content: 'MODEL_REF: LIZKEMI-V4';
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 0.65rem;
+        font-family: monospace;
+        color: rgba(255, 255, 255, 0.15);
+        letter-spacing: 1px;
+    }
 
-        .control-panel.accent-cyan { 
-            border-top-color: #00f0ff; 
-            box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.05);
-        }
-        .control-panel.accent-green { 
-            border-top-color: #10b981; 
-            box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.05);
-        }
-        .control-panel.accent-red { 
-            border-top-color: #ef4444; 
-            box-shadow: 0 8px 32px 0 rgba(239, 68, 68, 0.05);
-        }
+    h3 {
+        margin-bottom: 20px;
+        color: #00f2fe;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-family: monospace;
+    }
 
-        .panel-label {
-            font-size: 0.75rem;
-            color: #8892b0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            display: block;
-        }
+    /* --- Premium Matrix Product Grid --- */
+    .product-matrix {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+        margin: 25px 0;
+    }
 
-        .sub-panel-label {
-            font-size: 0.8rem;
-            color: #00f0ff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 20px 0 10px 0;
-            border-bottom: 1px dashed rgba(0, 240, 255, 0.2);
-            padding-bottom: 5px;
-        }
+    .product-card {
+        background: rgba(2, 2, 10, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-left: 3px solid #00f2fe;
+        border-radius: 2px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
 
-        /* --- Typography & Inputs --- */
-        p.desc { font-size: 0.9rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 20px; }
-        
-        .matrix-value { font-size: 2.2rem; font-weight: bold; color: #ffffff; margin: 10px 0; }
-        .matrix-value.cyan { color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
-        .matrix-value.green { color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+    .product-card:hover {
+        border-color: #00f2fe;
+        background: rgba(0, 242, 254, 0.03);
+        transform: translateY(-2px);
+    }
 
-        .input-stack { margin-bottom: 20px; }
-        .input-stack label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; }
-        .input-stack label span { color: #00f0ff; }
+    .product-card h4 {
+        color: #ffffff;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-family: monospace;
+        letter-spacing: 0.5px;
+    }
 
-        .cyber-select, .cyber-input {
-            width: 100%;
-            background: rgba(9, 9, 20, 0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(51, 65, 85, 0.6);
-            color: #ffffff;
-            padding: 12px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.2s;
-        }
+    .product-card p {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        line-height: 1.5;
+    }
 
-        .cyber-select:focus, .cyber-input:focus { 
-            border-color: #00f0ff; 
-            background: rgba(9, 9, 20, 0.85);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
-        }
+    /* --- Form Fields & Interactive Layouts --- */
+    .calc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 20px;
+    }
 
-        /* Styling for File Uploads */
-        .cyber-file-input {
-            width: 100%;
-            background: rgba(239, 68, 68, 0.03);
-            border: 1px dashed rgba(239, 68, 68, 0.4);
-            color: #ffffff;
-            padding: 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .cyber-file-input:hover {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.08);
-        }
+    .calc-box select, .custom-select {
+        width: 100%;
+        background-color: #02020a;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        color: #ffffff;
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 4px;
+        outline: none;
+        margin-top: 10px;
+        font-family: monospace;
+    }
 
-        .cyber-slider {
-            width: 100%;
-            height: 4px;
-            background: #1e293b;
-            outline: none;
-            accent-color: #00f0ff;
-        }
+    .calc-box select:focus, .custom-select:focus {
+        border-color: #00f2fe;
+    }
 
-        .cyber-btn {
-            background: rgba(0, 240, 255, 0.03);
-            backdrop-filter: blur(4px);
-            border: 1px solid #00f0ff;
-            color: #00f0ff;
-            padding: 12px 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.05);
-        }
+    .slider-group {
+        margin-bottom: 25px;
+    }
 
-        .cyber-btn:hover { 
-            background: rgba(0, 240, 255, 0.15); 
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            text-shadow: 0 0 5px #ffffff;
-        }
+    .slider-group label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        color: #9ca3af;
+        margin-bottom: 8px;
+        font-family: monospace;
+    }
 
-        .cyber-btn.btn-red {
-            border-color: #ef4444;
-            color: #ef4444;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.05);
-        }
-        .cyber-btn.btn-red:hover {
-            background: rgba(239, 68, 68, 0.15);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-        }
+    .slider-group label span {
+        color: #00f2fe;
+        font-weight: bold;
+    }
 
-        /* --- Interactive Tables & Arrays --- */
-        .data-array {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            text-align: left;
-        }
+    .custom-slider {
+        width: 100%;
+        height: 4px;
+        background: #060b18;
+        outline: none;
+        accent-color: #00f2fe;
+    }
 
-        .data-array th, .data-array td { padding: 12px 15px; border-bottom: 1px solid rgba(30, 41, 59, 0.5); }
-        .data-array th { color: #94a3b8; font-weight: normal; text-transform: uppercase; font-size: 0.75rem; }
-        .data-array tr:hover { background: rgba(255, 255, 255, 0.04); }
+    .info-line {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.85rem;
+        color: #9ca3af;
+        font-family: monospace;
+    }
 
-        /* --- Scrollable Data Matrix Terminals --- */
-        .terminal-box {
-            background: rgba(4, 4, 10, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(30, 41, 59, 0.5);
-            padding: 15px;
-            font-size: 0.8rem;
-            height: 180px;
-            overflow-y: auto;
-            color: #a1a1aa;
-            line-height: 1.5;
-        }
+    .info-line span:last-child {
+        font-weight: bold;
+        color: #ffffff;
+    }
 
-        .contract-scroll-frame {
-            background: rgba(4, 4, 10, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(30, 41, 59, 0.5);
-            height: 250px;
-            overflow-y: auto;
-            padding: 20px;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-        .contract-scroll-frame h4 { color: #ef4444; margin: 15px 0 5px 0; font-size: 0.9rem; }
+    .segmented-tabs {
+        display: flex;
+        background: #02020a;
+        padding: 4px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        margin: 15px 0 25px 0;
+    }
 
-        /* --- Custom Multi-Tab Segment Control --- */
-        .segment-bar {
-            display: flex;
-            background: rgba(9, 9, 20, 0.5);
-            border: 1px solid rgba(30, 41, 59, 0.5);
-            padding: 3px;
-            margin-bottom: 20px;
-        }
+    .tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #6b7280;
+        padding: 10px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-family: monospace;
+        transition: all 0.2s ease;
+    }
 
-        .segment-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #6b7280;
-            padding: 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+    .tab-btn.active {
+        background: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+    }
 
-        .segment-tab.active { background: rgba(0, 240, 255, 0.15); color: #00f0ff; }
+    .action-btn {
+        background: transparent;
+        border: 1px solid #00f2fe;
+        color: #00f2fe;
+        padding: 12px 24px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-family: monospace;
+        transition: all 0.3s ease;
+    }
 
-        /* --- Product Matrix Cards --- */
-        .product-net {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 15px;
-        }
+    .action-btn:hover {
+        background: #00f2fe;
+        color: #02020a;
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
 
-        .product-node {
-            background: rgba(4, 4, 12, 0.35);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(30, 41, 59, 0.4);
-            padding: 20px;
-        }
-        .product-node h4 { color: #00f0ff; font-size: 0.95rem; margin-bottom: 8px; }
-        .product-node p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; }
+    .form-group-inline {
+        margin: 25px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-        /* --- Bottom Static Layout Console Intercept --- */
-        .console-footer-dock {
-            background: rgba(4, 4, 10, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(30, 41, 59, 0.6);
-            padding: 20px 40px;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-            position: relative;
-            z-index: 2;
-        }
+    .form-group-inline input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #00f2fe;
+        cursor: pointer;
+    }
 
-        .console-input-line {
-            display: flex;
-            align-items: center;
-            background: rgba(9, 9, 20, 0.6);
-            border: 1px solid rgba(30, 41, 59, 0.6);
-            padding: 0 15px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-        }
+    .form-group-inline label {
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-family: monospace;
+        color: #9ca3af;
+    }
 
-        .console-prompt { color: #00f0ff; font-weight: bold; margin-right: 12px; font-size: 0.9rem; text-shadow: 0 0 5px #00f0ff; }
-        
-        .console-input-line input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #ffffff;
-            padding: 12px 0;
-            font-size: 0.9rem;
-        }
+    .custom-textarea, .custom-input {
+        width: 100%;
+        background-color: #02020a;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        color: #ffffff;
+        padding: 14px;
+        font-size: 0.9rem;
+        border-radius: 4px;
+        outline: none;
+        margin-bottom: 15px;
+        font-family: monospace;
+    }
 
-        /* --- Responsive Viewports --- */
-        @media (max-width: 1024px) {
-            #workspace { grid-template-columns: 1fr; }
-            aside { height: auto; position: relative; }
-            .console-footer-dock { grid-template-columns: 1fr; }
-        }
-    </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    .custom-textarea:focus, .custom-input:focus {
+        border-color: #00f2fe;
+    }
 
+    .custom-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .display-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(2, 2, 10, 0.4);
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .metric {
+        margin-bottom: 1.2rem;
+    }
+
+    .metric p {
+        font-size: 0.8rem;
+        font-family: monospace;
+        color: #9ca3af;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
+    .val-highlight {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #00f2fe;
+        font-family: monospace;
+    }
+
+    /* --- Scrollable Contract Box --- */
+    .contract-scroll {
+        background-color: #02020a;
+        border: 1px solid rgba(255,255,255,0.05);
+        height: 250px;
+        overflow-y: scroll;
+        padding: 20px;
+        font-family: monospace;
+        font-size: 0.8rem;
+        color: #9ca3af;
+        border-radius: 2px;
+        margin-top: 20px;
+    }
+
+    .contract-scroll h4 {
+        margin: 15px 0 5px 0;
+        color: #00f2fe;
+        font-size: 0.85rem;
+    }
+
+    /* --- Video Presentation Area --- */
+    video {
+        width: 100%;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        background: #02020a;
+        margin: 20px 0;
+    }
+
+    /* --- Performance Matrix Table --- */
+    .performance-matrix {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-family: monospace;
+    }
+
+    .performance-matrix th, .performance-matrix td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.85rem;
+    }
+
+    .performance-matrix th {
+        color: #6b7280;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .performance-matrix td {
+        color: #ffffff;
+    }
+
+    .performance-matrix tr:hover {
+        background: rgba(0, 242, 254, 0.02);
+    }
+
+    /* --- Dynamic Pipeline Cards --- */
+    .pipeline-card {
+        background: rgba(2, 2, 10, 0.5);
+        border: 1px solid rgba(0, 242, 254, 0.15);
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    /* --- HTML5 Visualization Chart --- */
+    .chart-container {
+        width: 100%;
+        background: #02020a;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    canvas.analytics-chart {
+        width: 100%;
+        height: 120px;
+        display: block;
+    }
+
+    /* --- Live System Activity Logs --- */
+    .system-log-box {
+        background: #02020a;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        font-family: monospace;
+        font-size: 0.75rem;
+        color: #00ff88;
+        height: 110px;
+        overflow-y: auto;
+        margin-top: 15px;
+        line-height: 1.4;
+    }
+
+    @keyframes fadeEffect {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* --- Security Badge Clusters --- */
+    .trust-badges {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        margin-top: 35px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        flex-wrap: wrap;
+    }
+
+    .badge-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.75rem;
+        color: #6b7280;
+        font-family: monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .badge-item svg {
+        width: 16px;
+        height: 16px;
+        fill: #00f2fe;
+    }
+
+    /* --- Welcome Boot Screen Overlay --- */
+    #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #02020a;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999;
+        transition: opacity 0.6s ease-out, visibility 0.6s;
+    }
+
+    .splash-container {
+        text-align: center;
+        max-width: 450px;
+        padding: 20px;
+    }
+
+    .splash-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #ffffff 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .splash-subtitle {
+        font-size: 0.85rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin-bottom: 40px;
+        font-weight: 700;
+        font-family: monospace;
+    }
+
+    .loader-ring {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 35px auto;
+    }
+
+    .loader-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        margin: 6px;
+        border: 2px solid #00f2fe;
+        border-radius: 50%;
+        animation: rotateRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #00f2fe transparent transparent transparent;
+    }
+    .loader-ring div:nth-child(1) { animation-delay: -0.45s; }
+    .loader-ring div:nth-child(2) { animation-delay: -0.3s; }
+    .loader-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+    @keyframes rotateRing {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .status-text {
+        font-size: 0.75rem;
+        color: #00ff88;
+        min-height: 24px;
+        font-family: monospace;
+    }
+
+    body.loaded #splash-screen {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* --- Side-spreading Operations Console --- */
+    #ai-sidebar-trigger {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        background: transparent;
+        color: #00f2fe;
+        border: 1px solid #00f2fe;
+        border-right: none;
+        padding: 20px 8px;
+        font-weight: bold;
+        font-size: 0.75rem;
+        font-family: monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        cursor: pointer;
+        border-radius: 4px 0 0 4px;
+        z-index: 10001;
+        transition: all 0.3s ease;
+    }
+
+    #ai-sidebar-trigger:hover {
+        background: rgba(0, 242, 254, 0.1);
+        box-shadow: -4px 0 20px rgba(0, 242, 254, 0.2);
+    }
+
+    #ai-widget {
+        position: fixed;
+        top: 0;
+        right: -55%; 
+        width: 45%;  
+        height: 100vh;
+        background: rgba(2, 2, 10, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(0, 242, 254, 0.3);
+        box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        z-index: 10000;
+        overflow: hidden;
+        transition: right 0.4s cubic-bezier(0.05, 0.74, 0.2, 0.99);
+    }
+
+    #ai-widget.open {
+        right: 0;
+    }
+
+    #ai-header {
+        background: #060b18;
+        padding: 20px;
+        font-weight: bold;
+        font-size: 1rem;
+        color: #00f2fe;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        letter-spacing: 0.05em;
+        font-family: monospace;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-transform: uppercase;
+    }
+
+    .ai-close-x {
+        background: transparent;
+        border: 1px solid rgba(0, 242, 254, 0.4);
+        color: #00f2fe;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-family: monospace;
+        transition: all 0.2s ease;
+    }
+
+    .ai-close-x:hover {
+        background: #00f2fe;
+        color: #02020a;
+    }
+
+    #ai-chat {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #ai-chat .user {
+        align-self: flex-end;
+        background: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+        padding: 12px 16px;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        border-radius: 4px;
+        font-size: 0.9rem;
+        max-width: 85%;
+        word-wrap: break-word;
+        font-family: monospace;
+    }
+
+    #ai-chat .bot {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.03);
+        color: #ffffff;
+        padding: 12px 16px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        max-width: 85%;
+        word-wrap: break-word;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        font-family: monospace;
+    }
+
+    #ai-input-area {
+        display: flex;
+        padding: 20px;
+        background: #060b18;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        gap: 10px;
+    }
+
+    #userInput {
+        flex: 1;
+        background: #02020a;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        padding: 12px;
+        color: #ffffff;
+        border-radius: 4px;
+        outline: none;
+        font-size: 0.9rem;
+        font-family: monospace;
+    }
+
+    #userInput:focus {
+        border-color: #00f2fe;
+    }
+
+    #ai-input-area button {
+        background: transparent;
+        border: 1px solid #00f2fe;
+        color: #00f2fe;
+        padding: 0 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        font-family: monospace;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    #ai-input-area button:hover {
+        background: #00f2fe;
+        color: #02020a;
+    }
+
+    footer {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6b7280;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        font-family: monospace;
+        font-size: 0.8rem;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1024px) {
+        #ai-widget { width: 65%; right: -75%; }
+    }
+
+    @media (max-width: 768px) {
+        .container { margin-top: 140px; }
+        .hero-header h1 { font-size: 1.8rem; }
+        .calc-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        #ai-widget { width: 100%; right: -105%; }
+    }
+</style>
 </head>
 <body>
- <!-- Loading Boot Sequence Screen -->
-    <div id="boot-screen">
-        <div class="boot-box">
-            <div class="boot-header">SYSTEM INITIALIZATION CORE</div>
-            <div class="boot-log" id="bootLog"></div>
-            <div class="boot-progress-bar">
-                <div class="boot-progress-fill" id="bootProgress"></div>
-            </div>
+
+    <!-- SYSTEM START OVERLAY -->
+    <div id="splash-screen">
+        <div class="splash-container">
+            <h1 class="splash-title">LIZKEMI SYSTEMS</h1>
+            <p class="splash-subtitle">CAPITAL NETWORK MATRIX</p>
+            <div class="loader-ring"><div></div><div></div><div></div><div></div></div>
+            <div class="status-text" id="status-update">Initializing Secure Matrix Frame...</div>
         </div>
     </div>
 
-    <!-- Background Matrix Layer -->
-    <canvas id="matrixCanvas"></canvas>
+<canvas id="canvas"></canvas>
+<div id="text-measure">LIZKEMI CAPITAL MATRIX</div>
 
-    <!-- Main Workspace Environment -->
-    <div id="workspace">
-        
-        <!-- Sidebar Navigation -->
-        <aside>
-            <div class="brand-panel">
-                <div class="brand-title">LizKemi Capital</div>
-                <div class="brand-subtitle">FIRMS / SYSTEM v10.0.0-SECURE</div>
-            </div>
+<!-- Top Navigation Bar -->
+<nav id="topNav">
+    <a href="#" class="nav-logo">
+        <img src="company.png" class="nav-logo-img" alt="Logo">
+        <span>LIZKEMI CAPITAL</span>
+    </a>
+    <div class="dropdown">
+        <button class="dropbtn">OPERATIONAL FILES</button>
+        <div class="dropdown-content">
+            <a href="#about"> About & Mission</a>
+            <a href="#loans"> 1. Loan Structures</a>
+            <a href="#investments"> 2. Wealth Architecture</a>
+            <a href="#trading"> 3. Execution Node</a>
+            <a href="#classes"> 4. Technical Classes</a>
+            <a href="#support"> 5. Desk Support</a>
+            <a href="#banking"> 6. Future Frameworks</a>
+            <a href="#leadership"> Leadership Record</a>
+            <a href="#shares"> Equity Distribution</a>
+            <a href="#consultant"> Consulting Channels</a>
+            <a href="#contact"> Communication Desk</a>
+        </div>
+    </div>
+</nav>
+
+<!-- SYSTEM TELEMETRY TICKER BAR -->
+<div class="ticker-wrap" id="tickerWrap">
+    <div class="ticker">
+        <div class="ticker-item">CORE ENGINE STATUS: <span class="ticker-blue">ACTIVE OPERATIONAL DISPATCH</span></div>
+        <div class="ticker-item">INTEREST REVENUE PROTOCOL: <span class="ticker-blue">20% FIXED STRUCTURAL VALUE</span></div>
+        <div class="ticker-item">REGULATORY COMPLIANCE SYSTEM: <span class="ticker-green">SIERRA LEONE REGIONAL AUDIT STATUS // FULL SECURE</span></div>
+        <div class="ticker-item">LIQUIDITY POOL METRIC: <span class="ticker-green">STABLE CAPITAL OUTLOOK EXPANSION</span></div>
+        <div class="ticker-item">ACQUISITION INSTALMENT WINDOW: <span class="ticker-blue">$2,000 / MONTHLY ALLOCATION MAXIMUM</span></div>
+    </div>
+</div>
+
+<div class="container" id="mainContainer">
+    
+    <!-- Hero Header Core Asset -->
+    <header class="hero-header">
+        <img src="company.png" alt="Logo Banner" class="hero-main-img">
+        <h1>Illuminating Your Financial Future</h1>
+        <p>[ System Interface Loaded Successfully // Welcome to LizKemi Capital Matrix ]</p>
+    </header>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Us & Our Mission</h2>
+        <div class="content-block">
+            <p style="font-size: 1rem; color: #e5e7eb; margin-bottom: 2rem; border-left: 3px solid #00f2fe; padding-left: 15px;">
+                <strong>LizKemi Capital Ltd</strong> is configured to deploy accessible and responsible loan solutions to individuals, small & big businesses, and students, empowering regional scaling targets. The entity operates to remain the most trusted financial partner for families and entrepreneurs in Sierra Leone & globally.
+            </p>
             
-            <div class="nav-menu">
-                <div class="nav-section-tag">Core Environment</div>
-                <a href="#" class="nav-item active" data-target="dashboard">⚡ Main Control Deck</a>
-                <a href="#" class="nav-item" data-target="loans">💸 Capital & Loans</a>
-                <a href="#" class="nav-item" data-target="investments">📈 Wealth Engine</a>
-                <a href="#" class="nav-item" data-target="trading">🌐 Market Access</a>
-                
-                <div class="nav-section-tag">Corporate Matrix</div>
-                <a href="#" class="nav-item" data-target="about">📜 Mission Ledger</a>
-                <a href="#" class="nav-item" data-target="shares">📊 Equity Hub</a>
-                <a href="#" class="nav-item" data-target="consulting">💼 Strategic Paths</a>
-            </div>
-        </aside>
-
-        <!-- Main Viewspace -->
-        <main>
-            <!-- Top Status Bar -->
-            <header class="top-ticker">
-                <div class="ticker-node">
-                    <span>STATUS: <span class="pulse-light">● SECURE FIREWALL ACTIVE</span></span>
-                    <span>BASE INTEREST: <span style="color:#00f0ff;">20% FIXED MATRIX</span></span>
-                </div>
-                <div>SECURE NODE: 256-BIT SSL VALIDATED</div>
-            </header>
-
-            <!-- SECTION: MAIN CONTROL DECK -->
-            <section id="dashboard" class="active-pane">
-                <div class="pane-heading"><span>//</span> SYSTEM OVERVIEW DECK</div>
-                
-   
-                    <div id="auth-authenticated" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                            <div>
-                                <span style="color: #10b981; font-weight: bold;">[ACCESS GRANTED]</span> Signed in as: <span id="currentUserEmail" style="color: #00f0ff;"></span>
-                            </div>
-                            <button class="cyber-btn" onclick="terminateSession()" style="width: auto; border-color: #ef4444; color: #ef4444; padding: 6px 15px;">Terminate Session</button>
-                        </div>
+            <!-- Community Metrics Frame -->
+            <section id="impact-monitor" style="padding: 20px 0; border-top: 1px solid rgba(0, 242, 254, 0.2);">
+                <h3 style="text-align:center; color: #00f2fe; margin-bottom: 25px;">Strategic Community Impact Metrics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="content-block" style="text-align:center; background: rgba(2,2,10,0.6);">
+                        <div class="val-highlight" id="count-projects" data-target="12">0</div>
+                        <p style="color: #6b7280; font-size:0.75rem; font-family:monospace; text-transform:uppercase; margin-top:5px;">Active Jui Projects</p>
                     </div>
-                </div>
-
-                <div class="cyber-grid">
-                    <div class="control-panel accent-cyan">
-                        <span class="panel-label">Operational Metrics</span>
-                        <div class="matrix-value cyan" id="count-days" data-target="365">0</div>
-                        <p class="desc">Days of Continuous Financial Deployment</p>
+                    <div class="content-block" style="text-align:center; background: rgba(2,2,10,0.6);">
+                        <div class="val-highlight" id="count-members" data-target="450">0</div>
+                        <p style="color: #6b7280; font-size:0.75rem; font-family:monospace; text-transform:uppercase; margin-top:5px;">Empowered Individuals</p>
                     </div>
-                    <div class="control-panel accent-green">
-                        <span class="panel-label">Empowered Cohorts</span>
-                        <div class="matrix-value green" id="count-members" data-target="450">0</div>
-                        <p class="desc">Active Empowered Individuals Worldwide</p>
-                    </div>
-                    <div class="control-panel">
-                        <span class="panel-label">Regional Growth Nodes</span>
-                        <div class="matrix-value" id="count-projects" data-target="12">0</div>
-                        <p class="desc">Active Regional Jui Infrastructure Projects</p>
-                    </div>
-                </div>
-
-                <div class="control-panel">
-                    <span class="panel-label">System State Terminal Feed</span>
-                    <div class="terminal-box" id="systemLog">
-                        [SYS_INFO] Institutional security protocols mapped.<br>
-                        [SYS_INFO] Framework waiting for query allocations...
+                    <div class="content-block" style="text-align:center; background: rgba(2,2,10,0.6);">
+                        <div class="val-highlight" id="count-days" data-target="365">0</div>
+                        <p style="color: #6b7280; font-size:0.75rem; font-family:monospace; text-transform:uppercase; margin-top:5px;">Days of Operation</p>
                     </div>
                 </div>
             </section>
+  
+            <h3>Corporate Video Presentation</h3>
+            <video autoplay muted loop playsinline>
+                <source src="Lizkemicapitalfirm.MP4" type="video/mp4">
+            </video>
 
-            <!-- SECTION: CAPITAL & LOANS -->
-            <section id="loans">
-                <div class="pane-heading"><span>//</span> 1. LOAN & INSTITUTIONAL CAPITAL BLOCK</div>
-                <p class="desc">Cross-border structural micro and macro capital solutions bound by international security frameworks, real-time KYC telemetry, and strict risk mapping.</p>
-                
-                <div class="cyber-grid">
-                    <div class="control-panel accent-cyan">
-                        <span class="panel-label">Calculation Parameters</span>
-                        <div class="input-stack">
-                            <label>Select Matrix Base Principal</label>
-                            <select id="loanAmount" class="cyber-select" onchange="runLoanEngine()">
-                                <option value="10">10</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                                <option value="500">500</option>
-                                <option value="1000">1,000</option>
-                                <option value="1500">1,500</option>
-                                <option value="2000" selected>2,000</option>
-                                <option value="5000">5,000</option>
-                                <option value="10000">10,000</option>
-                            </select>
+            <h3 style="margin-top:30px;">Core Corporate Philosophy</h3>
+            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #9ca3af;"><strong style="color:#ffffff;">Family:</strong> Deeply rooted name metrics driving core asset protections.</p>
+            <p style="margin-bottom: 10px; font-size: 0.9rem; color: #9ca3af;"><strong style="color:#ffffff;">Integrity:</strong> Systemic processing transparency across every execution rail.</p>
+            <p style="font-size: 0.9rem; color: #9ca3af;"><strong style="color:#ffffff;">Respect:</strong> Absolute alignment with stakeholder identities as an institutional partner.</p>
+        </div>
+    </section>
+
+    <!-- Loan Services Section -->
+    <section id="loans">
+        <h2>1. Loan & Capital Structures</h2>
+        <div class="content-block">
+            <h3>Strategic Liquidity Injections</h3>
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color:#9ca3af;">
+                LizKemi Capital Ltd maintains structured, scalable lending architectures built for corporate expansion tracks and individualized capital deployment models.
+            </p>
+
+            <!-- Product Grid -->
+            <div class="product-matrix">
+                <div class="product-card">
+                    <h4>✦ Term Liquidity Injections</h4>
+                    <p>Predictable, lump-sum capitalization accompanied by strict structured repayment protocols for corporate hardware scaling targets.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ SBA Credit Guarantee Portfolios</h4>
+                    <p>Government-backed commercial asset allocations tailored for long-term operational runway protection structures.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Revolving Operating Allocations</h4>
+                    <p>On-demand programmatic credit structures. Draw directly from sovereign reserves, resolve balances, and scale capacity instantaneously.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Asset-Backed Mechanics Financing</h4>
+                    <p>Collateralized asset deployment where targeted enterprise infrastructure shields liquidity pools against processing friction.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Velocity Revenue-Based Matrix</h4>
+                    <p>Adaptive funding vectors linked directly to algorithmic gross settlement indexes. Repayments index perfectly with corporate velocity.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Micro-Venture Micro Loans</h4>
+                    <p>Targeted micro-capital layers deployed directly to accelerate foundational startup frameworks and student execution tiers.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Systemic Macro Frameworks</h4>
+                    <p>Industrial macro-structural financing routes customized for complex tier-one industry scaling and high-volume corporate development.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ High-Leverage Liquid Accounts</h4>
+                    <p>High-performance clearing systems mapped explicitly to support algorithmic execution layers across global capital systems.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Invoice Factoring Ledger</h4>
+                    <p>Instantly clear outstanding accounts receivable layers into directly actionable operational reserves without delay metrics.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Property Acquisition Instruments</h4>
+                    <p>Corporate land-use expansion tracks and industrial physical property development frameworks across key emergent corridors.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Merchant Cash Advance (MCA)</h4>
+                    <p>Rapid, non-dilutive asset distribution modules calibrated against future batches to safely bridge operational intervals.</p>
+                </div>
+                <div class="product-card">
+                    <h4>✦ Structural Project Finance</h4>
+                    <p>Long-term project development financing architectures where debt resolution is entirely offset by structural output yields.</p>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Capital Allocation & Structural Execution Engine</h3>
+            <div class="calc-grid">
+                <div class="calc-box">
+                    <p>Operational Principal Selection (USD):</p>
+                    <select id="loanAmount" onchange="runCalculationEngine()">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="500">500</option>
+                        <option value="1000">1,000</option>
+                        <option value="1500">1,500</option>
+                        <option value="2000" selected>2,000</option>
+                        <option value="5000">5,000</option>
+                        <option value="10000">10,000</option>
+                    </select>
+                </div>
+                <div class="display-box">
+                    <div class="grid-display" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="metric">
+                            <p>Structural Accrued Yield (20% Fixed)</p>
+                            <div class="val-highlight" id="interestDisplay" style="font-size:1.5rem;">400</div>
                         </div>
-                        <button class="cyber-btn" onclick="exportContractManifest()">Export Data Manifest</button>
+                        <div class="metric">
+                            <p>Total Repayment Ledger Baseline</p>
+                            <div class="val-highlight" id="totalDisplay" style="font-size:1.5rem; color:#00ff88;">2,400</div>
+                        </div>
                     </div>
+                    
+                    <div class="info-line">
+                        <span>Maturity Term Bounds:</span>
+                        <span id="targetReturnDate">--/--/----</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Grace Allocation Limit (3-Day):</span>
+                        <span id="gracePeriodLimit" style="color: #00f2fe;">--/--/----</span>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="control-panel accent-green">
-                        <span class="panel-label">Live Calculation Yield</span>
-                        <div class="input-stack">
-                            <label>Accrued Interest (20% Matrix Base)</label>
-                            <div class="matrix-value green" id="interestDisplay">400</div>
-                        </div>
-                        <div class="input-stack">
-                            <label>Total Repayment Allocation Required</label>
-                            <div class="matrix-value cyan" id="totalDisplay">2,400</div>
-                        </div>
+            <h3 style="margin-top: 40px;">Standard Sovereign Enclave Agreement</h3>
+            <div class="contract-scroll" id="contractAgreementText">
+                <h4>LOAN CONTRACT AGREEMENT</h4>
+                <p><strong>Date of Agreement:</strong> 2026-06-17</p>
+                
+                <h4>PARTIES</h4>
+                <p><strong>1. Lender:</strong> LizKemi Capital Ltd</p>
+                <p><strong>2. Borrower:</strong> [Identity Validation Signature Required]</p>
+                <p><strong>3. Guarantor Alignment:</strong> Secondary Structural Backing Rule Specified</p>
+
+                <h4>ARTICLE 1: LOAN PRINCIPAL</h4>
+                <p>1) The Lender agrees to clear the chosen principal baseline configurations to the validated processing destination node.</p>
+
+                <h4>ARTICLE 4: REPAYMENT MATRIX</h4>
+                <p>The core deployment sum plus the 20% fixed asset initialization yield must be returned to the primary clearing vault on target maturity.</p>
+
+                <h4>ARTICLE 5: GUARANTOR PERFORMANCE</h4>
+                <p>1) The designated guarantor unconditionally secures the execution parameters of the primary balance path against default occurrences.</p>
+
+                <h4>ARTICLE 6: LATENCY PENALTY ARCHITECTURE</h4>
+                <p>1) A strict grace timeline envelope of three (3) calendar tracking days is assigned. Exceeding this boundary triggers immediate late fee matrices.</p>
+            </div>
+            <button class="action-btn" onclick="downloadContractDocument()">Export Plaintext Agreement</button>
+        </div>
+    </section>
+
+    <!-- Investment Services Section -->
+    <section id="investments">
+        <h2>2. Predictive Compound Asset Vector</h2>
+        <div class="content-block">
+            <h3>Strategic Wealth Architecture</h3>
+            <p style="margin-bottom: 25px; font-size:0.9rem; color:#9ca3af;">
+                We route targeted startup investments engineered to secure systemic compounding horizons across emerging institutional target channels.
+            </p>
+            
+            <div class="calc-grid">
+                <div class="calc-box">
+                    <div class="slider-group">
+                        <label for="investmentCapital">Seed Deployment Asset Base: <span id="capitalVal">$10,000</span></label>
+                        <input type="range" id="investmentCapital" min="1000" max="100000" step="1000" value="10000" class="custom-slider" oninput="runInvestmentEngine()">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label for="investmentDuration">Strategic Maturity Horizon: <span id="durationVal">3 Years</span></label>
+                        <input type="range" id="investmentDuration" min="1" max="10" step="1" value="3" class="custom-slider" oninput="runInvestmentEngine()">
+                    </div>
+                    
+                    <div class="chart-container">
+                        <p style="font-size:0.65rem; color:#00f2fe; margin-bottom:5px; text-transform:uppercase; font-family:monospace;">Visual Growth Trajectory Vector</p>
+                        <canvas id="growthChart" class="analytics-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="display-box">
+                    <div class="metric">
+                        <p>Projected Multi-Rail Valuation Asymptote (10% Compound Assumption)</p>
+                        <div class="val-highlight" id="matureValuationDisplay" style="color:#00ff88;">$13,310</div>
+                    </div>
+                    <div class="info-line">
+                        <span>Strategic Venture Processing:</span>
+                        <span style="color: #00ff88;">Active Inbound Sourcing</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Minimum Entry Parametric:</span>
+                        <span>Variable Cluster Criteria</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Services Section -->
+    <section id="trading">
+        <h2>3. Sovereign Telemetry Ingress Log Trace</h2>
+        <div class="content-block">
+            <h3>Institutional Clearing Execution</h3>
+            <p style="margin-bottom: 20px; font-size:0.9rem; color:#9ca3af;">
+                LizKemi Capital drives ultra-low-latency tracking pipelines to ensure system integrity and clean balance management across all processing networks.
+            </p>
+            <div class="system-log-box" id="trading-logs">
+                [3:56:59 PM] LOG_UPDATE Adjusting asset clearing micro-buffers to operational baseline threshold (0.018ms).<br>
+                [3:57:05 PM] LOG_UPDATE Hardware enclave reporting zero Byzantine fault errors across processing chains.<br>
+                [3:57:11 PM] LOG_UPDATE Multi-rail asset settlement structures confirmed completely verified via public signature ledger.
+            </div>
+        </div>
+    </section>
+
+    <!-- Practical Classes Section -->
+    <section id="classes">
+        <h2>4. Technical Execution Development</h2>
+        <div class="content-block">
+            <h3>Financial Literacy Mapping</h3>
+            <p style="font-size:0.9rem; color:#9ca3af;">
+                We connect market mechanics with tactical execution through intensive, hands-on masterclasses customized for regional operators and student networks.
+            </p>
+            <button class="action-btn" onclick="alert('Class roster registration request sent.')">View Upcoming Syllabus</button>
+        </div>
+    </section>
+
+    <!-- Expert Guidance Section -->
+    <section id="support">
+        <h2>5. Personalized Advisor Sync</h2>
+        <div class="content-block">
+            <h3>Direct Integration Desk</h3>
+            <p style="font-size:0.9rem; color:#9ca3af;">
+                Our network has uninhibited access to real-time market data analysis loops and dedicated risk architects to maintain flawless structural navigation.
+            </p>
+        </div>
+    </section>
+
+    <!-- Future Banking Section -->
+    <section id="banking">
+        <h2>6. Future Core Banking Infrastructure</h2>
+        <div class="content-block">
+            <h3>Next-Generation Ecosystem Design</h3>
+            <p style="font-size:0.9rem; color:#9ca3af;">
+                Our multi-phase architectural roadmap actively establishes underlying secure banking arrays configured to host decentralized account frameworks for clients and internal staff.
+            </p>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section id="leadership">
+        <h2>Sovereign Enclave Identity Record</h2>
+        <div class="content-block">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 15px;">
+                <div style="width: 50px; height: 50px; background: #02020a; border: 1px solid #00f2fe; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #00f2fe; font-family:monospace;">KL</div>
+                <div>
+                    <p style="font-size: 1.1rem; color: #ffffff; font-weight: bold; margin: 0; font-family:monospace;">KENNEDY LEWIS</p>
+                    <p style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #00ff88; margin: 0; font-family:monospace;">● PRESIDENTIAL CLEARANCE GRANTED</p>
+                </div>
+            </div>
+            <p style="font-size:0.9rem; color:#9ca3af;">
+                Directing systemic parameters toward permanent, multi-generation community enablement while ensuring that all platform workflows adhere to absolute data alignment, family-rooted foundations, and clarity metrics.
+            </p>
+        </div>
+    </section>
+
+    <!-- Share Prices Section -->
+    <section id="shares">
+        <h2>Institutional Equity Distribution Indices</h2>
+        <div class="calc-grid">
+            
+            <div class="content-block">
+                <h3>Asset Index Metrics</h3>
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.75rem; color: #6b7280; font-family:monospace;">DISPLAY CURRENCY VALUE:</span>
+                    <select id="currencySelector" class="custom-select" style="width: auto; margin-top: 0; padding: 4px 8px; font-size: 0.75rem;" onchange="convertEquityMatrix()">
+                        <option value="USD" selected>USD ($)</option>
+                        <option value="SLL">SLE (Leones)</option>
+                    </select>
+                </div>
+                <table class="performance-matrix">
+                    <thead>
+                        <tr>
+                            <th>Class Series Variant</th>
+                            <th>Genesis Value</th>
+                            <th>Real-Time Index</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Series A Sovereign Common</td>
+                            <td id="seriesAInit">$1.00</td>
+                            <td id="seriesACurr" style="color: #00ff88; font-weight:bold;">$1.45</td>
+                        </tr>
+                        <tr>
+                            <td>Series B Preferred Lock</td>
+                            <td id="seriesBInit">$2.50</td>
+                            <td id="seriesBCurr" style="color: #00ff88; font-weight:bold;">$3.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="content-block" style="border: 1px solid rgba(0, 242, 254, 0.3); background: rgba(6, 11, 24, 0.6);">
+                <h3>Secure Ledger Workspace Preview</h3>
+                <div class="info-line" style="margin-top:10px;">
+                    <span>Direct Sovereign Allocation Base:</span>
+                    <span id="dashCapital" style="color: #00f2fe; font-weight: bold;">$154,200.00</span>
+                </div>
+                <div class="info-line">
+                    <span>Accrued Structural Yield Engine:</span>
+                    <span id="dashYield" style="color: #00ff88; font-weight:bold;">+$12,480.00</span>
+                </div>
+                <div class="info-line">
+                    <span>Next Algorithmic Audit Settlement:</span>
+                    <span style="color:#ffffff;">July 01, 2026</span>
+                </div>
+                <button class="action-btn" style="width: 100%; margin-top: 15px;" onclick="alert('Accessing localized secure node... Redirecting to full ledger database.')">Launch Full Governance Portal</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Consultant Services Section -->
+    <section id="consultant">
+        <h2>Consultation Channel Deployment</h2>
+        <div class="content-block">
+            <h3>Framework Allocation Tracks</h3>
+            <p style="font-size:0.9rem; color:#9ca3af; margin-bottom:15px;">Configure target terminal metrics below to route priority inquiries to corporate clearance loops.</p>
+            
+            <div class="segmented-tabs">
+                <button type="button" class="tab-btn active" onclick="updatePipeline(this, 'Standard')">Standard Track</button>
+                <button type="button" class="tab-btn" onclick="updatePipeline(this, 'Premium')">Premium Portfolio</button>
+                <button type="button" class="tab-btn" onclick="updatePipeline(this, 'Enterprise')">Custom Elite</button>
+            </div>
+
+            <div id="pipeline-content-area">
+                <div id="track-Standard" class="pipeline-card" style="display: block;">
+                    <div class="info-line">
+                        <span>Consultation Track Max Density:</span>
+                        <span style="color: #00f2fe;">3 Direct Dispatches Allowed</span>
+                    </div>
+                    <div class="info-line">
+                        <span>Pipeline Processing Lag:</span>
+                        <span>Standard Queue Array (24-48 Hours)</span>
                     </div>
                 </div>
 
-                <!-- FORTIFIED COMPONENT: LIVE HIGH-SECURITY CAPITAL APPLICATION MATRIX -->
-                <div class="control-panel accent-red" style="margin-bottom: 30px;">
-                    <span class="panel-label" style="color: #ef4444; font-weight: bold;">[SECURE PROTOCOL] Institutional KYC Loan Entry Interface</span>
-                    <p class="desc" style="font-size: 0.8rem; color: #94a3b8;">All tracking telemetry, international location nodes, legal IDs, and uploaded file strings will be hardcoded into the cloud ledger database to protect capital against bad actors and fraud.</p>
-                    
-                    <!-- Section A: Primary Personal Telemetry -->
-                    <div class="sub-panel-label">01. Primary Identity Vectors</div>
-                    <div class="form-grid-2">
-                        <div class="input-stack">
-                            <label>Full Legal Operator Name *</label>
-                            <input type="text" id="appName" class="cyber-input" placeholder="First Name, Middle, Surname">
-                        </div>
-                        <div class="input-stack">
-                            <label>National / International ID Number *</label>
-                            <input type="text" id="appNationalID" class="cyber-input" placeholder="Passport / Gov ID / National Registry Num">
-                        </div>
+                <div id="track-Premium" class="pipeline-card" style="display: none;">
+                    <div class="info-line">
+                        <span>Consultation Track Max Density:</span>
+                        <span style="color: #00f2fe;">Priority Synchronous Video Uplink</span>
                     </div>
-
-                    <div class="form-grid-2">
-                        <div class="input-stack">
-                            <label>Country of Current Jurisdiction *</label>
-                            <input type="text" id="appCountry" class="cyber-input" placeholder="e.g. Sierra Leone, United States, United Kingdom">
-                        </div>
-                        <div class="input-stack">
-                            <label>Active Contact Phone Line (With Area Code) *</label>
-                            <input type="tel" id="appPhone" class="cyber-input" placeholder="+232 XX XXXXXX / +1 XXX XXX XXXX">
-                        </div>
+                    <div class="info-line">
+                        <span>Pipeline Processing Lag:</span>
+                        <span style="color: #00ff88;">Accelerated Matrix Route (&lt; 6 Hours)</span>
                     </div>
+                </div>
 
-                    <div class="input-stack">
-                        <label>Permanent Residential/Physical Street Address *</label>
-                        <input type="text" id="appAddress" class="cyber-input" placeholder="Street Name, City, State/Province, Postal Node">
+                <div id="track-Enterprise" class="pipeline-card" style="display: none;">
+                    <div class="info-line">
+                        <span>Consultation Track Max Density:</span>
+                        <span style="color: #00f2fe;">Direct Presidential Board Integration Access</span>
                     </div>
-
-                    <!-- Section B: Professional & Employment Status -->
-                    <div class="sub-panel-label">02. Economic Infrastructure Parameters</div>
-                    <div class="form-grid-2">
-                        <div class="input-stack">
-                            <label>Active Professional Status *</label>
-                            <select id="appJobStatus" class="cyber-select">
-                                <option value="Employed">Full-Time / Part-Time Employed</option>
-                                <option value="Student">Academic Student Operator</option>
-                                <option value="BusinessOwner">Business Owner / Company Founder</option>
-                                <option value="Freelancer">Independent Freelancer</option>
-                            </select>
-                        </div>
-                        <div class="input-stack">
-                            <label>Verifiable Monthly Income Range (USD Base) *</label>
-                            <input type="text" id="appIncome" class="cyber-input" placeholder="e.g. $500, $2,500, $10,000">
-                        </div>
+                    <div class="info-line">
+                        <span>Pipeline Processing Lag:</span>
+                        <span style="color: #00ff88;">Immediate Dedicated Execution Override</span>
                     </div>
+                </div>
+            </div>
 
-                    <div class="form-grid-2">
-                        <div class="input-stack">
-                            <label>Employer Name / Academic Institution *</label>
-                            <input type="text" id="appEmployer" class="cyber-input" placeholder="Company or University Node">
-                        </div>
-                        <div class="input-stack">
-                            <label>Strategic Capital Purpose *</label>
-                            <select id="appPurpose" class="cyber-select">
-                                <option value="Infrastructure">Workspace / Infrastructure</option>
-                                <option value="Liquidity">Operational Liquidity</option>
-                                <option value="Trading">Market Access / Trading</option>
-                                <option value="Startup">Student Enterprise / Startup</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="form-group-inline">
+                <input type="checkbox" id="nigeria">
+                <label for="nigeria">Verify Term Loan Framework Compliance Rules</label>
+            </div>
 
-                    <!-- Section C: Biometric Data Capture Slots (Front & Back IDs) -->
-                    <div class="sub-panel-label">03. Verification Registry Files (Binary Upload Layers)</div>as();
+            <textarea class="custom-textarea" placeholder="Detail your project targets or custom terms here..."></textarea>
+            <button type="button" class="action-btn" onclick="alert('Priority request submitted successfully.')">Submit Priority Consulting Request</button>
+        </div>
+    </section>
 
-        function renderMatrixFrame() {
-            ctx.fillStyle = 'rgba(2, 2, 5, 0.04)'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00f0ff';
-            ctx.font = '11px monospace';
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Corporate Communication Ingress Desk</h2>
+        <div class="calc-grid">
+            <div class="content-block">
+                <h3>Physical Coordinates</h3>
+                <p style="margin-bottom: 8px; font-size:0.9rem; font-family:monospace;"><strong style="color:#ffffff;">Address:</strong> 10 Gen Street, Mainline</p>
+                <p style="margin-bottom: 8px; font-size:0.9rem; font-family:monospace;"><strong style="color:#ffffff;">Phone:</strong> 079518827</p>
+                <p style="font-size:0.9rem; font-family:monospace;"><strong style="color:#ffffff;">Region Parameter:</strong> Sierra Leone Base Terminal</p>
+            </div>
+            <div class="content-block">
+                <h3>Transmission Node Injection</h3>
+                <input type="text" class="custom-input" placeholder="Operator Identity Name">
+                <input type="email" class="custom-input" placeholder="Target Secure Mail Ingress">
+                <button class="action-btn" style="margin-top:5px; width:100%;" onclick="alert('Message buffered to secure corporate queue.')">Send Outbound Transmission</button>
+            </div>
+        </div>
+    </section>
 
-            for (let i = 0; i < drops.length; i++) {
-                const matrixChar = Math.random() > 0.5 ? "1" : "0";
-                const xCoordinate = i * 20;
-                const yCoordinate = drops[i] * 20;
+</div>
 
-                ctx.fillText(matrixChar, xCoordinate, yCoordinate);
-                if (yCoordinate > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-        setInterval(renderMatrixFrame, 33);
+<footer>
+    <div class="system-log-box" id="systemLog">
+        [SYSTEM INFO] Core platform engine initialized...<br>
+        [SYSTEM INFO] Ledger system operating securely via client protocols.
+    </div>
+    <div class="trust-badges">
+        <div class="badge-item">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            256-BIT ENCRYPTION LAYER
+        </div>
+        <div class="badge-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            COMPLIANCE SECURE VERIFIED
+        </div>
+    </div>
+    <p style="margin-top: 40px;">&copy; 2026 LIZKEMI CAPITAL OPERATIONS. CLASSIFIED DATA PARAMETERS SECURED.</p>
+</footer>
 
-        /* --- Incremental Core Statistics Counter Animation --- */
-        function triggerAnimateMetrics() {
-            const counters = document.querySelectorAll('.matrix-value[id^="count-"]');
-            counters.forEach(counter => {
-                const updateCounterValue = () => {
-                    const targetVal = +counter.getAttribute('data-target');
-                    const rawTextVal = +counter.innerText.replace('+', '');
-                    const processingIncrement = targetVal / 50;
+<!-- FLOATING MANAGEMENT TOGGLE TAB -->
+<div id="ai-sidebar-trigger" onclick="toggleAISidebar()">
+    ● OPERATIONAL CONSOLE
+</div>
 
-                    if (rawTextVal < targetVal) {
-                        counter.innerText = Math.ceil(rawTextVal + processingIncrement);
-                        setTimeout(updateCounterValue, 20);
-                    } else {
-                        counter.innerText = targetVal + '+';
-                    }
-                };
-                updateCounterValue();
-            });
-        }
+<!-- SIDE-SPREADING OPERATIONS CONSOLE PANEL -->
+<div id="ai-widget">
+    <div id="ai-header">
+        <span>LIZKEMI CORE INTELLIGENCE INTERFACE</span>
+        <button class="ai-close-x" onclick="toggleAISidebar()">CLOSE TERMINAL ✕</button>
+    </div>
+    <div id="ai-chat">
+        <div class="bot">System online. Terminal links verified. Accessing localized collateral ledgers... How may our team guide your financial matrix targets today?</div>
+    </div>
+    <div id="ai-input-area">
+        <input id="userInput" type="text" placeholder="Transmit system query or engine instruction code...">
+        <button onclick="sendMessage()">TRANSMIT</button>
+    </div>
+</div>
 
-        /* --- 20% Loan Computation Logic Engine --- */
-        function runLoanEngine() {
-            const selectVal = document.getElementById('loanAmount');
-            if(!selectVal) return;
-            const corePrincipal = parseInt(selectVal.value);
-            const calculatedInterest = Math.round(corePrincipal * 0.20);
-            
-            document.getElementById('interestDisplay').innerText = calculatedInterest.toLocaleString();
-            document.getElementById('totalDisplay').innerText = (corePrincipal + calculatedInterest).toLocaleString();
-        }
+<!-- Main JavaScript Execution Core -->
+<script>
+let selectedTrackPipeline = "Standard";
 
-        function exportContractManifest() {
-            const principalValue = document.getElementById('loanAmount').value;
-            const interestValue = document.getElementById('interestDisplay').innerText;
-            const totalRequired = document.getElementById('totalDisplay').innerText;
-
-            const trackingPayload = `LIZKEMI CAPITAL TERMINAL REPORT\n` +
-                                    `System Timestamp Base: 2026-07\n` +
-                                    `Selected Active Principal Modifier: ${principalValue}\n` +
-                                    `Computed 20% Matrix Interest Yield: ${interestValue}\n` +
-                                    `Aggregate Redemption Total Requirement: ${totalRequired}\n\n` +
-                                    `Payload bound securely inside active application frame ledger instance.`;
-
-            const documentBlob = new Blob([trackingPayload], { type: "text/plain" });
-            const dynamicLinkNode = document.createElement("a");
-            dynamicLinkNode.href = URL.createObjectURL(documentBlob);
-            dynamicLinkNode.download = "LizKemi_Lending_Payload.txt";
-            dynamicLinkNode.click();
-        }
-
-        /* --- Wealth Capital Compound Simulation Core --- */
-        function runWealthEngine() {
-            const capitalNode = document.getElementById('investmentCapital');
-            const horizonNode = document.getElementById('investmentDuration');
-            if(!capitalNode || !horizonNode) return;
-
-            const principalValue = parseInt(capitalNode.value);
-            const holdingPeriods = parseInt(horizonNode.value);
-
-            document.getElementById('capitalVal').innerText = '$' + principalValue.toLocaleString();
-            document.getElementById('durationVal').innerText = holdingPeriods + (holdingPeriods === 1 ? ' Year' : ' Years');
-
-            const compoundingFormulaResult = Math.round(principalValue * Math.pow((1 + 0.10), holdingPeriods));
-            document.getElementById('matureValuationDisplay').innerText = '$' + compoundingFormulaResult.toLocaleString();
-        }
-
-        /* --- Currency Equities Real-Time Conversions Matrix --- */
-        function convertEquityMatrix() {
-            const selectorCode = document.getElementById('currencySelector').value;
-            const operationalRateModifier = (selectorCode === "SLL") ? 22.5 : 1;
-            const currencySymbolString = (selectorCode === "SLL") ? "Le " : "$";
-
-            document.getElementById('seriesAInit').innerText = currencySymbolString + (1.00 * operationalRateModifier).toFixed(2);
-            document.getElementById('seriesACurr').innerText = currencySymbolString + (1.45 * operationalRateModifier).toFixed(2);
-            document.getElementById('seriesBInit').innerText = currencySymbolString + (2.50 * operationalRateModifier).toFixed(2);
-            document.getElementById('seriesBCurr').innerText = currencySymbolString + (3.10 * operationalRateModifier).toFixed(2);
-
-            if (currentActiveUser) {
-                fetchLiveProfile(currentActiveUser.id);
-            } else {
-                document.getElementById('dashCapital').innerText = currencySymbolString + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
-            }
-        }
-
-        /* --- Strategic Segment Consulting Control Paths --- */
-        function updatePipelineTrack(elementNode, pipelineTag) {
-            elementNode.parentElement.querySelectorAll('.segment-tab').forEach(tab => tab.classList.remove('active'));
-            elementNode.classList.add('active');
-
-            const allPipelineCards = document.querySelectorAll('#pipeline-info-cards > div');
-            allPipelineCards.forEach(card => card.style.display = 'none');
-
-            const targetedTrackNode = document.getElementById(`track-${pipelineTag}`);
-            if(targetedTrackNode) targetedTrackNode.style.display = 'block';
-        }
-
-        /* --- Live Profile Fetch Operations --- */
-        async function fetchLiveProfile(userId) {
-            const { data: profile, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .maybeSingle();
-
-            if (error) {
-                console.error("[SYS_ERROR] Could not fetch data matrix:", error.message);
-                return;
-            }
-
-            const selectorCode = document.getElementById('currencySelector').value;
-            const operationalRateModifier = (selectorCode === "SLL") ? 22.5 : 1;
-            const currencySymbolString = (selectorCode === "SLL") ? "Le " : "$";
-
-            const nameDisplay = document.getElementById('profile-name-display');
-            const statusDisplay = document.getElementById('profile-status-display');
-
-            if (profile) {
-                const originalCapital = (profile.core_capital || 0) * operationalRateModifier;
-                const originalYield = (profile.accrued_yield || 0) * operationalRateModifier;
-
-                document.getElementById('dashCapital').innerText = currencySymbolString + originalCapital.toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + originalYield.toLocaleString(undefined, {minimumFractionDigits: 2});
-                
-                if (nameDisplay) nameDisplay.innerText = profile.full_name || currentActiveUser.email.split('@')[0];
-                if (statusDisplay) {
-                    statusDisplay.innerText = profile.is_executive ? "● EXECUTIVE ROUTE SIGNED" : "● CLIENT NODE VERIFIED";
-                    statusDisplay.style.color = profile.is_executive ? "#10b981" : "#00f0ff";
-                }
-            } else {
-                document.getElementById('dashCapital').innerText = currencySymbolString + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
-                document.getElementById('dashYield').innerText = (selectorCode === "SLL" ? "+Le " : "+$") + (0).toLocaleString(undefined, {minimumFractionDigits: 2});
-                if (nameDisplay) nameDisplay.innerText = currentActiveUser.email.split('@')[0];
-                if (statusDisplay) {
-                    statusDisplay.innerText = "● COHORT ACTIVE NODE";
-                    statusDisplay.style.color = "#00f0ff";
-                }
-            }
-        }
-
-        /* --- Helper to Convert Uploaded Files to String Paths --- */
-        function convertFileToBase64(fileNode) {
-            return new Promise((resolve) => {
-                if (!fileNode || !fileNode.files[0]) resolve(null);
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.readAsDataURL(fileNode.files[0]);
-            });
-        }
-
-        /* --- INSTITUTIONAL SECURE FORM APPLICATION DELIVERIES --- */
-        async function submitLiveLoanApplication() {
-            const terminalFeedNode = document.getElementById("systemLog");
-
-            if (!currentActiveUser) {
-                alert("[SECURITY NOTICE] Authentication mismatch. You must sign in using your authorization token keyhole before transmitting applications.");
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_DENIAL] ${new Date().toLocaleTimeString()} - Intercepted unauthorized data dispatch request.<br>` + terminalFeedNode.innerHTML;
-                return;
-            }
-
-            // Extract calculations parameters
-            const selectVal = document.getElementById('loanAmount');
-            const principal = parseInt(selectVal.value);
-            const interest = Math.round(principal * 0.20);
-            const total = principal + interest;
-
-            // Extract identity and location tracking inputs
-            const name = document.getElementById('appName').value.trim();
-            const nationalID = document.getElementById('appNationalID').value.trim();
-            const country = document.getElementById('appCountry').value.trim();
-            const phone = document.getElementById('appPhone').value.trim();
-            const address = document.getElementById('appAddress').value.trim();
-
-            // Extract professional status matrix
-            const jobStatus = document.getElementById('appJobStatus').value;
-            const income = document.getElementById('appIncome').value.trim();
-            const employer = document.getElementById('appEmployer').value.trim();
-            const purpose = document.getElementById('appPurpose').value;
-
-            // Extract guarantor secondary tracing parameters
-            const guarantorName = document.getElementById('appGuarantorName').value.trim();
-            const guarantorRelation = document.getElementById('appGuarantorRelation').value.trim();
-            const guarantorPhone = document.getElementById('appGuarantorPhone').value.trim();
-            const guarantorAddress = document.getElementById('appGuarantorAddress').value.trim();
-
-            // Check signature and checkboxes
-            const compliance = document.getElementById('complianceCheck').checked;
-            const signature = document.getElementById('appSignature').value.trim();
-
-            // Complete Mandatory Field Verification Check
-            if (!name || !nationalID || !country || !phone || !address || !income || !guarantorName || !guarantorPhone || !signature) {
-                alert("[VALIDATION BLOCK] Critical identity or tracking vector fields are empty. Complete all marked inputs to clear firewall checks.");
-                return;
-            }
-
-            if (!compliance) {
-                alert("[VALIDATION BLOCK] Legal compliance attestation box must be checked to execute data deployment.");
-                return;
-            }
-
-            if (name.toLowerCase() !== signature.toLowerCase()) {
-                alert("[SIGNATURE MISMATCH] Legal Signature string must exactly match your Legal Operator Name field.");
-                return;
-            }
-
-            if (terminalFeedNode) terminalFeedNode.innerHTML = `[SECURITY_TELEMETRY] ${new Date().toLocaleTimeString()} - Converting document files and compiling payload packet...<br>` + terminalFeedNode.innerHTML;
-
-            // Process Files to base64 strings securely
-            const fileFrontString = await convertFileToBase64(document.getElementById('appIdFront'));
-            const fileBackString = await convertFileToBase64(document.getElementById('appIdBack'));
-
-            if (!fileFrontString || !fileBackString) {
-                alert("[VALIDATION BLOCK] Missing identification documents. Both Front and Back registry snaps must be loaded.");
-                return;
-            }
-
-            if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_DISPATCH] ${new Date().toLocaleTimeString()} - Shipping fully encrypted trace matrix to database...<br>` + terminalFeedNode.innerHTML;
-
-            // Ship compiled data payload straight to Supabase
-            const { data, error } = await supabase
-                .from('loan_applications')
-                .insert([
-                    { 
-                        user_id: currentActiveUser.id,
-                        user_email: currentActiveUser.email,
-                        principal_amount: principal, 
-                        interest_accrued: interest, 
-                        total_repayment: total,
-                        compliance_bound: compliance,
-                        status: 'pending',
-                        
-                        // Integrated High-Security Tracking Metrics
-                        legal_name: name,
-                        national_id_number: nationalID,
-                        country_of_residence: country,
-                        phone_number: phone,
-                        physical_address: address,
-                        professional_status: jobStatus,
-                        monthly_income: income,
-                        employer_or_school: employer,
-                        loan_purpose: purpose,
-                        guarantor_name: guarantorName,
-                        guarantor_relationship: guarantorRelation,
-                        guarantor_phone: guarantorPhone,
-                        guarantor_address: guarantorAddress,
-                        digital_signature: signature,
-                        id_front_base64: fileFrontString,
-                        id_back_base64: fileBackString
-                    }
-                ]);
-
-            if (error) {
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[FIREWALL_REJECTION] ${new Date().toLocaleTimeString()} - Broadcast failed: ${error.message}<br>` + terminalFeedNode.innerHTML;
-                alert('Database Delivery Error: ' + error.message);
-            } else {
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[LEDGER_SUCCESS] ${new Date().toLocaleTimeString()} - Complete secure identity record created. Risk index authorized.<br>` + terminalFeedNode.innerHTML;
-                alert('Verification complete. High-security capital application tracking payload successfully generated and locked in database ledger.');
-                
-                // Reset inputs upon victory
-                document.getElementById('appName').value = '';
-                document.getElementById('appNationalID').value = '';
-                document.getElementById('appCountry').value = '';
-                document.getElementById('appPhone').value = '';
-                document.getElementById('appAddress').value = '';
-                document.getElementById('appIncome').value = '';
-                document.getElementById('appEmployer').value = '';
-                document.getElementById('appGuarantorName').value = '';
-                document.getElementById('appGuarantorRelation').value = '';
-                document.getElementById('appGuarantorPhone').value = '';
-                document.getElementById('appGuarantorAddress').value = '';
-                document.getElementById('appSignature').value = '';
-                document.getElementById('appIdFront').value = '';
-                document.getElementById('appIdBack').value = '';
-                document.getElementById('complianceCheck').checked = false;
-            }
-        }
-
-        /* --- ASYNC TERMINAL COMMAND HANDLER --- */
-        async function handleTerminalLoanCommand(inputString) {
-            const args = inputString.split(' ');
-            const amountParam = parseInt(args[1]);
-
-            if (!amountParam || isNaN(amountParam)) {
-                return "[LOAN_ERROR] Execution aborted. Invalid parameters specified. Correct pattern: 'apply <amount>' (e.g., apply 2500).";
-            }
-
-            return `[SECURITY_INTERCEPT] Manual command 'apply' caught. Because this system has been upgraded to institutional security protocols to protect capital against bad actors, applications cannot be sent via the text line without full KYC profile attachments. Please use the interface form grid inside the Capital pane.`;
-        }
-     // Ensure you use the exact variable names provided
-const supabaseUrl = 'https://uzocbmlhgmdcmimgcxqa.supabase.co';
-const supabaseKey = 'sb_publishable_pt37E-6-d_wIBYfqTBNM2Q_Mmpkee4K';
-const supabase =
-window.supabase.createClient(supabaseUrl, supabaseKey);
-
-
-
-        /* --- Bottom Console Command Intercept Input Logic --- */
-        const systemRuntimeLogsArray = [
-            "[LEDGER_CHECK] Security node processing limits passing calculations validation patterns.",
-            "[CIPHER_SECURE] 256-Bit algorithmic loops operating normal systemic routines.",
-            "[STRATEGIC_RISK] High leverage capital positions tracking risk matrix balancing curves flawlessly.",
-            "[METRIC_SYNC] Automated cohort score tracking synced with host interface."
-        ];
-
-        function appendAutomatedTerminalTraffic() {
-            const logElementNode = document.getElementById("systemLog");
-            if(!logElementNode) return;
-            const pulledRandomLog = systemRuntimeLogsArray[Math.floor(Math.random() * systemRuntimeLogsArray.length)];
-            logElementNode.innerHTML = `[SYS_INFO] ${new Date().toLocaleTimeString()} - ${pulledRandomLog}<br>` + logElementNode.innerHTML;
-        }
-        setInterval(appendAutomatedTerminalTraffic, 8000);
-
-        document.getElementById("consoleInput").addEventListener("keydown", function(eventData) {
-            if (eventData.key === "Enter") {
-                const rawInputValue = this.value.trim();
-                if (rawInputValue === "") return;
-
-                const terminalFeedNode = document.getElementById("systemLog");
-                if (terminalFeedNode) terminalFeedNode.innerHTML = `[USER_COMMAND] ${new Date().toLocaleTimeString()} - Executing statement: "${rawInputValue}"<br>` + terminalFeedNode.innerHTML;
-
-                supabase.from('terminal_logs').insert([
-                    {
-                        user_id: currentActiveUser ? currentActiveUser.id : null,
-                        command_string: rawInputValue
-                    }
-                ]).then(({ error }) => {
-                    if (error) console.error("[SYS_WARN] Telemetry logging bypassed:", error.message);
-                });
-
-                let engineResponseString = "Command structural array evaluated successfully. Input queued for verification routing.";
-                const formattedQueryLower = rawInputValue.toLowerCase().replace(/\s+/g, '');
-
-                if (rawInputValue.toLowerCase().startsWith('apply')) {
-                    handleTerminalLoanCommand(rawInputValue).then(terminalResponse => {
-                        if (terminalFeedNode) terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${terminalResponse}<br>` + terminalFeedNode.innerHTML;
-                    });
-                    this.value = "";
-                    return;
-                }
-
-                if (formattedQueryLower === "level1" || formattedQueryLower === "l1" || formattedQueryLower.includes("operationalstats")) {
-                    const days = document.getElementById('count-days').innerText;
-                    const members = document.getElementById('count-members').innerText;
-                    const infrastructure = document.getElementById('count-projects').innerText;
-                    engineResponseString = `[METRIC_L1_SUCCESS] Extraction complete. ${days} Deployment periods active, ${members} Cohorts mapped, ${infrastructure} Regional Jui nodes active.`;
-                }
-                else if (formattedQueryLower === "level2" || formattedQueryLower === "l2" || formattedQueryLower.includes("loanparameter")) {
-                    const principal = document.getElementById('loanAmount').value;
-                    const currentInterest = document.getElementById('interestDisplay').innerText;
-                    engineResponseString = `[LOAN_L2_METRIC] Matrix Active. Selected Principle Base: $${principal} // Target Interest Modifier Yield (20%): $${currentInterest}.`;
-                }
-                else if (formattedQueryLower === "level3" || formattedQueryLower === "l3" || formattedQueryLower.includes("bankbalance")) {
-                    const currentCap = document.getElementById('dashCapital').innerText;
-                    const currentYield = document.getElementById('dashYield').innerText;
-                    engineResponseString = `[BANK_L3_SUCCESS] Liquidity Map Verified. Base Tier id=""Holdings: ${currentCap} // Accrued Yield Balance: ${currentYield}. Status: Liquidity Stable.`;
-                } 
-                else if (formattedQueryLower === "level4" || formattedQueryLower === "l4" || formattedQueryLower.includes("wealthforecast")) {
-                    const matureCalc = document.getElementById('matureValuationDisplay').innerText;
-                    engineResponseString = `[WEALTH_L4_FORECAST] Simulation compiled matching 10% annual baseline. Expected Horizon Maturity Yield: ${matureCalc}.`;
-                }
-                else if (formattedQueryLower === "level5" || formattedQueryLower === "l5" || formattedQueryLower.includes("arbitrage")) {
-                    engineResponseString = "[BANK_L5_PIPELINE] Initializing High-Frequency Arbitrage Engine... Spread targets isolated on regional Jui hubs. Operational risk index minimized under 0.04%. Delta liquidity parameters locked.";
-                } 
-                else if (formattedQueryLower === "level6" || formattedQueryLower === "l6" || formattedQueryLower.includes("equitymatrix")) {
-                    const seriesA = document.getElementById('seriesACurr').innerText;
-                    const seriesB = document.getElementById('seriesBCurr').innerText;
-                    engineResponseString = `[EQUITY_L6_INDEX] Real-time matriculation analysis completed. Series A Common Valuation: ${seriesA} | Series B Preferred Lock: ${seriesB}.`;
-                }
-                else if (formattedQueryLower === "level7" || formattedQueryLower === "l7" || formattedQueryLower.includes("clearledger")) {
-                    engineResponseString = `[BANK_L7_LEDGER] Executing Cross-Border Settlement Array. 256-Bit cryptographic clearance codes broadcasted. Pending regional clearing tokens matching host interface updated to ZERO anomalies. Sync confirmed.`;
-                } 
-                else if (formattedQueryLower === "executelevelmax" || formattedQueryLower === "levelmax" || formattedQueryLower === "lmax" || formattedQueryLower.includes("systemoverride")) {
-                    engineResponseString = "[BANK_ULTRA_GATEWAY] Presidential Node Active. Multi-Phase Macro Capital adjustmentssupabase running across all sectors: L1-L4 Parameters verified, L5 Arbitrage maximized, L6 Equities stabilized, L7 Cross-border clearing parameters executed flawlessly. System architecture optimization absolute.";
-                }
-                else if (formattedQueryLower.includes("loan") || formattedQueryLower.includes("capital")) {
-                    engineResponseString = "Lending Core Output: Term Loans, SBA Credit Frameworks, Revolving Lines, and Micro Structures operating nominally at 20% Base.";
-                } else if (formattedQueryLower === "clear") {
-                    if (terminalFeedNode) terminalFeedNode.innerHTML = "[SYS_INFO] Log history pipeline cleared locally.<br>";
-                    this.value = "";
-                    return;
-                } else if (formattedQueryLower === "status") {
-                    engineResponseString = "System Status: Core operational grid active. Encryption lines optimal. Node processing lag: 4ms. Layout Glassmorphism filter operational.";
-                }
-
-                setTimeout(() => {
-                    if (terminalFeedNode) terminalFeedNode.innerHTML = `[ENGINE_RESPONSE] ${new Date().toLocaleTimeString()} - ${engineResponseString}<br>` + terminalFeedNode.innerHTML;
-                }, 400);
-
-                this.value = "";
-            }
-        });
-
-        runLoanEngine();
-        runWealthEngine();
-        convertEquityMatrix();
-                    
-        /* --- Boot Sequence Transition --- */
-window.addEventListener('load', () => {
-    const bootScreen = document.getElementById('boot-screen');
-    const bootProgress = document.getElementById('boot-progress-fill');
+function toggleAISidebar() {
+    const aiWidget = document.getElementById('ai-widget');
+    const bodyElement = document.body;
+    const triggerTab = document.getElementById('ai-sidebar-trigger');
     
-    // Simulate loading progress
-    let width = 0;
-    const interval = setInterval(() => {
-        if (width >= 100) {
-            clearInterval(interval);
-            // Hide boot screen
-            bootScreen.style.opacity = '0';
-            bootScreen.style.visibility = 'hidden';
-            // Add class to reveal main content
-            document.body.classList.add('booted');
-        } else {
-            width += 2;
-            bootProgress.style.width = width + '%';
+    aiWidget.classList.toggle('open');
+    bodyElement.classList.toggle('ai-open');
+    
+    if (aiWidget.classList.contains('open')) {
+        triggerTab.style.right = '-60px';
+    } else {
+        triggerTab.style.right = '0';
+    }
+}
+
+function updatePipeline(element, trackValue) {
+    element.parentElement.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+    selectedTrackPipeline = trackValue;
+
+    document.querySelectorAll('.pipeline-card').forEach(card => card.style.display = 'none');
+
+    const targetCard = document.getElementById(`track-${trackValue}`);
+    if (targetCard) {
+        targetCard.style.display = 'block';
+        targetCard.style.animation = 'fadeEffect 0.3s ease-in-out';
+    }
+}
+
+function runCalculationEngine() {
+    const selectElem = document.getElementById('loanAmount');
+    if(!selectElem) return;
+    const val = parseInt(selectElem.value);
+    const interest = Math.round(val * 0.2);
+    const total = val + interest;
+    
+    document.getElementById('interestDisplay').innerText = interest.toLocaleString();
+    document.getElementById('totalDisplay').innerText = total.toLocaleString();
+    
+    const baseDate = new Date();
+    const targetDate = new Date();
+    targetDate.setDate(baseDate.getDate() + 30);
+    
+    const graceLimitDate = new Date();
+    graceLimitDate.setDate(targetDate.getDate() + 3);
+    
+    document.getElementById('targetReturnDate').innerText = targetDate.toLocaleDateString();
+    document.getElementById('gracePeriodLimit').innerText = graceLimitDate.toLocaleDateString();
+}
+
+function downloadContractDocument() {
+    const amountText = document.getElementById('loanAmount').value;
+    const interestText = document.getElementById('interestDisplay').innerText;
+    const totalText = document.getElementById('totalDisplay').innerText;
+    
+    const plainText = `LIZKEMI CAPITAL LTD - TRANSACTION OVERVIEW MANIFEST\n` +
+                      `Chosen Principal Layer: ${amountText}\n` +
+                      `Computed 20% Interest Margin: ${interestText}\n` +
+                      `Total Settlement Bounds: ${totalText}\n\n` +
+                      `Generated within active system session under secure token rules. Strict 3-day grace constraints applied.`;
+                      
+    const blob = new Blob([plainText], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "LizKemi_Matrix_Manifest.txt";
+    link.click();
+}
+
+function runInvestmentEngine() {
+    const capitalInput = document.getElementById('investmentCapital');
+    const durationInput = document.getElementById('investmentDuration');
+    if(!capitalInput || !durationInput) return;
+
+    const capital = parseInt(capitalInput.value);
+    const years = parseInt(durationInput.value);
+    
+    document.getElementById('capitalVal').innerText = '$' + capital.toLocaleString();
+    document.getElementById('durationVal').innerText = years + (years === 1 ? ' Year' : ' Years');
+    
+    const assumedRate = 0.10;
+    const projectedYield = Math.round(capital * Math.pow((1 + assumedRate), years));
+    
+    document.getElementById('matureValuationDisplay').innerText = '$' + projectedYield.toLocaleString();
+
+    drawGrowthChart(capital, assumedRate, years);
+}
+
+function drawGrowthChart(principal, rate, periods) {
+    const chartCanvas = document.getElementById('growthChart');
+    if (!chartCanvas) return;
+    const gctx = chartCanvas.getContext('2d');
+    
+    chartCanvas.width = chartCanvas.clientWidth;
+    chartCanvas.height = 120;
+    
+    const w = chartCanvas.width;
+    const h = chartCanvas.height;
+    gctx.clearRect(0, 0, w, h);
+    
+    let points = [];
+    for (let i = 0; i <= periods; i++) {
+        points.push(principal * Math.pow((1 + rate), i));
+    }
+    
+    const maxVal = points[points.length - 1];
+    
+    gctx.beginPath();
+    gctx.strokeStyle = '#00f2fe';
+    gctx.lineWidth = 2;
+    
+    for (let i = 0; i < points.length; i++) {
+        const xPos = (i / periods) * (w - 40) + 20;
+        const yPos = h - ((points[i] / maxVal) * (h - 24) + 12);
+        if (i === 0) gctx.moveTo(xPos, yPos);
+        else gctx.lineTo(xPos, yPos);
+        
+        gctx.fillStyle = '#00ff88';
+        gctx.fillRect(xPos - 2, yPos - 2, 4, 4);
+    }
+    gctx.stroke();
+}
+
+function convertEquityMatrix() {
+    const selector = document.getElementById('currencySelector');
+    if(!selector) return;
+    const currency = selector.value;
+    const rate = (currency === "SLL") ? 22.5 : 1;
+    const symbol = (currency === "SLL") ? "Le " : "$";
+
+    const data = {
+        aInit: 1.00 * rate,
+        aCurr: 1.45 * rate,
+        bInit: 2.50 * rate,
+        bCurr: 3.10 * rate,
+        dashCap: 154200.00 * rate,
+        dashYld: 12480.00 * rate
+    };
+
+    document.getElementById('seriesAInit').innerText = symbol + data.aInit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('seriesACurr').innerText = symbol + data.aCurr.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('seriesBInit').innerText = symbol + data.bInit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('seriesBCurr').innerText = symbol + data.bCurr.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    document.getElementById('dashCapital').innerText = symbol + data.dashCap.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('dashYield').innerText = (currency === "SLL" ? "+Le " : "+$") + data.dashYld.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+
+const logs = [
+    "[LEDGER SUCCESS] Target verification hashes generated cleanly.",
+    "[SECURE] 256-Bit synchronization links operating cleanly.",
+    "[PORTFOLIO] Balance matrices adjusting safely within tracking guidelines.",
+    "[METRIC] Processing node scores updated on current UI matrix frame."
+];
+function appendLiveLogs() {
+    const logBox = document.getElementById("systemLog");
+    if(!logBox) return;
+    const randomLog = logs[Math.floor(Math.random() * logs.length)];
+    logBox.innerHTML = `[SYSTEM INFO] ${new Date().toLocaleTimeString()} - ${randomLog}<br>` + logBox.innerHTML;
+}
+setInterval(appendLiveLogs, 6000);
+
+function sendMessage(){
+    let input = document.getElementById("userInput");
+    let chat = document.getElementById("ai-chat");
+    if(!input || !chat) return;
+
+    let userText = input.value.trim();
+    if(userText === "") return;
+
+    chat.innerHTML += `<div class="user">${userText}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+
+    let message = userText.toLowerCase();
+    let reply = "Transmission received. Data arrays are parsed to management advisers for prompt feedback pipelines.";
+
+    if(message.includes("loan")){
+        reply = "Lending tracks comprise Term Structures, Lines of Credit, SBA Guarantees, Revenue Fluctuation Matrix Arrays, and custom options.";
+    }
+    else if(message.includes("trading") || message.includes("crypto") || message.includes("forex")){
+        reply = "LizKemi Capital deploys dedicated, isolated multi-leverage accounts configured alongside continuous platform sync options.";
+    }
+    else if(message.includes("hello") || message.includes("hi")){
+        reply = "Interface connection verified. Welcome to the LizKemi Operations Console. Detail your asset query to initiate telemetry checks.";
+    }
+
+    setTimeout(() => {
+        chat.innerHTML += `<div class="bot">${reply}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    }, 400);
+
+    input.value = "";
+}
+
+function startImpactAnimation() {
+    const counters = document.querySelectorAll('.val-highlight[id^="count-"]');
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const increment = target / 60;
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(updateCount, 25);
+            } else {
+                counter.innerText = target + '+';
+            }
+        };
+        updateCount();
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    runCalculationEngine();
+    runInvestmentEngine();
+    convertEquityMatrix();
+    
+    document.getElementById("userInput").addEventListener("keydown", function(e){
+        if(e.key === "Enter") sendMessage();
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            startImpactAnimation();
+            observer.disconnect();
         }
-    }, 40); // Adjust speed here
+    });
+    observer.observe(document.getElementById('impact-monitor'));
 });
 
+/* --- Cosmic Matrix Background System --- */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let width, height, particles = [];
+
+function setSize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    initParticles();
+}
+
+class Particle {
+    constructor(targetX, targetY) {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.size = Math.random() * 1.5 + 1;
+        this.speed = Math.random() * 0.06 + 0.02;
+        this.alpha = 0;
+    }
+    update() {
+        this.x += (this.targetX - this.x) * this.speed;
+        this.y += (this.targetY - this.y) * this.speed;
+        if (this.alpha < 0.8) this.alpha += 0.02;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 242, 254, ${this.alpha * 0.4})`;
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.font = "bold 65px monospace";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    
+    if(width < 768) { ctx.font = "bold 28px monospace"; }
+    ctx.fillText("LIZKEMI CAPITAL", width / 2, height / 2);
+
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+    particles = [];
+
+    for (let y = 0; y < height; y += 6) {
+        for (let x = 0; x < width; x += 6) {
+            const index = (y * width + x) * 4;
+            if (data[index + 3] > 128) {
+                particles.push(new Particle(x, y));
+            }
+        }
+    }
+}
+
+window.addEventListener('resize', setSize);
+setSize();
+
+function animate() {
+    ctx.fillStyle = "rgba(2, 2, 10, 0.2)";
+    ctx.fillRect(0, 0, width, height);
+    particles.forEach(p => {
+        p.update();
+        p.draw();
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+
+/* --- Initialization Sequence --- */
+document.addEventListener("DOMContentLoaded", () => {
+    const statusText = document.getElementById("status-update");
+    const bootSequences = [
+        { text: "Initializing Secure Matrix Frame...", delay: 400 },
+        { text: "Mapping Encryption Layer [SSL 256-Bit]...", delay: 900 },
+        { text: "Synchronizing Operations Console Tiers...", delay: 1400 },
+        { text: "Handshake Confirmed. Access Granted.", delay: 1900 }
+    ];
+
+    bootSequences.forEach((seq) => {
+        setTimeout(() => { if(statusText) statusText.textContent = seq.text; }, seq.delay);
+    });
+
+    setTimeout(() => {
+        document.body.classList.add("loaded");
+        runCalculationEngine();
+        runInvestmentEngine();
+    }, 2400);
+});
 </script>
 </body>
 </html>
