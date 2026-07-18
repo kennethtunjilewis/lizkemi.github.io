@@ -1102,7 +1102,29 @@ window.supabase.createClient(supabaseUrl, supabaseKey);
         runLoanEngine();
         runWealthEngine();
         convertEquityMatrix();
-        
+                    
+        /* --- Boot Sequence Transition --- */
+window.addEventListener('load', () => {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootProgress = document.getElementById('boot-progress-fill');
+    
+    // Simulate loading progress
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= 100) {
+            clearInterval(interval);
+            // Hide boot screen
+            bootScreen.style.opacity = '0';
+            bootScreen.style.visibility = 'hidden';
+            // Add class to reveal main content
+            document.body.classList.add('booted');
+        } else {
+            width += 2;
+            bootProgress.style.width = width + '%';
+        }
+    }, 40); // Adjust speed here
+});
+
 </script>
 </body>
 </html>
