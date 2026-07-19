@@ -1214,9 +1214,9 @@
         <h2>Sovereign Enclave Identity Record</h2>
         <div class="content-block">
             <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 15px;">
-                <div style="width: 50px; height: 50px; background: #02020a; border: 1px solid #00f2fe; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #00f2fe; font-family:monospace;">KL</div>
+                <div style="width: 50px; height: 50px; background: #02020a; border: 1px solid #00f2fe; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #00f2fe; font-family:monospace;">ML</div>
                 <div>
-                    <p style="font-size: 1.1rem; color: #ffffff; font-weight: bold; margin: 0; font-family:monospace;">KENNEDY LEWIS</p>
+                    <p style="font-size: 1.1rem; color: #ffffff; font-weight: bold; margin: 0; font-family:monospace;">MR LEWIS</p>
                     <p style="text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #00ff88; margin: 0; font-family:monospace;">● PRESIDENTIAL CLEARANCE GRANTED</p>
                 </div>
             </div>
@@ -1455,22 +1455,42 @@ function runCalculationEngine() {
 }
 
 function downloadContractDocument() {
-    const amountText = document.getElementById('loanAmount').value;
-    const interestText = document.getElementById('interestDisplay').innerText;
-    const totalText = document.getElementById('totalDisplay').innerText;
+    // Locate the elements
+    const amountEl = document.getElementById('loanAmount');
+    const interestEl = document.getElementById('interestDisplay');
+    const totalEl = document.getElementById('totalDisplay');
+
+    // Extract text values safely
+    const amountText = amountEl ? amountEl.options[amountEl.selectedIndex].text : "N/A";
+    const interestText = interestEl ? interestEl.innerText : "0";
+    const totalText = totalEl ? totalEl.innerText : "0";
+
+    // Build the string
+    const fileContent = `LIZKEMI CAPITAL FIRM LTD - TRANSACTION OVERVIEW MANIFEST
+---------------------------------------------------------
+Chosen Principal Layer: ${amountText}
+Computed 20% Interest Margin: ${interestText}
+Total Settlement Bounds: ${totalText}
+
+Generated: ${new Date().toLocaleString()}
+Strict 3-day grace constraints applied.`;
+
+    // Create the Blob with explicit encoding
+    const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
     
-    const plainText = `LIZKEMI CAPITAL FIRM LTD - TRANSACTION OVERVIEW MANIFEST\n` +
-                      `Chosen Principal Layer: ${amountText}\n` +
-                      `Computed 20% Interest Margin: ${interestText}\n` +
-                      `Total Settlement Bounds: ${totalText}\n\n` +
-                      `Generated within active system session under secure token rules. Strict 3-day grace constraints applied.`;
-                      
-    const blob = new Blob([plainText], { type: "text/plain" });
+    // Trigger download
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "LizKemi_Matrix_Manifest.txt";
+    link.href = url;
+    link.download = "LizKemi_Manifest.txt";
+    document.body.appendChild(link);
     link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
+
 
 function runInvestmentEngine() {
     const capitalInput = document.getElementById('investmentCapital');
@@ -1634,79 +1654,58 @@ window.addEventListener('DOMContentLoaded', () => {
     observer.observe(document.getElementById('impact-monitor'));
 });
 
-/* --- Cosmic Matrix Background System --- */
+/* --- Matrix Code Rain Background System --- */
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-let width, height, particles = [];
+
+let width, height;
+const fontSize = 14;
+let columns;
+let drops = [];
 
 function setSize() {
     width = window.innerWidth;
     height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
-    initParticles();
-}
-
-class Particle {
-    constructor(targetX, targetY) {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.targetX = targetX;
-        this.targetY = targetY;
-        this.size = Math.random() * 1.5 + 1;
-        this.speed = Math.random() * 0.06 + 0.02;
-        this.alpha = 0;
-    }
-    update() {
-        this.x += (this.targetX - this.x) * this.speed;
-        this.y += (this.targetY - this.y) * this.speed;
-        if (this.alpha < 0.8) this.alpha += 0.02;
-    }
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 242, 254, ${this.alpha * 0.4})`;
-        ctx.fill();
-    }
-}
-
-function initParticles() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.font = "bold 65px monospace";
-    ctx.fillStyle = "white";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
     
-    if(width < 768) { ctx.font = "bold 28px monospace"; }
-    ctx.fillText("LIZKEMI CAPITAL Firm", width / 2, height / 2);
-
-    const imageData = ctx.getImageData(0, 0, width, height);
-    const data = imageData.data;
-    particles = [];
-
-    for (let y = 0; y < height; y += 6) {
-        for (let x = 0; x < width; x += 6) {
-            const index = (y * width + x) * 4;
-            if (data[index + 3] > 128) {
-                particles.push(new Particle(x, y));
-            }
-        }
+    // Calculate columns based on window width
+    columns = Math.floor(width / fontSize);
+    drops = [];
+    for (let i = 0; i < columns; i++) {
+        drops[i] = 1; // Start at top
     }
 }
 
 window.addEventListener('resize', setSize);
 setSize();
 
-function animate() {
-    ctx.fillStyle = "rgba(2, 2, 10, 0.2)";
+// Characters to display (can be numbers or code symbols)
+const chars = "0100101010";
+
+function drawMatrix() {
+    // Semi-transparent black background creates the "fading tail" effect
+    ctx.fillStyle = "rgba(2, 2, 10, 0.05)";
     ctx.fillRect(0, 0, width, height);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
-    });
-    requestAnimationFrame(animate);
+
+    ctx.fillStyle = "#00f2fe"; // Your brand blue
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        // Reset drop to top randomly after it crosses the screen
+        if (drops[i] * fontSize > height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
 }
-animate();
+
+// Set animation speed
+setInterval(drawMatrix, 50);
+
 
 /* --- Initialization Sequence --- */
 document.addEventListener("DOMContentLoaded", () => {
@@ -1731,3 +1730,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
