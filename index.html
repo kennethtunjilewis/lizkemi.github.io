@@ -888,6 +888,650 @@
         .calc-grid { grid-template-columns: 1fr; gap: 1.5rem; }
         #ai-widget { width: 100%; right: -105%; }
     }
+      /* --- Cyberpunk / Holographic Reset & Variable Matrix --- */
+    :root {
+        --bg-deep: #02040a;
+        --neon-cyan: #00f2fe;
+        --neon-pink: #ff0080;
+        --glow-blue: #4facfe;
+        --text-bright: #ffffff;
+        --text-muted: #a3b8cc;
+        --panel-bg: rgba(10, 18, 42, 0.5);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-deep);
+        color: var(--text-bright);
+        overflow-x: hidden;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* --- DYNAMIC MOVING BACKGROUND MATRIX --- */
+    .moving-glow-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -2;
+        background: radial-gradient(circle at 50% 50%, #060d22 0%, #02040a 100%);
+        overflow: hidden;
+    }
+
+    /* Moving Illuminated Plasma Flares */
+    .moving-glow-bg::before, .moving-glow-bg::after {
+        content: "";
+        position: absolute;
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        opacity: 0.12;
+        filter: blur(120px);
+        pointer-events: none;
+    }
+
+    .moving-glow-bg::before {
+        background: var(--neon-cyan);
+        top: -20%;
+        left: -10%;
+        animation: floatGlowOne 18s infinite alternate ease-in-out;
+    }
+
+    .moving-glow-bg::after {
+        background: var(--neon-pink);
+        bottom: -20%;
+        right: -10%;
+        animation: floatGlowTwo 22s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatGlowOne {
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+        100% { transform: translate(150px, 100px) scale(1.2) rotate(90deg); }
+    }
+
+    @keyframes floatGlowTwo {
+        0% { transform: translate(0, 0) scale(1.1) rotate(0deg); }
+        100% { transform: translate(-200px, -80px) scale(0.9) rotate(-90deg); }
+    }
+
+    /* Sci-Fi Grid Overlay */
+    .cyber-grid {
+        position: fixed;
+        inset: 0;
+        background: 
+            linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px) center / 45px 45px,
+            linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px) center / 45px 45px;
+        mask-image: radial-gradient(circle, black 40%, transparent 90%);
+        -webkit-mask-image: radial-gradient(circle, black 40%, transparent 90%);
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Moving Horizontal Laser Scan */
+    .laser-scan-line {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+        opacity: 0.3;
+        box-shadow: 0 0 15px var(--neon-cyan);
+        animation: scanMove 7s linear infinite;
+        z-index: 1000;
+        pointer-events: none;
+    }
+
+    @keyframes scanMove {
+        0% { transform: translateY(-10vh); }
+        100% { transform: translateY(110vh); }
+    }
+
+    /* --- BOOT SPLASH OVERLAY --- */
+    #boot-splash {
+        position: fixed;
+        inset: 0;
+        background: #010308;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+    }
+
+    .boot-container {
+        text-align: center;
+        padding: 40px;
+        background: rgba(4, 8, 20, 0.8);
+        border: 1px solid rgba(0, 242, 254, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 0 50px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(0, 242, 254, 0.1);
+        backdrop-filter: blur(20px);
+        max-width: 480px;
+        width: 90%;
+    }
+
+    .boot-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        background: linear-gradient(135deg, #fff, var(--neon-cyan), var(--neon-pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 5px;
+    }
+
+    .boot-subtitle {
+        color: var(--neon-cyan);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+    /* Holographic Tech Spinner */
+    .holo-spinner {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 25px;
+        position: relative;
+    }
+    .holo-spinner::before, .holo-spinner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 3px solid transparent;
+        border-radius: 50%;
+    }
+    .holo-spinner::before {
+        border-top-color: var(--neon-cyan);
+        border-bottom-color: var(--neon-cyan);
+        animation: spinClockwise 1s linear infinite;
+    }
+    .holo-spinner::after {
+        border-left-color: var(--neon-pink);
+        border-right-color: var(--neon-pink);
+        inset: 6px;
+        animation: spinCounter 1.5s linear infinite;
+    }
+
+    @keyframes spinClockwise { to { transform: rotate(360deg); } }
+    @keyframes spinCounter { to { transform: rotate(-360deg); } }
+
+    .boot-logs {
+        font-family: monospace;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        min-height: 20px;
+    }
+
+    /* --- NAVIGATION --- */
+    nav {
+        background: rgba(2, 4, 10, 0.85);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 5000;
+    }
+
+    .logo {
+        font-weight: bold;
+        color: var(--text-bright);
+        text-decoration: none;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 25px;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: var(--neon-cyan);
+        text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    /* --- HERO DISPLAY SCAPE --- */
+    .hero {
+        padding: 160px 5% 60px;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+        line-height: 1.15;
+        margin-bottom: 20px;
+        background: linear-gradient(to right, #fff, var(--neon-cyan), var(--neon-pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        max-width: 650px;
+        margin: 0 auto 40px;
+    }
+
+    /* --- CONTAINER & BLOCKS --- */
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px 100px;
+    }
+
+    section {
+        padding: 60px 0;
+        scroll-margin-top: 100px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        color: var(--neon-cyan);
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
+
+    .content-panel {
+        background: var(--panel-bg);
+        border: 1px solid rgba(0, 242, 254, 0.15);
+        border-radius: 12px;
+        padding: 35px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    /* --- EXPERT PIPELINE INTERACTIVE STAGE --- */
+    .stage-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+    }
+
+    @media (max-width: 900px) {
+        .stage-layout { grid-template-columns: 1fr; }
+        .hero h1 { font-size: 2.5rem; }
+    }
+
+    /* 3D Render Port */
+    .render-canvas-container {
+        width: 100%;
+        height: 380px;
+        background: rgba(3, 7, 20, 0.8);
+        border: 1px dashed rgba(0, 242, 254, 0.3);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.1);
+        cursor: grab;
+    }
+    .render-canvas-container:active { cursor: grabbing; }
+
+    .render-canvas-container canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .render-instruction {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(2, 4, 10, 0.8);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        color: var(--neon-cyan);
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        pointer-events: none;
+        font-family: monospace;
+    }
+
+    /* --- FORM CONTROL SUITE --- */
+    .calculator-block {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cyber-select, .cyber-input {
+        background: #040814;
+        border: 1px solid rgba(0, 242, 254, 0.2);
+        padding: 14px;
+        border-radius: 6px;
+        color: var(--text-bright);
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .cyber-select:focus, .cyber-input:focus {
+        border-color: var(--neon-cyan);
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    .metric-readout {
+        padding: 20px;
+        background: rgba(0, 242, 254, 0.03);
+        border-radius: 6px;
+        border-left: 4px solid var(--neon-cyan);
+    }
+
+    .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--neon-cyan);
+        text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+    }
+
+    .action-button {
+        background: transparent;
+        border: 1px solid var(--neon-cyan);
+        color: var(--neon-cyan);
+        padding: 14px 28px;
+        font-weight: bold;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+    }
+
+    .action-button:hover {
+        background: linear-gradient(135deg, var(--neon-cyan), var(--glow-blue));
+        color: #02040a;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        border-color: transparent;
+    }
+
+    /* --- REAL-TIME DATA LOGS --- */
+    .system-terminal {
+        background: #010308;
+        border: 1px solid rgba(255, 0, 128, 0.15);
+        border-radius: 8px;
+        padding: 20px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #ff0080;
+        height: 150px;
+        overflow-y: auto;
+        box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    }
+
+    footer {
+        text-align: center;
+        padding: 40px 20px;
+        border-top: 1px solid rgba(0, 242, 254, 0.1);
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+   :root {
+            --bg-dark: #0a0b10;
+            --bg-card: #121526;
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --text: #ffffff;
+            --text-muted: #a0a5b5;
+            --border: #232946;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Header Navigation */
+        header {
+            background-color: #05060a;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Dropdown Styling */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #05060a;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .dropbtn:hover {
+            transform: translateY(-2px);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--bg-card);
+            min-width: 260px;
+            box-shadow: 0px 8px 24px rgba(0,0,0,0.6);
+            z-index: 100;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: var(--text);
+            padding: 14px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Main Content & Dynamic Forms */
+        .main-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .intro-section h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .intro-section p {
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        .form-panel {
+            display: none;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .form-panel.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-panel h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1e36;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Info Highlights for Trading */
+        .feature-box {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 20px;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 20px;
+        }
+
+        .feature-box h4 {
+            margin: 0 0 5px 0;
+            color: var(--primary);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #05060a;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
 </style>
 </head>
 <body>
@@ -916,7 +1560,7 @@
         <div class="dropdown-content">
             <a href="#about"> About & Mission</a>
             <a href="#loans"> 1. Loan Structures</a>
-            <a href="#investments"> 2. Wealth Architecture</a>
+   <a href="#investments"> 2. Wealth Architecture</a>
             <a href="#trading"> 3. Execution Node</a>
             <a href="#classes"> 4. Technical Classes</a>
             <a href="#support"> 5. Desk Support</a>
@@ -925,9 +1569,18 @@
             <a href="#shares"> Equity Distribution</a>
             <a href="#consultant"> Consulting Channels</a>
             <a href="#contact"> Communication Desk</a>
+  <a onclick="showPanel('loan')">Apply for a Loan</a>
+                <a onclick="showPanel('investment')">Investment Programs</a>
+                <a onclick="showPanel('trading')">Trading Academy & Live Support</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+                <a onclick="showPanel('loan')">Apply for a Loan</a>
+                <a onclick="showPanel('investment')">Investment Programs</a>
+                <a onclick="showPanel('trading')">Trading Academy & Live Support</a>
+            </div>
+        </div>
+    </nav>
 
 <!-- SYSTEM TELEMETRY TICKER BAR -->
 <div class="ticker-wrap" id="tickerWrap">
@@ -974,6 +1627,22 @@
                         <p style="color: #6b7280; font-size:0.75rem; font-family:monospace; text-transform:uppercase; margin-top:5px;">Days of Operation</p>
                     </div>
                 </div>
+                <div class="cockpit-grid">
+            
+            <div class="col-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                <div class="metric-block">
+                    <div class="metric-label">Autonomous Sovereign Pool Base</div>
+                    <div class="metric-value cyan tabular-nums">$1,500,000,000</div>
+                </div>
+                <div class="metric-block">
+                    <div class="metric-value emerald tabular-nums" id="metric-empowered">450+</div>
+                    <div class="metric-label" style="margin-top: 4px;">Empowered Micro-Venture Operations</div>
+                </div>
+                <div class="metric-block">
+                    <div class="metric-label">System Transaction Latency</div>
+                    <div class="metric-value tabular-nums">0.018ms</div>
+                </div>
+            </div>
             </section>
   
             <h3>Corporate Video Presentation</h3>
@@ -986,17 +1655,30 @@
             <p style="margin-bottom: 10px; font-size: 0.9rem; color: #9ca3af;"><strong style="color:#ffffff;">Integrity:</strong> Systemic processing transparency across every execution rail.</p>
             <p style="font-size: 0.9rem; color: #9ca3af;"><strong style="color:#ffffff;">Respect:</strong> Absolute alignment with stakeholder identities as an institutional partner.</p>
         </div>
-    </section>
-
+    </section>   
     <!-- Loan Services Section -->
-    <section id="loans">
+       <section id="loans">
         <h2>1. Loan & Capital Structures</h2>
         <div class="content-block">
             <h3>Strategic Liquidity Injections</h3>
             <p style="margin-bottom: 20px; font-size: 0.9rem; color:#9ca3af;">
                 LizKemi Capital Firm Ltd maintains structured, scalable lending architectures built for corporate expansion tracks and individualized capital deployment models.
             </p>
-
+ <div class="form-group">
+     <label>Full Name / Corporate Entity Name</label>
+                <input type="text" placeholder="Enter your full legal name" required>
+            </div>
+            <div class="form-group">
+                <label>Desired Loan Amount ($)</label>
+                <input type="number" placeholder="e.g. 50000" required>
+            </div>
+            <div class="form-group">
+                <label>Loan Purpose</label>
+                <textarea rows="4" placeholder="Briefly describe why you need this capital..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Loan Request</button>
+        </form>
+    </div>
             <!-- Product Grid -->
             <div class="product-matrix">
                 <div class="product-card">
@@ -1111,19 +1793,43 @@
                 <p>1) A strict grace timeline envelope of three (3) calendar tracking days is assigned. Exceeding this boundary triggers immediate late fee matrices.</p>
             </div>
             <button class="action-btn" onclick="downloadContractDocument()">Export Plaintext Agreement</button>
-        </div>
+        </div>         
     </section>
 
     <!-- Investment Services Section -->
     <section id="investments">
         <h2>2. Predictive Compound Asset Vector</h2>
-        <div class="content-block">
+          <div class="form-group">
+                <label>Company / Project Name</label>
+                <input type="text" placeholder="Enter name of entity" required>
+            </div>
+            <div class="form-group">
+                <label>Required Investment Capital ($)</label>
+                <input type="number" placeholder="e.g. 250000" required>
+            </div>
+            <div class="form-group">
+                <label>Industry / Focus Area</label>
+                <select>
+                    <option>Technology / Software</option>
+                    <option>Real Estate / Infrastructure</option>
+                    <option>E-commerce / Retail</option>
+                    <option>Other / Special Project</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Executive Summary / Pitch</label>
+                <textarea rows="4" placeholder="Describe the project returns and model..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Pitch Proposal</button>
+        </form>
+    </div>
+         <div class="content-block">
             <h3>Strategic Wealth Architecture</h3>
             <p style="margin-bottom: 25px; font-size:0.9rem; color:#9ca3af;">
                 We route targeted startup investments engineered to secure systemic compounding horizons across emerging institutional target channels.
             </p>
-            
-            <div class="calc-grid">
+            </div>
+          <div class="calc-grid">
                 <div class="calc-box">
                     <div class="slider-group">
                         <label for="investmentCapital">Seed Deployment Asset Base: <span id="capitalVal">$10,000</span></label>
@@ -1157,9 +1863,7 @@
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Trading Services Section -->
+   <!-- Trading Services Section -->
     <section id="trading">
         <h2>3. Sovereign Telemetry Ingress Log Trace</h2>
         <div class="content-block">
@@ -1196,6 +1900,37 @@
                 Our network has uninhibited access to real-time market data analysis loops and dedicated risk architects to maintain flawless structural navigation.
             </p>
         </div>
+               <div class="feature-box">
+            <h4>📈 Practical Classes with Expert Teachers</h4>
+            <p style="margin: 5px 0 0 0; font-size: 14px;">Pay a modest entry fee to join our live trading groups. You don't just read books—you execute practical live trades step-by-step alongside expert instructors.</p>
+        </div>
+
+        <div class="feature-box">
+            <h4>🎧 Dedicated Home-Trader Hotlines</h4>
+            <p style="margin: 5px 0 0 0; font-size: 14px;">Once your courses conclude, you aren't left alone. While trading from the comfort of your home, you can connect directly with our live trade coaches to guide you through real-time market shifts.</p>
+        </div>
+
+        <form onsubmit="alert('Registration Request Received! Check your email for trading portal credentials.'); return false;">
+            <div class="form-group">
+                <label>Your Full Name</label>
+                <input type="text" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@example.com" required style="width: 100%; padding: 12px; background: #1a1e36; border: 1px solid var(--border); color: var(--text); border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div class="form-group">
+                <label>Select Experience Level</label>
+                <select>
+                    <option>Complete Beginner (No experience)</option>
+                    <option>Intermediate (Know basic charts)</option>
+                    <option>Advanced (Looking for live trader assistance)</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Register for Trading Access</button>
+        </form>
+    </div>
+</div>
     </section>
 
     <!-- Future Banking Section -->
@@ -1282,7 +2017,6 @@
 
         </div>
     </section>
-
     <!-- Consultant Services Section -->
     <section id="consultant">
         <h2>Consultation Channel Deployment</h2>
@@ -1359,10 +2093,41 @@
             </div>
         </div>
     </section>
-
 </div>
-
-<footer>
+          <!-- INTERACTIVE 3D STAGE SECTION -->
+        <section id="expert-stage">
+            <h2 class="section-title">Expert Trading & Asset Portals</h2>
+            <div class="content-panel">
+                <div class="stage-layout">
+                    <div>
+                        <h3 style="color: #fff; margin-bottom: 15px;">Programmatic 3D Asset Matrix</h3>
+                        <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">
+                            Toggle between specialized market pipelines. Select a sector to manifest its structural digital matrix within the interactive terminal viewport.
+                        </p>
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label>Select Operational Sector Node</label>
+                            <select class="cyber-select" id="asset-selector" onchange="switchModelNode()">
+                                <option value="crypto">Crypto Asset Ring (Spinning Loop)</option>
+                                <option value="forex">Forex Matrix Node (Dynamic Cage)</option>
+                                <option value="macro">Macro Corporate Cube (Venture Framework)</option>
+                            </select>
+                        </div>
+                        <button class="action-button" onclick="triggerManualPulse()">Inject Data Pulse</button>
+                    </div>
+                    
+                    <!-- 3D PORT WITH INTERACTIVE EVENT TARGETING -->
+                    <div class="render-canvas-container" id="stage-viewport">
+                        <canvas id="glCanvas"></canvas>
+                        <div class="render-instruction">◀ Drag on stage to rotate 3D matrix ▶</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </section>
+    </main>
+           <footer>
+        <p>&copy; 2026 LizKemi Capital Firm. System Nodes Operational.</p>
+    </footer>
     <div class="system-log-box" id="systemLog">
         [SYSTEM INFO] Core platform engine initialized...<br>
         [SYSTEM INFO] Ledger system operating securely via client protocols.
@@ -1727,6 +2492,290 @@ document.addEventListener("DOMContentLoaded", () => {
         runInvestmentEngine();
     }, 2400);
 });
+/* --- BOOT OVERLAY CONTROLLER --- */
+    window.addEventListener('DOMContentLoaded', () => {
+        const logs = [
+            "Mounting core interfaces...",
+            "Compiling WebGL illumination vertex modules...",
+            "Mapping 3D structural matrix layout...",
+            "Operational framework established."
+        ];
+        let step = 0;
+        const interval = setInterval(() => {
+            if(step < logs.length) {
+                document.getElementById('boot-status').textContent = logs[step];
+                step++;
+            } else {
+                clearInterval(interval);
+                const splash = document.getElementById('boot-splash');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.display = 'none', 800);
+            }
+        }, 600);
+
+        initWebGLStage();
+        runMatrixCompute();
+    });
+
+    /* --- LENDING ENGINE CALCULATION MATRIX --- */
+    function runMatrixCompute() {
+        const principal = parseInt(document.getElementById('principal-amount').value);
+        const interest = Math.round(principal * 0.20);
+        const total = principal + interest;
+
+        document.getElementById('interest-out').textContent = '$' + interest.toLocaleString();
+        document.getElementById('total-out').textContent = '$' + total.toLocaleString();
+
+        const log = document.getElementById('sys-log');
+        log.innerHTML = `[COMPUTE] Recalculated matrix for principal: $${principal}. Interest calculated: $${interest}.<br>` + log.innerHTML;
+    }
+
+    /* ==========================================================================
+       PROGRAMMATIC INTEGRATED 3D WEBGL CORE GRAPHICS ENGINE
+       ========================================================================== */
+    let gl, program, positionBuffer, colorBuffer;
+    let currentModelType = 'crypto';
+    let rotationY = 0.0, rotationX = 0.0;
+    let targetRotationY = 0.0, targetRotationX = 0.0;
+    let isDragging = false, lastMouseX = 0, lastMouseY = 0;
+    let dataPulseScale = 1.0;
+
+    function initWebGLStage() {
+        const canvas = document.getElementById('glCanvas');
+        const container = document.getElementById('stage-viewport');
+        
+        // Match high-pixel density screens perfectly
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+
+        gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) {
+            container.innerHTML = "<p style='padding:20px; color:red;'>WebGL Context Failure. Update browser architecture.</p>";
+            return;
+        }
+
+        // Vertex shader logic
+        const vsSource = `
+            attribute vec3 aPosition;
+            attribute vec4 aColor;
+            varying lowp vec4 vColor;
+            uniform mat4 uMatrix;
+            void main() {
+                gl_Position = uMatrix * vec4(aPosition, 1.0);
+                gl_PointSize = 6.0;
+                vColor = aColor;
+            }
+        `;
+
+        // Fragment shader logic
+        const fsSource = `
+            varying lowp vec4 vColor;
+            void main() {
+                gl_FragColor = vColor;
+            }
+        `;
+
+        const vs = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vs, vsSource);
+        gl.compileShader(vs);
+
+        const fs = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fs, fsSource);
+        gl.compileShader(fs);
+
+        program = gl.createProgram();
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        positionBuffer = gl.createBuffer();
+        colorBuffer = gl.createBuffer();
+
+        // Event Listeners for manual 3D manipulation
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            let deltaX = e.clientX - lastMouseX;
+            let deltaY = e.clientY - lastMouseY;
+            targetRotationY += deltaX * 0.01;
+            targetRotationX += deltaY * 0.01;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mouseup', () => isDragging = false);
+
+        // Mobile touch support
+        container.addEventListener('touchstart', (e) => {
+            if(e.touches.length === 1) {
+                isDragging = true;
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            }
+        });
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDragging || e.touches.length !== 1) return;
+            let deltaX = e.touches[0].clientX - lastMouseX;
+            let deltaY = e.touches[0].clientY - lastMouseY;
+            targetRotationY += deltaX * 0.01;
+            targetRotationX += deltaY * 0.01;
+            lastMouseX = e.touches[0].clientX;
+            lastMouseY = e.touches[0].clientY;
+        });
+
+        container.addEventListener('touchend', () => isDragging = false);
+
+        window.addEventListener('resize', () => {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        });
+
+        requestAnimationFrame(renderLoop);
+    }
+
+    function switchModelNode() {
+        currentModelType = document.getElementById('asset-selector').value;
+        const log = document.getElementById('sys-log');
+        log.innerHTML = `[NODES] Router switched projection track to: ${currentModelType.toUpperCase()}<br>` + log.innerHTML;
+    }
+
+    function triggerManualPulse() {
+        dataPulseScale = 1.6;
+        const log = document.getElementById('sys-log');
+        log.innerHTML = `[SIGNAL] High-power data pulse injected into 3D render matrix.<br>` + log.innerHTML;
+    }
+
+    /* Generates 3D coordinates based on chosen node */
+    function generateMathematicalModel(type) {
+        let vertices = [];
+        let colors = [];
+
+        if (type === 'crypto') {
+            // Generates an intricate interactive spinning ring
+            const points = 120;
+            const radius = 0.5 * dataPulseScale;
+            for (let i = 0; i < points; i++) {
+                let angle = (i / points) * Math.PI * 2;
+                vertices.push(Math.cos(angle) * radius, Math.sin(angle) * radius, 0.0);
+                colors.push(0.0, 0.95, 0.99, 1.0); // Cyan glow trace
+                
+                // Outer structural accent ring
+                vertices.push(Math.cos(angle) * (radius * 1.15), Math.sin(angle) * (radius * 1.15), 0.1);
+                colors.push(1.0, 0.0, 0.5, 0.6); // Pink glow trace
+            }
+        } else if (type === 'forex') {
+            // Generates an interlaced cage grid geometry
+            const lines = 16;
+            for (let i = 0; i <= lines; i++) {
+                let pct = (i / lines) * 2 - 1;
+                let scale = dataPulseScale;
+                // Parallel vectors
+                vertices.push(pct * 0.5 * scale, -0.5 * scale, 0.0,  pct * 0.5 * scale, 0.5 * scale, 0.0);
+                colors.push(0.0, 0.9, 1.0, 0.8,  0.0, 0.9, 1.0, 0.8);
+                
+                vertices.push(-0.5 * scale, pct * 0.5 * scale, 0.0,  0.5 * scale, pct * 0.5 * scale, 0.0);
+                colors.push(0.0, 0.9, 1.0, 0.8,  0.0, 0.9, 1.0, 0.8);
+            }
+        } else {
+            // Generates an advanced corporate institutional volume block
+            let size = 0.35 * dataPulseScale;
+            vertices = [
+                -size, -size,  size,   size, -size,  size,   size,  size,  size,  -size,  size,  size,
+                -size, -size, -size,  -size,  size, -size,   size,  size, -size,   size, -size, -size
+            ];
+            for(let c=0; c<4; c++) colors.push(1.0, 0.0, 0.5, 1.0);
+            for(let c=0; c<4; c++) colors.push(0.0, 0.95, 1.0, 1.0);
+        }
+
+        return { points: vertices, tints: colors };
+    }
+
+    function renderLoop() {
+        if (!gl) return;
+
+        // Damp physics logic for smooth rotational tracking
+        rotationY += (targetRotationY - rotationY) * 0.1;
+        rotationX += (targetRotationX - rotationX) * 0.1;
+
+        // Base automated structural spin rotation logic
+        if(!isDragging) {
+            targetRotationY += 0.006;
+        }
+
+        // Return pulse back to equilibrium state
+        if (dataPulseScale > 1.0) {
+            dataPulseScale -= 0.03;
+        }
+
+        gl.clearColor(0.02, 0.04, 0.09, 0.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.enable(gl.DEPTH_TEST);
+
+        const model = generateMathematicalModel(currentModelType);
+
+        // Bind vertices
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.points), gl.DYNAMIC_DRAW);
+        const aPosition = gl.getAttribLocation(program, 'aPosition');
+        gl.enableVertexAttribArray(aPosition);
+        gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
+
+        // Bind color configurations
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.tints), gl.DYNAMIC_DRAW);
+        const aColor = gl.getAttribLocation(program, 'aColor');
+        gl.enableVertexAttribArray(aColor);
+        gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 0, 0);
+
+        // Programmatic orthographic transformations matrix mapping
+        let cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
+        let cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
+
+        // Transform calculations combined directly
+        let transformMatrix = [
+            cosY,        sinY * sinX,  sinY * cosX,  0,
+            0,           cosX,        -sinX,         0,
+            -sinY,       cosY * sinX,  cosY * cosX,  0,
+            0,           0,            0,            1
+        ];
+
+        const uMatrix = gl.getUniformLocation(program, 'uMatrix');
+        gl.uniformMatrix4fv(uMatrix, false, transformMatrix);
+
+        // Render nodes
+        if (currentModelType === 'crypto') {
+            gl.drawArrays(gl.POINTS, 0, model.points.length / 3);
+        } else if (currentModelType === 'forex') {
+            gl.drawArrays(gl.LINES, 0, model.points.length / 3);
+        } else {
+            gl.drawArrays(gl.LINE_LOOP, 0, 4);
+            gl.drawArrays(gl.LINE_LOOP, 4, 4);
+        }
+
+        requestAnimationFrame(renderLoop);
+    }
+    function showPanel(panelId) {
+    // Hide the initial welcoming landing text block
+    document.getElementById('placeholder-text').style.display = 'none';
+
+    // Hide all form panels
+    const panels = document.querySelectorAll('.form-panel');
+    panels.forEach(panel => panel.classList.remove('active'));
+    
+    // Open the selected panel from the dropdown menu link click
+    const activePanel = document.getElementById('panel-' + panelId);
+    if(activePanel) {
+        activePanel.classList.add('active');
+    }
+}
 </script>
 </body>
 </html>
