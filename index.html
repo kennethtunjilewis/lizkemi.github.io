@@ -1533,6 +1533,17 @@
             opacity: 0.9;
         }
 </style>
+       <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init({
+            publicKey: "r-HNWnY0Nx-50oyER", 
+          });
+       })();
+    </script>
+</head>
+ 
 </head>
 <body>
 
@@ -1664,21 +1675,25 @@
             <p style="margin-bottom: 20px; font-size: 0.9rem; color:#9ca3af;">
                 LizKemi Capital Firm Ltd maintains structured, scalable lending architectures built for corporate expansion tracks and individualized capital deployment models.
             </p>
- <div class="form-group">
-     <label>Full Name / Corporate Entity Name</label>
-                <input type="text" placeholder="Enter your full legal name" required>
-            </div>
-            <div class="form-group">
-                <label>Desired Loan Amount ($)</label>
-                <input type="number" placeholder="e.g. 50000" required>
-            </div>
-            <div class="form-group">
-                <label>Loan Purpose</label>
-                <textarea rows="4" placeholder="Briefly describe why you need this capital..."></textarea>
-            </div>
-            <button type="submit" class="submit-btn">Submit Loan Request</button>
-        </form>
-    </div>
+<div class="content-block">
+    <h3>Apply for a Loan</h3>
+    <form id="loanForm" onsubmit="sendLoanEmail(event)">
+        <div class="form-group">
+            <label>Full Name / Corporate Entity Name</label>
+            <input type="text" id="loanName" placeholder="Enter your full legal name" required>
+        </div>
+        <div class="form-group">
+            <label>Desired Loan Amount ($)</label>
+            <input type="number" id="loanAmountInput" placeholder="e.g. 50000" required>
+        </div>
+        <div class="form-group">
+            <label>Loan Purpose</label>
+            <textarea id="loanPurpose" rows="4" placeholder="Briefly describe why you need this capital..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Submit Loan Request</button>
+    </form>
+</div>
+
             <!-- Product Grid -->
             <div class="product-matrix">
                 <div class="product-card">
@@ -2776,6 +2791,29 @@ document.addEventListener("DOMContentLoaded", () => {
         activePanel.classList.add('active');
     }
 }
+    function sendLoanEmail(event) {
+    event.preventDefault(); // Stop standard form refresh
+
+    // Gather data from your form fields
+    const templateParams = {
+        from_name: document.getElementById('loanName').value,
+        loan_amount: document.getElementById('loanAmountInput').value,
+        message: document.getElementById('loanPurpose').value
+    };
+
+    // Replace with your actual EmailJS Service ID and Template ID
+    const serviceID = "const serviceID = "service_kxv0jlp";
+const templateID = "template_bd4r2ay"; // Or "template_rpfssko" 
+  emailjs.send(serviceID, templateID, templateParams)
+        .then((response) => {
+            alert('Loan request successfully transmitted to corporate clearing desk!');
+            document.getElementById('loanForm').reset();
+        }, (error) => {
+            alert('Transmission failed. Check network parameters or system logs.');
+            console.error('FAILED...', error);
+        });
+}
+
 </script>
 </body>
 </html>
