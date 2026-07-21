@@ -2221,8 +2221,10 @@ function runCalculationEngine() {
     const interest = Math.round(val * 0.2);
     const total = val + interest;
     
-    document.getElementById('interestDisplay').innerText = interest.toLocaleString();
-    document.getElementById('totalDisplay').innerText = total.toLocaleString();
+    const interestDisplay = document.getElementById('interestDisplay');
+    const totalDisplay = document.getElementById('totalDisplay');
+    if(interestDisplay) interestDisplay.innerText = interest.toLocaleString();
+    if(totalDisplay) totalDisplay.innerText = total.toLocaleString();
     
     const baseDate = new Date();
     const targetDate = new Date();
@@ -2231,22 +2233,21 @@ function runCalculationEngine() {
     const graceLimitDate = new Date();
     graceLimitDate.setDate(targetDate.getDate() + 3);
     
-    document.getElementById('targetReturnDate').innerText = targetDate.toLocaleDateString();
-    document.getElementById('gracePeriodLimit').innerText = graceLimitDate.toLocaleDateString();
+    const targetReturnDate = document.getElementById('targetReturnDate');
+    const gracePeriodLimit = document.getElementById('gracePeriodLimit');
+    if(targetReturnDate) targetReturnDate.innerText = targetDate.toLocaleDateString();
+    if(gracePeriodLimit) gracePeriodLimit.innerText = graceLimitDate.toLocaleDateString();
 }
 
 function downloadContractDocument() {
-    // Locate the elements
     const amountEl = document.getElementById('loanAmount');
     const interestEl = document.getElementById('interestDisplay');
     const totalEl = document.getElementById('totalDisplay');
 
-    // Extract text values safely
     const amountText = amountEl ? amountEl.options[amountEl.selectedIndex].text : "N/A";
     const interestText = interestEl ? interestEl.innerText : "0";
     const totalText = totalEl ? totalEl.innerText : "0";
 
-    // Build the string
     const fileContent = `LIZKEMI CAPITAL FIRM LTD - TRANSACTION OVERVIEW MANIFEST
 ---------------------------------------------------------
 Chosen Principal Layer: ${amountText}
@@ -2256,22 +2257,16 @@ Total Settlement Bounds: ${totalText}
 Generated: ${new Date().toLocaleString()}
 Strict 3-day grace constraints applied.`;
 
-    // Create the Blob with explicit encoding
     const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
-    
-    // Trigger download
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.download = "LizKemi_Manifest.txt";
     document.body.appendChild(link);
     link.click();
-    
-    // Cleanup
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 }
-
 
 function runInvestmentEngine() {
     const capitalInput = document.getElementById('investmentCapital');
@@ -2288,7 +2283,6 @@ function runInvestmentEngine() {
     const projectedYield = Math.round(capital * Math.pow((1 + assumedRate), years));
     
     document.getElementById('matureValuationDisplay').innerText = '$' + projectedYield.toLocaleString();
-
     drawGrowthChart(capital, assumedRate, years);
 }
 
@@ -2358,6 +2352,7 @@ const logs = [
     "[PORTFOLIO] Balance matrices adjusting safely within tracking guidelines.",
     "[METRIC] Processing node scores updated on current UI matrix frame."
 ];
+
 function appendLiveLogs() {
     const logBox = document.getElementById("systemLog");
     if(!logBox) return;
@@ -2417,27 +2412,9 @@ function startImpactAnimation() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    runCalculationEngine();
-    runInvestmentEngine();
-    convertEquityMatrix();
-    
-    document.getElementById("userInput").addEventListener("keydown", function(e){
-        if(e.key === "Enter") sendMessage();
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            startImpactAnimation();
-            observer.disconnect();
-        }
-    });
-    observer.observe(document.getElementById('impact-monitor'));
-});
-
 /* --- Matrix Code Rain Background System --- */
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
 
 let width, height;
 const fontSize = 14;
@@ -2445,48 +2422,43 @@ let columns;
 let drops = [];
 
 function setSize() {
+    if(!canvas) return;
     width = window.innerWidth;
     height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
     
-    // Calculate columns based on window width
     columns = Math.floor(width / fontSize);
     drops = [];
     for (let i = 0; i < columns; i++) {
-        drops[i] = 1; // Start at top
+        drops[i] = 1;
     }
 }
 
 window.addEventListener('resize', setSize);
 setSize();
 
-// Characters to display (can be numbers or code symbols)
 const chars = "0100101010";
 
 function drawMatrix() {
-    // Semi-transparent black background creates the "fading tail" effect
+    if(!ctx || !canvas) return;
     ctx.fillStyle = "rgba(2, 2, 10, 0.05)";
     ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = "#00f2fe"; // Your brand blue
+    ctx.fillStyle = "#00f2fe";
     ctx.font = fontSize + "px monospace";
 
     for (let i = 0; i < drops.length; i++) {
         const text = chars.charAt(Math.floor(Math.random() * chars.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        // Reset drop to top randomly after it crosses the screen
         if (drops[i] * fontSize > height && Math.random() > 0.975) {
             drops[i] = 0;
         }
         drops[i]++;
     }
 }
-
-// Set animation speed
-setInterval(drawMatrix, 50);
-
+if(canvas) setInterval(drawMatrix, 50);
 
 /* --- Initialization Sequence --- */
 document.addEventListener("DOMContentLoaded", () => {
@@ -2503,309 +2475,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     setTimeout(() => {
-        document.body.classList.add("loaded");
+        const splash = document.getElementById("splash-screen");
+        if(splash) splash.style.display = "none";
         runCalculationEngine();
         runInvestmentEngine();
+        convertEquityMatrix();
     }, 2400);
+
+    const userInput = document.getElementById("userInput");
+    if(userInput) {
+        userInput.addEventListener("keydown", function(e){
+            if(e.key === "Enter") sendMessage();
+        });
+    }
+
+    const impactMonitor = document.getElementById('impact-monitor');
+    if(impactMonitor) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                startImpactAnimation();
+                observer.disconnect();
+            }
+        });
+        observer.observe(impactMonitor);
+    }
 });
-/* --- BOOT OVERLAY CONTROLLER --- */
-    window.addEventListener('DOMContentLoaded', () => {
-        const logs = [
-            "Mounting core interfaces...",
-            "Compiling WebGL illumination vertex modules...",
-            "Mapping 3D structural matrix layout...",
-            "Operational framework established."
-        ];
-        let step = 0;
-        const interval = setInterval(() => {
-            if(step < logs.length) {
-                document.getElementById('boot-status').textContent = logs[step];
-                step++;
-            } else {
-                clearInterval(interval);
-                const splash = document.getElementById('boot-splash');
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.display = 'none', 800);
-            }
-        }, 600);
 
-        initWebGLStage();
-        runMatrixCompute();
-    });
+function showPanel(panelId) {
+    const placeholder = document.getElementById('placeholder-text');
+    if(placeholder) placeholder.style.display = 'none';
 
-    /* --- LENDING ENGINE CALCULATION MATRIX --- */
-    function runMatrixCompute() {
-        const principal = parseInt(document.getElementById('principal-amount').value);
-        const interest = Math.round(principal * 0.20);
-        const total = principal + interest;
-
-        document.getElementById('interest-out').textContent = '$' + interest.toLocaleString();
-        document.getElementById('total-out').textContent = '$' + total.toLocaleString();
-
-        const log = document.getElementById('sys-log');
-        log.innerHTML = `[COMPUTE] Recalculated matrix for principal: $${principal}. Interest calculated: $${interest}.<br>` + log.innerHTML;
-    }
-
-    /* ==========================================================================
-       PROGRAMMATIC INTEGRATED 3D WEBGL CORE GRAPHICS ENGINE
-       ========================================================================== */
-    let gl, program, positionBuffer, colorBuffer;
-    let currentModelType = 'crypto';
-    let rotationY = 0.0, rotationX = 0.0;
-    let targetRotationY = 0.0, targetRotationX = 0.0;
-    let isDragging = false, lastMouseX = 0, lastMouseY = 0;
-    let dataPulseScale = 1.0;
-
-    function initWebGLStage() {
-        const canvas = document.getElementById('glCanvas');
-        const container = document.getElementById('stage-viewport');
-        
-        // Match high-pixel density screens perfectly
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
-
-        gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (!gl) {
-            container.innerHTML = "<p style='padding:20px; color:red;'>WebGL Context Failure. Update browser architecture.</p>";
-            return;
-        }
-
-        // Vertex shader logic
-        const vsSource = `
-            attribute vec3 aPosition;
-            attribute vec4 aColor;
-            varying lowp vec4 vColor;
-            uniform mat4 uMatrix;
-            void main() {
-                gl_Position = uMatrix * vec4(aPosition, 1.0);
-                gl_PointSize = 6.0;
-                vColor = aColor;
-            }
-        `;
-
-        // Fragment shader logic
-        const fsSource = `
-            varying lowp vec4 vColor;
-            void main() {
-                gl_FragColor = vColor;
-            }
-        `;
-
-        const vs = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vs, vsSource);
-        gl.compileShader(vs);
-
-        const fs = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(fs, fsSource);
-        gl.compileShader(fs);
-
-        program = gl.createProgram();
-        gl.attachShader(program, vs);
-        gl.attachShader(program, fs);
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
-        positionBuffer = gl.createBuffer();
-        colorBuffer = gl.createBuffer();
-
-        // Event Listeners for manual 3D manipulation
-        container.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            let deltaX = e.clientX - lastMouseX;
-            let deltaY = e.clientY - lastMouseY;
-            targetRotationY += deltaX * 0.01;
-            targetRotationX += deltaY * 0.01;
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
-        });
-
-        window.addEventListener('mouseup', () => isDragging = false);
-
-        // Mobile touch support
-        container.addEventListener('touchstart', (e) => {
-            if(e.touches.length === 1) {
-                isDragging = true;
-                lastMouseX = e.touches[0].clientX;
-                lastMouseY = e.touches[0].clientY;
-            }
-        });
-
-        container.addEventListener('touchmove', (e) => {
-            if (!isDragging || e.touches.length !== 1) return;
-            let deltaX = e.touches[0].clientX - lastMouseX;
-            let deltaY = e.touches[0].clientY - lastMouseY;
-            targetRotationY += deltaX * 0.01;
-            targetRotationX += deltaY * 0.01;
-            lastMouseX = e.touches[0].clientX;
-            lastMouseY = e.touches[0].clientY;
-        });
-
-        container.addEventListener('touchend', () => isDragging = false);
-
-        window.addEventListener('resize', () => {
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        });
-
-        requestAnimationFrame(renderLoop);
-    }
-
-    function switchModelNode() {
-        currentModelType = document.getElementById('asset-selector').value;
-        const log = document.getElementById('sys-log');
-        log.innerHTML = `[NODES] Router switched projection track to: ${currentModelType.toUpperCase()}<br>` + log.innerHTML;
-    }
-
-    function triggerManualPulse() {
-        dataPulseScale = 1.6;
-        const log = document.getElementById('sys-log');
-        log.innerHTML = `[SIGNAL] High-power data pulse injected into 3D render matrix.<br>` + log.innerHTML;
-    }
-
-    /* Generates 3D coordinates based on chosen node */
-    function generateMathematicalModel(type) {
-        let vertices = [];
-        let colors = [];
-
-        if (type === 'crypto') {
-            // Generates an intricate interactive spinning ring
-            const points = 120;
-            const radius = 0.5 * dataPulseScale;
-            for (let i = 0; i < points; i++) {
-                let angle = (i / points) * Math.PI * 2;
-                vertices.push(Math.cos(angle) * radius, Math.sin(angle) * radius, 0.0);
-                colors.push(0.0, 0.95, 0.99, 1.0); // Cyan glow trace
-                
-                // Outer structural accent ring
-                vertices.push(Math.cos(angle) * (radius * 1.15), Math.sin(angle) * (radius * 1.15), 0.1);
-                colors.push(1.0, 0.0, 0.5, 0.6); // Pink glow trace
-            }
-        } else if (type === 'forex') {
-            // Generates an interlaced cage grid geometry
-            const lines = 16;
-            for (let i = 0; i <= lines; i++) {
-                let pct = (i / lines) * 2 - 1;
-                let scale = dataPulseScale;
-                // Parallel vectors
-                vertices.push(pct * 0.5 * scale, -0.5 * scale, 0.0,  pct * 0.5 * scale, 0.5 * scale, 0.0);
-                colors.push(0.0, 0.9, 1.0, 0.8,  0.0, 0.9, 1.0, 0.8);
-                
-                vertices.push(-0.5 * scale, pct * 0.5 * scale, 0.0,  0.5 * scale, pct * 0.5 * scale, 0.0);
-                colors.push(0.0, 0.9, 1.0, 0.8,  0.0, 0.9, 1.0, 0.8);
-            }
-        } else {
-            // Generates an advanced corporate institutional volume block
-            let size = 0.35 * dataPulseScale;
-            vertices = [
-                -size, -size,  size,   size, -size,  size,   size,  size,  size,  -size,  size,  size,
-                -size, -size, -size,  -size,  size, -size,   size,  size, -size,   size, -size, -size
-            ];
-            for(let c=0; c<4; c++) colors.push(1.0, 0.0, 0.5, 1.0);
-            for(let c=0; c<4; c++) colors.push(0.0, 0.95, 1.0, 1.0);
-        }
-
-        return { points: vertices, tints: colors };
-    }
-
-    function renderLoop() {
-        if (!gl) return;
-
-        // Damp physics logic for smooth rotational tracking
-        rotationY += (targetRotationY - rotationY) * 0.1;
-        rotationX += (targetRotationX - rotationX) * 0.1;
-
-        // Base automated structural spin rotation logic
-        if(!isDragging) {
-            targetRotationY += 0.006;
-        }
-
-        // Return pulse back to equilibrium state
-        if (dataPulseScale > 1.0) {
-            dataPulseScale -= 0.03;
-        }
-
-        gl.clearColor(0.02, 0.04, 0.09, 0.0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.enable(gl.DEPTH_TEST);
-
-        const model = generateMathematicalModel(currentModelType);
-
-        // Bind vertices
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.points), gl.DYNAMIC_DRAW);
-        const aPosition = gl.getAttribLocation(program, 'aPosition');
-        gl.enableVertexAttribArray(aPosition);
-        gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
-
-        // Bind color configurations
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.tints), gl.DYNAMIC_DRAW);
-        const aColor = gl.getAttribLocation(program, 'aColor');
-        gl.enableVertexAttribArray(aColor);
-        gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 0, 0);
-
-        // Programmatic orthographic transformations matrix mapping
-        let cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
-        let cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
-
-        // Transform calculations combined directly
-        let transformMatrix = [
-            cosY,        sinY * sinX,  sinY * cosX,  0,
-            0,           cosX,        -sinX,         0,
-            -sinY,       cosY * sinX,  cosY * cosX,  0,
-            0,           0,            0,            1
-        ];
-
-        const uMatrix = gl.getUniformLocation(program, 'uMatrix');
-        gl.uniformMatrix4fv(uMatrix, false, transformMatrix);
-
-        // Render nodes
-        if (currentModelType === 'crypto') {
-            gl.drawArrays(gl.POINTS, 0, model.points.length / 3);
-        } else if (currentModelType === 'forex') {
-            gl.drawArrays(gl.LINES, 0, model.points.length / 3);
-        } else {
-            gl.drawArrays(gl.LINE_LOOP, 0, 4);
-            gl.drawArrays(gl.LINE_LOOP, 4, 4);
-        }
-
-        requestAnimationFrame(renderLoop);
-    }
-    function showPanel(panelId) {
-    // Hide the initial welcoming landing text block
-    document.getElementById('placeholder-text').style.display = 'none';
-
-    // Hide all form panels
     const panels = document.querySelectorAll('.form-panel');
     panels.forEach(panel => panel.classList.remove('active'));
     
-    // Open the selected panel from the dropdown menu link click
     const activePanel = document.getElementById('panel-' + panelId);
     if(activePanel) {
         activePanel.classList.add('active');
     }
 }
-    function sendLoanEmail(event) {
-    event.preventDefault(); // Stop standard form refresh
 
-    // Gather data from your form fields
+function sendLoanEmail(event) {
+    event.preventDefault();
+
     const templateParams = {
         from_name: document.getElementById('loanName').value,
         loan_amount: document.getElementById('loanAmountInput').value,
         message: document.getElementById('loanPurpose').value
     };
 
-    // Replace with your actual EmailJS Service ID and Template ID
-    const serviceID = "const serviceID = "service_kxv0jlp";
-const templateID = "template_bd4r2ay"; // Or "template_rpfssko" 
-  emailjs.send(serviceID, templateID, templateParams)
+    const serviceID = "service_kxv0jlp";
+    const templateID = "template_bd4r2ay";
+
+    emailjs.send(serviceID, templateID, templateParams)
         .then((response) => {
             alert('Loan request successfully transmitted to corporate clearing desk!');
             document.getElementById('loanForm').reset();
@@ -2814,9 +2535,7 @@ const templateID = "template_bd4r2ay"; // Or "template_rpfssko"
             console.error('FAILED...', error);
         });
 }
-
 </script>
-    </script>
 </body>
 </html>
 
